@@ -1,4 +1,4 @@
-# MEVA
+# MEVA- Minimal Evolving Versatile Agent
 
 ### Minimal, Evolving, Versatile orchestration for Codex projects
 
