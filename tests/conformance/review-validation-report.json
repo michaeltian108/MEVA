@@ -1,0 +1,255 @@
+{
+  "report_version": "1.0",
+  "task_id": "SAG-VALIDATE-RV2-001",
+  "phase": "final-WP5",
+  "environment": {
+    "kind": "local",
+    "python": "3.9.6",
+    "platform": "Darwin 25.5.0 arm64",
+    "dependencies": "Python standard library only",
+    "canonical_state": "schema-valid revision 3, invalidation revision 0",
+    "runtime_owned_telemetry": "absent; live activation unverified"
+  },
+  "digests": {
+    "AGENTS.md": "3b64a9ff4d3ed6be4dddb4724ee9f0b76a084214ca2a7e69505b12169fb5c176",
+    "Agent.md": "d3b5ec062c9914c19601af06e309e10b722935d11fd815a573115beb37a9776d",
+    "README.md": "bc3364ec1e07037ae8f944362dcf764b4772cb30c79b1bd5e297fcdd558ef0b5",
+    ".codex/config.toml": "5fac0fa18357ec99d9039f9274dea88010102a54a3158c60050ab3b77fdb3a86",
+    ".codex/agents/implementation_engineer.toml": "f1b2d0b728d2bc510002d68c65707aee8956c9f76ac7f5efa134a97f57b30fa2",
+    ".codex/agents/planner.toml": "17c4f537c1de81a807a6e0c27efdc7b939cc05745f5c053e7312e18b908bc764",
+    ".codex/agents/platform_engineer.toml": "f40c412bdd623aa52877e93b283380867f278e799ddce35c5c6e042e159b1276",
+    ".codex/agents/reviewer.toml": "b67e480300c3bb564f7fd1ab6890d81651f4326136c5dac9a760a6ac55f113ce",
+    ".codex/agents/validation_engineer.toml": "9fe95ee0324535379f8772baf5e2d3ef2528e276884811ebc8930a941ac6c859",
+    "contracts/meva.schema.json": "98b8aec10b754f7bb2f27faf51eb959f0cb74da0871657c5c907840263185445",
+    "templates/project-state.json": "ac7992916c2d942e5c0597f323f12640db9106acecaf5d9ab289637dccea3589",
+    "tools/meva_check.py": "f09652b21a15385b78f6c37f2d422c6faa611f39eb265aa82b0ba836b61e0e49",
+    "docs/reviewer-handbook.md": "9f9bbe0231c5464de9cf0fec396e98613edb000fef0a0b39266b06f1f4d85db3",
+    "tests/conformance/protocol.v1.json": "edc31644ed2aace18b3b0d5f51ede4487206ea7505ed6a685d5b486d934c366c",
+    "tests/conformance/protocol.v1.sha256": "bee8b50c6d56d884e997c79ccea19e9a5bb5444ddda4c35406644f9a9457a334",
+    "tests/conformance/test_contracts.py": "923d402c8fa6d43dd170a945dc1154313710ad8c94c842e8e86df8e19f7633e7",
+    "tests/conformance/validation-report.json": "e82766bf6fb2aa3ea0e07a4e9652bd065c038a406cf8d591689960203b85be76",
+    "tests/conformance/review_protocol.v1.json": "1189746000e9baf26bfab3d19eb4e067e77c01bfd6eb6cd69448bc8cf6b89b57",
+    "tests/conformance/review_protocol.v1.sha256": "6efc5ad7b607e0801b23df539da857cc235849cf4118593ad5c41980d698aed0",
+    "tests/conformance/test_review_contracts.py": "380ebe80c853b3cc0ab579ead86569e05e2520b1462aa9a29ce3291c33d4f3dc",
+    "tests/conformance/assurance_protocol.v1.json": "07baa7f12b50155ba449532ce24bd49a3c009adc4f430425c73c88ca46aa8e15",
+    "tests/conformance/assurance_protocol.v1.sha256": "9b7512329516e159c0f7c25f92842c6023ed0a70135ef5c6914199514044d567",
+    "tests/conformance/test_assurance_contracts.py": "9c2ada2cbe416e2e301a168d9b2757ac58fc315a2a255c72eb2438bbf47e6849"
+  },
+  "trusted_anchor": {
+    "constant": "EXPECTED_REVIEW_PROTOCOL_DIGEST",
+    "embedded_value": "1189746000e9baf26bfab3d19eb4e067e77c01bfd6eb6cd69448bc8cf6b89b57",
+    "protocol_match": true,
+    "lock_match": true,
+    "co_drift_rejection": "pass"
+  },
+  "runs": {
+    "original": {
+      "command": "python3 -B -m unittest -v tests.conformance.test_contracts",
+      "exit_code": 0,
+      "tests_run": 43,
+      "passed": 43,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 3.184,
+      "output_summary": "Ran 43 tests in 3.184s\n\nOK",
+      "conclusion": "pass"
+    },
+    "rv2": {
+      "command": "python3 -B -m unittest -v tests.conformance.test_review_contracts",
+      "exit_code": 0,
+      "tests_run": 30,
+      "passed": 30,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 1.167,
+      "output_summary": "Ran 30 tests in 1.167s\n\nOK",
+      "conclusion": "pass"
+    },
+    "combined": {
+      "command": "python3 -B -m unittest -v tests.conformance.test_contracts tests.conformance.test_review_contracts",
+      "exit_code": 0,
+      "tests_run": 73,
+      "passed": 73,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 4.374,
+      "output_summary": "Ran 73 tests in 4.374s\n\nOK",
+      "conclusion": "pass"
+    },
+    "legacy_package_checker": {
+      "command": "python3 -B tools/meva_check.py check-package --root .",
+      "static_package": "pass",
+      "runtime_activation": "unverified",
+      "static_errors": []
+    },
+    "template_validation": {
+      "command": "python3 -B tools/meva_check.py validate-state templates/project-state.json",
+      "result": "pass",
+      "errors": []
+    }
+  },
+  "pre_rv2_passed_tests_preserved": [
+    "RV2FormalReviewTests.test_ac011_positive_advisory_review_is_nongating",
+    "RV2InvalidationTests.test_ac005_positive_transitive_resolved_invalidation",
+    "RV2LifecycleTests.test_ac003_positive_r1_current_validation_and_review_gates",
+    "RV2OverlayTests.test_ac009_negative_duplicate_required_key_rejects",
+    "RV2OwnershipTests.test_ac006_positive_same_role_nonoverlapping_owner_instances",
+    "RV2ProtocolAnchorTests.test_review_protocol_literal_digest_and_lock",
+    "RV2ReadOnlyExternalTests.test_ac010_negative_mutation_relabelled_as_inspect_rejects",
+    "RV2ResolutionEvidenceTests.test_ac002_positive_current_independent_resolution_evidence"
+  ],
+  "pre_rv2_failures_preserved": [
+    {
+      "name": "RV2AtomicAccountingTests.test_ac004_negative_action_kind_relabel_rejects",
+      "observation": "Trusted project-write metadata conflicts with caller label cleanup, but preflight passes."
+    },
+    {
+      "name": "RV2AtomicAccountingTests.test_ac004_negative_increment_rejects",
+      "observation": "A negative cost increment is accepted."
+    },
+    {
+      "name": "RV2AtomicAccountingTests.test_ac004_negative_nan_json_rejects_at_parse",
+      "observation": "NaN is accepted by the state JSON path."
+    },
+    {
+      "name": "RV2AtomicAccountingTests.test_ac004_negative_noncanonical_path_rejects",
+      "observation": "A path containing a dot segment is accepted."
+    },
+    {
+      "name": "RV2AtomicAccountingTests.test_ac004_negative_write_without_structured_target_rejects",
+      "observation": "A write preflight succeeds without a structured target."
+    },
+    {
+      "name": "RV2AtomicAccountingTests.test_ac004_positive_reconcile_action_public_interface_exists",
+      "observation": "The required atomic reconciliation command is absent."
+    },
+    {
+      "name": "RV2AtomicAccountingTests.test_ac004_positive_reserve_action_public_interface_exists",
+      "observation": "The required atomic reservation command is absent."
+    },
+    {
+      "name": "RV2FormalReviewTests.test_ac011_negative_formal_review_without_runtime_proof_rejects",
+      "observation": "A structured formal review can pass without runtime read-only proof."
+    },
+    {
+      "name": "RV2InvalidationTests.test_ac005_negative_provenance_change_without_closure_rejects",
+      "observation": "A provenance revision change is accepted without invalidation closure."
+    },
+    {
+      "name": "RV2LifecycleTests.test_ac003_negative_r1_completion_without_gates_rejects",
+      "observation": "R1 completes without Validation or independent Review gates."
+    },
+    {
+      "name": "RV2OverlayTests.test_ac009_positive_unrelated_overlay_and_lower_cap",
+      "observation": "Installed-overlay check-package rejects unrelated configuration and a narrower concurrency cap."
+    },
+    {
+      "name": "RV2OwnershipTests.test_ac006_negative_empty_owner_instance_cannot_activate",
+      "observation": "Activation passes despite an explicitly empty owner-instance identity."
+    },
+    {
+      "name": "RV2OwnershipTests.test_ac006_negative_same_role_overlap_rejects",
+      "observation": "Overlapping active writers assigned to the same role are accepted."
+    },
+    {
+      "name": "RV2PackageBindingTests.test_ac007_positive_all_artifacts_and_original_count_are_bound",
+      "observation": "The required distribution check-release command is absent."
+    },
+    {
+      "name": "RV2ProtocolAnchorTests.test_protocol_and_lock_codrift_is_rejected",
+      "observation": "Installed-overlay check-package accepts RV2 protocol-plus-lock co-drift."
+    },
+    {
+      "name": "RV2ProvenanceTests.test_ac008_negative_agents_digest_mismatch_rejects_activation",
+      "observation": "Activation ignores an explicitly mismatched AGENTS.md bootstrap digest."
+    },
+    {
+      "name": "RV2ProvenanceTests.test_ac008_positive_raw_and_prefixed_digests_compare_equal",
+      "observation": "Canonical raw/sha256-prefixed digest comparison is absent."
+    },
+    {
+      "name": "RV2ReadOnlyExternalTests.test_ac010_positive_budgeted_reviewer_external_read",
+      "observation": "An exactly authorized, budgeted Reviewer external read is categorically rejected."
+    },
+    {
+      "name": "RV2ResolutionEvidenceTests.test_ac002_negative_missing_resolution_evidence_id_rejects",
+      "observation": "A structured resolved high finding may reference nonexistent evidence."
+    },
+    {
+      "name": "RV2ResolutionEvidenceTests.test_ac002_negative_remediation_author_evidence_rejects",
+      "observation": "Remediation-author evidence can resolve a structured finding."
+    },
+    {
+      "name": "RV2RiskAcceptanceTests.test_ac001_negative_nonwaivable_finding_rejects",
+      "observation": "A structured non-waivable high finding is accepted."
+    },
+    {
+      "name": "RV2RiskAcceptanceTests.test_ac001_positive_exact_structured_risk_acceptance",
+      "observation": "The required structured risk_accept_finding approval form is rejected."
+    }
+  ],
+  "input_equivalence_audit": [
+    {
+      "area": "owner-instance authorization",
+      "original_positive": "Original activation and preflight use base.valid_state() with absent explicit owner_instance_id.",
+      "rv2_fixture_distinction": "The RV2 negative adds explicit empty owner_instance_id and refreshes the canonical ticket digest.",
+      "separation": "Only absent legacy identity may derive from exactly one current runtime-owned attestation id bound to exact project, role, task, ticket digest, and active time; explicit invalid identity never falls back.",
+      "identical_input_conflict": false
+    },
+    {
+      "area": "risk acceptance, resolved evidence, and review mode",
+      "original_positive": "Original cases use extension-empty contract-2.0 review records.",
+      "rv2_fixture_distinction": "RV2 cases carry structured finding/operation, coverage/provenance, or mode=formal extensions.",
+      "separation": "Extension-empty legacy records are advisory-compatible only; structured RV2 fields trigger complete exact enforcement and cannot downgrade.",
+      "identical_input_conflict": false
+    },
+    {
+      "area": "trusted action-kind accounting",
+      "original_positive": "The original cleanup boundary has no trusted capability metadata.",
+      "rv2_fixture_distinction": "The RV2 negative supplies trusted project_write/ordinary metadata that conflicts with caller label cleanup.",
+      "separation": "Legacy diagnostic preflight does not establish RV2 authorization or atomicity; reserve-action is the consequential authorization boundary.",
+      "identical_input_conflict": false
+    },
+    {
+      "area": "AGENTS.md activation provenance",
+      "original_positive": "Original activation uses an empty state artifact_digests map.",
+      "rv2_fixture_distinction": "The RV2 negative explicitly declares a conflicting AGENTS.md digest.",
+      "separation": "Verified immutable release anchors may supply distribution digests without duplicate state fields; every declared conflict rejects.",
+      "identical_input_conflict": false
+    }
+  ],
+  "copy_package_audit": {
+    "helper_behavior": "base.copy_package omits the original validation-report.json while retaining executable artifacts and the RV2 report.",
+    "callers_checked": 6,
+    "result": "All copy_package callers are installed-overlay or anchor mutation checks. No distribution-release positive relies on the helper; report-bound distribution integrity is assigned to check-release."
+  },
+  "criteria": {
+    "RV2-AC-001": "pass",
+    "RV2-AC-002": "pass",
+    "RV2-AC-003": "pass",
+    "RV2-AC-004": "pass",
+    "RV2-AC-005": "pass",
+    "RV2-AC-006": "pass",
+    "RV2-AC-007": "pass",
+    "RV2-AC-008": "pass",
+    "RV2-AC-009": "pass",
+    "RV2-AC-010": "pass",
+    "RV2-AC-011": "pass"
+  },
+  "limitations": [
+    "The canonical state validates, but its product provenance is stale and no runtime-owned activation or effective-permission attestation is present.",
+    "Runtime-dependent production and formal-review claims remain unverified.",
+    "Package-local digest anchors cannot resist coordinated edits to protocol, lock, harness, and embedded constant.",
+    "Validation was local and used synthetic fixtures; no production or physical claim is supported."
+  ],
+  "conclusion": {
+    "original_regression_gate": "pass",
+    "rv2_static_package": "pass",
+    "runtime_activation": "unverified",
+    "overall": "pass",
+    "statement": "The immutable final product passes the original 43-test suite, RV2 30-test suite, and their 73-test combined execution without failures or skips. Live runtime activation remains separately unverified."
+  }
+}

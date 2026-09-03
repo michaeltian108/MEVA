@@ -1,0 +1,398 @@
+{
+  "report_version": "1.0",
+  "task_id": "SAG-VALIDATE-002",
+  "protocol": {
+    "path": "tests/conformance/protocol.v1.json",
+    "sha256": "edc31644ed2aace18b3b0d5f51ede4487206ea7505ed6a685d5b486d934c366c",
+    "lock_verified": true,
+    "status": "frozen"
+  },
+  "baseline": {
+    "phase": "pre-WP3",
+    "command": "python3 -B -m unittest -v tests.conformance.test_contracts",
+    "exit_code": 1,
+    "tests_run": 43,
+    "passed": 37,
+    "failures": 6,
+    "errors": 0,
+    "skipped": 0,
+    "duration_seconds": 2.387,
+    "conclusion": "fail",
+    "runtime_activation": "unverified"
+  },
+  "environment": {
+    "validation_environment": "local",
+    "python": "3.9.6",
+    "operating_system": "Darwin 25.5.0 arm64",
+    "dependencies": "Python standard library only",
+    "live_runtime_owned_activation_telemetry": "unavailable"
+  },
+  "implementation_digests": {
+    "AGENTS.md": "3b64a9ff4d3ed6be4dddb4724ee9f0b76a084214ca2a7e69505b12169fb5c176",
+    "Agent.md": "efc06857727f3eefba58fb6fb0e046e7cc3ad64231121a4b2c95fb6ebc8fb3db",
+    "README.md": "5f29652793cdbfe5cfb055d02f01a2411267c59b8fd727b98fd53a1400619be7",
+    ".codex/config.toml": "5fac0fa18357ec99d9039f9274dea88010102a54a3158c60050ab3b77fdb3a86",
+    ".codex/agents/implementation_engineer.toml": "f1b2d0b728d2bc510002d68c65707aee8956c9f76ac7f5efa134a97f57b30fa2",
+    ".codex/agents/planner.toml": "70c05c64c76049075f38afd2e501a89813e71286c8e906cfa15e527f0c169791",
+    ".codex/agents/platform_engineer.toml": "f40c412bdd623aa52877e93b283380867f278e799ddce35c5c6e042e159b1276",
+    ".codex/agents/reviewer.toml": "d1d3eb21aab2a4789c09709beb5872b61a58e51393074cfc001af92f2e79baeb",
+    ".codex/agents/validation_engineer.toml": "9fe95ee0324535379f8772baf5e2d3ef2528e276884811ebc8930a941ac6c859",
+    "contracts/meva.schema.json": "840e132ebe5befe50d158e3c8f021a70b3fc3193ebf05f139f9a96cb87b104f6",
+    "templates/project-state.json": "38ac59a4c328af5b6491b3845c95215afeac87e1686c4e9ca844d8573c95f48e",
+    "tools/meva_check.py": "b5217362f0a6e382f79c1e43eb2386ce2856dc2b442435c60462fed5221720f6",
+    "docs/reviewer-handbook.md": "c3c70296b0d7fe5425a5a14f12e456451b87017a62793ea4ce853a27c90fa423"
+  },
+  "validation_artifact_digests": {
+    "tests/conformance/test_contracts.py": "923d402c8fa6d43dd170a945dc1154313710ad8c94c842e8e86df8e19f7633e7",
+    "tests/conformance/protocol.v1.sha256": "bee8b50c6d56d884e997c79ccea19e9a5bb5444ddda4c35406644f9a9457a334"
+  },
+  "failed_tests": [
+    {
+      "name": "tests.conformance.test_contracts.AuthorityAndIndependenceTests.test_overlapping_active_writers_reject",
+      "message": "AssertionError: 0 == 0 : two active task owners may not hold overlapping writable scopes",
+      "defect_class": "one-writer ownership is not fail-closed"
+    },
+    {
+      "name": "tests.conformance.test_contracts.RuntimeActivationTests.test_broader_runtime_scope_rejects_activation",
+      "message": "AssertionError: 0 == 0 : runtime activation must apply authority intersection, not defer it",
+      "defect_class": "runtime activation accepts authority broader than the ticket"
+    },
+    {
+      "name": "tests.conformance.test_contracts.RuntimeActivationTests.test_excess_concurrency_rejects_activation",
+      "message": "AssertionError: 0 == 0 : runtime concurrency above configured four must reject",
+      "defect_class": "runtime activation accepts concurrency above the configured cap"
+    },
+    {
+      "name": "tests.conformance.test_contracts.RuntimeActivationTests.test_mismatched_provenance_digest_rejects",
+      "message": "AssertionError: 0 == 0 : attested package digests must bind to canonical state/package digests",
+      "defect_class": "runtime activation does not bind attested provenance digests"
+    },
+    {
+      "name": "tests.conformance.test_contracts.SchemaAndVocabularyTests.test_read_only_handoff_changed_scope_rejects (role='planner')",
+      "message": "AssertionError: [] is not true : read-only handoff with changed paths must be invalid",
+      "defect_class": "read-only handoff role invariant is not schema-enforced"
+    },
+    {
+      "name": "tests.conformance.test_contracts.SchemaAndVocabularyTests.test_read_only_handoff_changed_scope_rejects (role='reviewer')",
+      "message": "AssertionError: [] is not true : read-only handoff with changed paths must be invalid",
+      "defect_class": "read-only handoff role invariant is not schema-enforced"
+    }
+  ],
+  "defect_classes": [
+    {
+      "id": "VD-01",
+      "claim": "Active tasks with different owners must not have overlapping writable scopes.",
+      "observed": "validate-state returned success for two active writers owning src.",
+      "protocol_impact": ["AC-04", "F1"]
+    },
+    {
+      "id": "VD-02",
+      "claim": "Planner and Reviewer handoffs must require scope.changed to be empty.",
+      "observed": "The handoff schema accepted non-empty changed paths for both read-only roles.",
+      "protocol_impact": ["AC-03", "AC-04", "F1"]
+    },
+    {
+      "id": "VD-03",
+      "claim": "Runtime activation must reject effective writable scope broader than the ticket and human authority.",
+      "observed": "check-package reported runtime_activation pass for writable_scopes ['.'] against ticket scope ['src'].",
+      "protocol_impact": ["AC-04", "AC-11", "F1", "F5"]
+    },
+    {
+      "id": "VD-04",
+      "claim": "Runtime activation must enforce the configured concurrency cap of four.",
+      "observed": "check-package reported runtime_activation pass for max_concurrency 5.",
+      "protocol_impact": ["AC-06", "AC-11", "F3", "F5"]
+    },
+    {
+      "id": "VD-05",
+      "claim": "Runtime activation must bind attested package digests to canonical state and package digests.",
+      "observed": "check-package reported runtime_activation pass after the attested manual digest was changed.",
+      "protocol_impact": ["AC-10", "AC-11", "F5"]
+    }
+  ],
+  "criteria": {
+    "AC-01": "pass",
+    "AC-02": "pass",
+    "AC-03": "fail",
+    "AC-04": "fail",
+    "AC-05": "pass",
+    "AC-06": "fail",
+    "AC-07": "pass",
+    "AC-08": "pass",
+    "AC-09": "pass",
+    "AC-10": "fail",
+    "AC-11": "fail",
+    "AC-12": "pass"
+  },
+  "command_output": {
+    "summary": "Ran 43 tests in 2.387s\n\nFAILED (failures=6)",
+    "failure_lines": [
+      "FAIL: test_overlapping_active_writers_reject (tests.conformance.test_contracts.AuthorityAndIndependenceTests)",
+      "AssertionError: 0 == 0 : two active task owners may not hold overlapping writable scopes",
+      "FAIL: test_broader_runtime_scope_rejects_activation (tests.conformance.test_contracts.RuntimeActivationTests)",
+      "AssertionError: 0 == 0 : runtime activation must apply authority intersection, not defer it",
+      "FAIL: test_excess_concurrency_rejects_activation (tests.conformance.test_contracts.RuntimeActivationTests)",
+      "AssertionError: 0 == 0 : runtime concurrency above configured four must reject",
+      "FAIL: test_mismatched_provenance_digest_rejects (tests.conformance.test_contracts.RuntimeActivationTests)",
+      "AssertionError: 0 == 0 : attested package digests must bind to canonical state/package digests",
+      "FAIL: test_read_only_handoff_changed_scope_rejects (tests.conformance.test_contracts.SchemaAndVocabularyTests) (role='planner')",
+      "AssertionError: [] is not true : read-only handoff with changed paths must be invalid",
+      "FAIL: test_read_only_handoff_changed_scope_rejects (tests.conformance.test_contracts.SchemaAndVocabularyTests) (role='reviewer')",
+      "AssertionError: [] is not true : read-only handoff with changed paths must be invalid"
+    ]
+  },
+  "gaps": [
+    "No live runtime-owned activation or effective-permission telemetry was available; live activation remains unverified.",
+    "Validation was local and deterministic only; production and physical environments were excluded.",
+    "No product workaround or remediation was applied by Validation."
+  ],
+  "conclusion": {
+    "result": "fail",
+    "static_package_checker_baseline": "pass",
+    "frozen_protocol_gate": "fail",
+    "runtime_activation": "unverified",
+    "statement": "The pre-WP3 implementation fails the frozen acceptance protocol on five defect classes represented by six failing assertions."
+  },
+  "post_wp3": {
+    "task_id": "SAG-VALIDATE-003",
+    "protocol_and_harness_integrity": {
+      "protocol_sha256": "edc31644ed2aace18b3b0d5f51ede4487206ea7505ed6a685d5b486d934c366c",
+      "protocol_unchanged": true,
+      "test_contracts_sha256": "923d402c8fa6d43dd170a945dc1154313710ad8c94c842e8e86df8e19f7633e7",
+      "test_contracts_unchanged": true
+    },
+    "environment": {
+      "validation_environment": "local",
+      "python": "3.9.6",
+      "operating_system": "Darwin 25.5.0 arm64",
+      "dependencies": "Python standard library only",
+      "bytecode_cache": "temporary workspace-safe directory",
+      "live_runtime_owned_activation_telemetry": "unavailable"
+    },
+    "implementation_digests": {
+      "AGENTS.md": "3b64a9ff4d3ed6be4dddb4724ee9f0b76a084214ca2a7e69505b12169fb5c176",
+      "Agent.md": "efc06857727f3eefba58fb6fb0e046e7cc3ad64231121a4b2c95fb6ebc8fb3db",
+      "README.md": "5f29652793cdbfe5cfb055d02f01a2411267c59b8fd727b98fd53a1400619be7",
+      ".codex/config.toml": "5fac0fa18357ec99d9039f9274dea88010102a54a3158c60050ab3b77fdb3a86",
+      ".codex/agents/implementation_engineer.toml": "f1b2d0b728d2bc510002d68c65707aee8956c9f76ac7f5efa134a97f57b30fa2",
+      ".codex/agents/planner.toml": "70c05c64c76049075f38afd2e501a89813e71286c8e906cfa15e527f0c169791",
+      ".codex/agents/platform_engineer.toml": "f40c412bdd623aa52877e93b283380867f278e799ddce35c5c6e042e159b1276",
+      ".codex/agents/reviewer.toml": "d1d3eb21aab2a4789c09709beb5872b61a58e51393074cfc001af92f2e79baeb",
+      ".codex/agents/validation_engineer.toml": "9fe95ee0324535379f8772baf5e2d3ef2528e276884811ebc8930a941ac6c859",
+      "contracts/meva.schema.json": "e5b80fd1ebc939bee84ad10a627b088aec58817724b237a99117298522a3ce75",
+      "templates/project-state.json": "38ac59a4c328af5b6491b3845c95215afeac87e1686c4e9ca844d8573c95f48e",
+      "tools/meva_check.py": "bced9f2eab62b590ba160a932900f544ef7f282322fcf5ac09ff9be938ee194d",
+      "docs/reviewer-handbook.md": "c3c70296b0d7fe5425a5a14f12e456451b87017a62793ea4ce853a27c90fa423"
+    },
+    "suite": {
+      "command": "python3 -B -m unittest -v tests.conformance.test_contracts",
+      "exit_code": 0,
+      "tests_run": 43,
+      "passed": 43,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 2.411,
+      "command_output": "Ran 43 tests in 2.411s\n\nOK",
+      "passed_test_names": [
+        "AccountingTests.test_70_percent_boundary",
+        "AccountingTests.test_90_and_100_percent_boundaries",
+        "AccountingTests.test_hard_limits_depth_retry_alternative_and_chain",
+        "AccountingTests.test_invalid_declared_depth_and_retry_limits_reject",
+        "ApprovalTests.test_exact_expiry_boundary_rejects",
+        "ApprovalTests.test_untrusted_expired_and_exact_mismatches_reject",
+        "ApprovalTests.test_valid_approval_and_unknown_id",
+        "AuthorityAndIndependenceTests.test_broader_runtime_permission_fails_closed",
+        "AuthorityAndIndependenceTests.test_overlapping_active_writers_reject",
+        "AuthorityAndIndependenceTests.test_planner_and_reviewer_require_empty_writable_scope",
+        "AuthorityAndIndependenceTests.test_reviewer_authorship_conflict_rejects",
+        "AuthorityAndIndependenceTests.test_valid_authority_intersection_and_scope_escape",
+        "FrozenProtocolTests.test_protocol_digest_is_frozen",
+        "FrozenProtocolTests.test_protocol_digest_mutation_fails_static_package",
+        "LifecycleAndInvalidationTests.test_legal_lifecycle_r0_fast_path_and_invalid_transitions",
+        "LifecycleAndInvalidationTests.test_partial_stale_and_incomplete_invalidation_reject",
+        "LifecycleAndInvalidationTests.test_task_dependency_cycles_reject",
+        "LifecycleAndInvalidationTests.test_transitive_invalidation_and_unrelated_evidence",
+        "PackageConformanceTests.test_config_supported_keys_only",
+        "PackageConformanceTests.test_custom_orchestrator_role_is_rejected",
+        "PackageConformanceTests.test_exactly_five_workers_and_primary_bootstrap",
+        "PackageConformanceTests.test_static_package_passes_and_runtime_is_separate_unverified",
+        "ReviewTests.test_dispositions_and_gate_results",
+        "ReviewTests.test_gate_outcomes_ignore_nonblocking_priority",
+        "ReviewTests.test_invalid_critical_and_high_priorities_reject",
+        "ReviewTests.test_priority_does_not_weaken_high_blocker",
+        "ReviewTests.test_valid_and_invalid_risk_acceptance",
+        "RiskAndTeamCompositionTests.test_consequence_rules_and_no_fold_are_normative",
+        "RiskAndTeamCompositionTests.test_keywords_alone_do_not_escalate_r0",
+        "RiskAndTeamCompositionTests.test_r1_cannot_use_intake_complete_fast_path",
+        "RuntimeActivationTests.test_broader_runtime_scope_rejects_activation",
+        "RuntimeActivationTests.test_excess_concurrency_rejects_activation",
+        "RuntimeActivationTests.test_mismatched_provenance_digest_rejects",
+        "RuntimeActivationTests.test_missing_self_asserted_and_stale_activation",
+        "RuntimeActivationTests.test_unknown_provenance_is_unverified",
+        "RuntimeActivationTests.test_valid_runtime_activation",
+        "RuntimeActivationTests.test_wrong_task_is_unverified",
+        "SchemaAndVocabularyTests.test_aliases_are_rejected",
+        "SchemaAndVocabularyTests.test_canonical_vocabulary_sets",
+        "SchemaAndVocabularyTests.test_duplicate_and_unknown_json_fields_reject_extensions_allow",
+        "SchemaAndVocabularyTests.test_read_only_handoff_changed_scope_rejects",
+        "SchemaAndVocabularyTests.test_required_state_and_handoff_fields_reject",
+        "SchemaAndVocabularyTests.test_valid_template_and_json_restart"
+      ]
+    },
+    "formerly_failing_defect_probes": {
+      "command": "python3 -B -m unittest -v tests.conformance.test_contracts.AuthorityAndIndependenceTests.test_overlapping_active_writers_reject tests.conformance.test_contracts.RuntimeActivationTests.test_broader_runtime_scope_rejects_activation tests.conformance.test_contracts.RuntimeActivationTests.test_excess_concurrency_rejects_activation tests.conformance.test_contracts.RuntimeActivationTests.test_mismatched_provenance_digest_rejects tests.conformance.test_contracts.SchemaAndVocabularyTests.test_read_only_handoff_changed_scope_rejects",
+      "result": "pass",
+      "tests_run": 5,
+      "duration_seconds": 0.130,
+      "command_output": "Ran 5 tests in 0.130s\n\nOK",
+      "covered_defect_classes": [
+        "overlapping active writable scopes",
+        "runtime writable scope broader than authority",
+        "runtime concurrency above configured cap",
+        "attestation provenance digest mismatch",
+        "non-empty Planner or Reviewer handoff scope.changed"
+      ]
+    },
+    "additional_checks": {
+      "static_package": {
+        "command": "python3 -B tools/meva_check.py check-package --root .",
+        "result": "pass",
+        "runtime_activation": "unverified",
+        "static_errors": []
+      },
+      "template_validation": {
+        "command": "python3 -B tools/meva_check.py validate-state templates/project-state.json",
+        "result": "pass",
+        "errors": []
+      },
+      "schema_json_parse": "pass",
+      "validation_report_json_parse_before_update": "pass",
+      "python_compile": {
+        "result": "pass",
+        "artifacts": [
+          "tools/meva_check.py",
+          "tests/conformance/test_contracts.py"
+        ],
+        "cache_location": "temporary directory"
+      }
+    },
+    "criteria": {
+      "AC-01": "pass",
+      "AC-02": "pass",
+      "AC-03": "pass",
+      "AC-04": "pass",
+      "AC-05": "pass",
+      "AC-06": "pass",
+      "AC-07": "pass",
+      "AC-08": "pass",
+      "AC-09": "pass",
+      "AC-10": "pass",
+      "AC-11": "unverified",
+      "AC-12": "pass"
+    },
+    "conclusion": {
+      "static_package": "pass",
+      "frozen_static_and_fixture_checks": "pass",
+      "runtime_activation": "unverified",
+      "result": "conditional",
+      "statement": "All 43 frozen static and synthetic-fixture checks and all five isolated former-defect probes pass against WP3. AC-11 and the live runtime activation gate remain unverified because runtime-owned telemetry was not supplied."
+    }
+  },
+  "post_wp4": {
+    "task_id": "WP5-VALIDATION",
+    "state_revision": 3,
+    "invalidation_revision": 0,
+    "protocol_and_harness_integrity": {
+      "protocol_sha256": "edc31644ed2aace18b3b0d5f51ede4487206ea7505ed6a685d5b486d934c366c",
+      "protocol_lock_sha256": "bee8b50c6d56d884e997c79ccea19e9a5bb5444ddda4c35406644f9a9457a334",
+      "test_contracts_sha256": "923d402c8fa6d43dd170a945dc1154313710ad8c94c842e8e86df8e19f7633e7",
+      "protocol_unchanged": true,
+      "harness_unchanged": true
+    },
+    "environment": {
+      "validation_environment": "local",
+      "python": "3.9.6",
+      "operating_system": "Darwin 25.5.0 arm64",
+      "dependencies": "Python standard library only",
+      "live_runtime_owned_activation_telemetry": "unavailable"
+    },
+    "implementation_digests": {
+      "AGENTS.md": "3b64a9ff4d3ed6be4dddb4724ee9f0b76a084214ca2a7e69505b12169fb5c176",
+      "Agent.md": "d3b5ec062c9914c19601af06e309e10b722935d11fd815a573115beb37a9776d",
+      "README.md": "bc3364ec1e07037ae8f944362dcf764b4772cb30c79b1bd5e297fcdd558ef0b5",
+      ".codex/config.toml": "5fac0fa18357ec99d9039f9274dea88010102a54a3158c60050ab3b77fdb3a86",
+      ".codex/agents/implementation_engineer.toml": "f1b2d0b728d2bc510002d68c65707aee8956c9f76ac7f5efa134a97f57b30fa2",
+      ".codex/agents/planner.toml": "17c4f537c1de81a807a6e0c27efdc7b939cc05745f5c053e7312e18b908bc764",
+      ".codex/agents/platform_engineer.toml": "f40c412bdd623aa52877e93b283380867f278e799ddce35c5c6e042e159b1276",
+      ".codex/agents/reviewer.toml": "b67e480300c3bb564f7fd1ab6890d81651f4326136c5dac9a760a6ac55f113ce",
+      ".codex/agents/validation_engineer.toml": "9fe95ee0324535379f8772baf5e2d3ef2528e276884811ebc8930a941ac6c859",
+      "contracts/meva.schema.json": "98b8aec10b754f7bb2f27faf51eb959f0cb74da0871657c5c907840263185445",
+      "templates/project-state.json": "ac7992916c2d942e5c0597f323f12640db9106acecaf5d9ab289637dccea3589",
+      "tools/meva_check.py": "f09652b21a15385b78f6c37f2d422c6faa611f39eb265aa82b0ba836b61e0e49",
+      "docs/reviewer-handbook.md": "9f9bbe0231c5464de9cf0fec396e98613edb000fef0a0b39266b06f1f4d85db3"
+    },
+    "suite": {
+      "command": "python3 -B -m unittest -v tests.conformance.test_contracts",
+      "exit_code": 0,
+      "tests_run": 43,
+      "passed": 43,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 3.184,
+      "command_output": "Ran 43 tests in 3.184s\n\nOK",
+      "conclusion": "pass"
+    },
+    "additional_checks": {
+      "strict_json": {
+        "command": "python3 -B -m unittest -v tests.conformance.test_review_contracts.RV2AtomicAccountingTests.test_ac004_negative_nan_json_rejects_at_parse tests.conformance.test_contracts.SchemaAndVocabularyTests.test_duplicate_and_unknown_json_fields_reject_extensions_allow",
+        "tests_run": 2,
+        "result": "pass",
+        "command_output": "Ran 2 tests in 0.167s\n\nOK"
+      },
+      "python_compile": {
+        "command": "PYTHONPYCACHEPREFIX=/private/tmp/meva-final-pycache python3 -B -m py_compile tools/meva_check.py tests/conformance/test_contracts.py tests/conformance/test_review_contracts.py tests/conformance/test_assurance_contracts.py",
+        "exit_code": 0,
+        "result": "pass"
+      },
+      "template_validation": {
+        "command": "python3 -B tools/meva_check.py validate-state templates/project-state.json",
+        "result": "pass",
+        "errors": [],
+        "migration_mode": "rv2"
+      },
+      "static_package": {
+        "command": "python3 -B tools/meva_check.py check-package --root .",
+        "exit_code": 0,
+        "static_package": "pass",
+        "runtime_activation": "unverified",
+        "static_errors": [],
+        "activation_observations": [
+          "runtime activation was not evaluated"
+        ]
+      }
+    },
+    "criteria": {
+      "AC-01": "pass",
+      "AC-02": "pass",
+      "AC-03": "pass",
+      "AC-04": "pass",
+      "AC-05": "pass",
+      "AC-06": "pass",
+      "AC-07": "pass",
+      "AC-08": "pass",
+      "AC-09": "pass",
+      "AC-10": "pass",
+      "AC-11": "unverified",
+      "AC-12": "pass"
+    },
+    "conclusion": {
+      "static_package": "pass",
+      "frozen_static_and_fixture_checks": "pass",
+      "runtime_activation": "unverified",
+      "result": "conditional",
+      "statement": "All 43 original frozen static and synthetic-fixture checks pass against the immutable final product. Live runtime activation remains unverified because no runtime-owned activation telemetry was supplied."
+    }
+  }
+}

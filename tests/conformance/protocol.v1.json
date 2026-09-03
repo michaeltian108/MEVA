@@ -1,0 +1,148 @@
+{
+  "protocol_id": "SAG-CONFORMANCE-1.0",
+  "status": "frozen",
+  "contract_target": "2.0",
+  "purpose": "Predeclared acceptance criteria for the MEVA remediation.",
+  "static_package_gate": {
+    "result_values": ["pass", "fail"],
+    "pass_condition": "Every AC marked static passes with no unexpected valid or invalid fixture result."
+  },
+  "runtime_activation_gate": {
+    "result_values": ["pass", "fail", "unverified"],
+    "pass_condition": "Runtime-owned evidence binds the active session to the expected project, role, ticket, configuration, model, policy, package digests, and effective permissions.",
+    "fallback": "Static conformance never upgrades missing runtime evidence; activation remains unverified."
+  },
+  "canonical_decisions": {
+    "spawnable_worker_roles": [
+      "planner",
+      "implementation_engineer",
+      "platform_engineer",
+      "validation_engineer",
+      "reviewer"
+    ],
+    "primary_role": "meva_orchestrator",
+    "state_format": "JSON",
+    "implementation_dependencies": "Python standard library only",
+    "finding_severities": ["critical", "high", "medium", "low"],
+    "finding_priorities": ["P0", "P1", "P2", "P3"],
+    "review_recommendations": ["pass", "conditional", "fail"]
+  },
+  "acceptance_criteria": [
+    {
+      "id": "AC-01",
+      "kind": "static",
+      "covers": ["F4", "F7"],
+      "claim": "The package contains the required bootstrap, manual, config, schema, state example, validator, reviewer handbook, tests, and exactly five unique spawnable worker roles; the primary orchestrator contract is in AGENTS.md and Agent.md.",
+      "threshold": "All required artifacts exist, no meva_orchestrator custom-agent file exists, and the restricted role/config loader reports no duplicate or unsupported definition."
+    },
+    {
+      "id": "AC-02",
+      "kind": "static",
+      "covers": ["F6"],
+      "claim": "One schema is the machine-readable authority for roles, states, risk tiers, safety tiers, classifications, environments, results, severities, priorities, dispositions, and recommendations.",
+      "threshold": "Exact set equality across schema-backed fixtures and zero legacy aliases in normative contracts."
+    },
+    {
+      "id": "AC-03",
+      "kind": "static",
+      "covers": ["F2", "F3", "F4", "F5", "F6"],
+      "claim": "Canonical state, task, handoff, approval, budget, finding, gate, evidence, and runtime-attestation records validate deterministically.",
+      "threshold": "Every valid fixture is accepted and every single-fault mutation is rejected; unknown fields are rejected except under extensions."
+    },
+    {
+      "id": "AC-04",
+      "kind": "static",
+      "covers": ["F1"],
+      "claim": "Declared authority is the intersection of human authority, role maximum, task scope, and attested runtime capability; broader or unknown authority never expands a ticket.",
+      "threshold": "Read-only writes, scope escape, authorship conflict, unknown consequential authority, and broader-than-ticket actions fail closed."
+    },
+    {
+      "id": "AC-05",
+      "kind": "static",
+      "covers": ["F2"],
+      "claim": "Approval use requires a trusted-source verification and exact match on identifier, action, scope, environment, limits, status, and UTC expiry.",
+      "threshold": "Missing or self-asserted verification, superset/substring scope, mismatch, revocation, and now greater than or equal to expiry reject."
+    },
+    {
+      "id": "AC-06",
+      "kind": "static",
+      "covers": ["F3"],
+      "claim": "Budget, external-call, delegation-depth, action-chain, retry, and persistent-resource accounting has deterministic stop behavior.",
+      "threshold": "At 70 percent notify/re-estimate; at 90 percent deny fan-out/nonessential work; at 100 percent deny ordinary work while allowing only cleanup or emergency safe-stop; any hard-limit excess rejects."
+    },
+    {
+      "id": "AC-07",
+      "kind": "static",
+      "covers": ["F2", "F4"],
+      "claim": "Only declared lifecycle transitions are accepted and requirement/interface changes invalidate all affected downstream evidence until acknowledgement and rerun.",
+      "threshold": "All legal transitions pass; skips, terminal resume, stale acknowledgement, and premature resume reject; transitive invalidation is complete and does not touch unrelated evidence."
+    },
+    {
+      "id": "AC-08",
+      "kind": "static",
+      "covers": ["F8"],
+      "claim": "Risk classification is consequence-based, R0 permits a no-delegation fast path, and Validation and Reviewer are never folded when both gates apply.",
+      "threshold": "Local reversible non-consequential work is not escalated by keywords alone; production, sensitive-data, material-spend, consequential-autonomy, or physical blast radius triggers the appropriate higher tier."
+    },
+    {
+      "id": "AC-09",
+      "kind": "static",
+      "covers": ["F4"],
+      "claim": "Reviewer severity and P0-P3 remediation priority are independent and gate evaluation ignores priority.",
+      "threshold": "Open critical is P0 and blocks; open high is P0 or P1 and blocks; priority cannot lower severity, disposition, approval requirements, or release blocking."
+    },
+    {
+      "id": "AC-10",
+      "kind": "static",
+      "covers": ["F5"],
+      "claim": "State and handoffs record effective runtime, model, provider, policy, config, manual, schema, role, ticket, and artifact provenance using explicit unknown values.",
+      "threshold": "Missing required provenance rejects; unknown authority, safety, independence, or reproducibility facts yield unverified rather than pass."
+    },
+    {
+      "id": "AC-11",
+      "kind": "runtime",
+      "covers": ["F1", "F5"],
+      "claim": "Runtime activation is proven only by runtime-owned telemetry for project loading, fresh-session status, selected role, effective permissions, concurrency, ticket, and package digests.",
+      "threshold": "Wrong, stale, missing, self-authored, or broader-than-authorized telemetry yields fail or unverified; static inspection alone cannot pass runtime activation."
+    },
+    {
+      "id": "AC-12",
+      "kind": "static",
+      "covers": ["F4"],
+      "claim": "The frozen protocol cannot drift after implementation begins.",
+      "threshold": "The protocol SHA-256 matches protocol.v1.sha256 before and after validation; mismatch aborts acceptance."
+    }
+  ],
+  "required_negative_cases": [
+    "missing_required_field",
+    "invalid_enum_or_alias",
+    "unknown_field",
+    "read_only_role_write",
+    "write_outside_ticket_scope",
+    "reviewer_authorship_overlap",
+    "approval_unverified",
+    "approval_expired_or_mismatched",
+    "budget_threshold_edges",
+    "delegation_depth_exceeded",
+    "retry_or_action_chain_exceeded",
+    "invalid_state_transition",
+    "stale_or_partial_invalidation_acknowledgement",
+    "priority_attempts_to_weaken_blocker",
+    "blanket_keyword_only_risk_escalation",
+    "forced_r0_delegation",
+    "validation_reviewer_folding",
+    "missing_or_stale_provenance",
+    "static_claims_runtime_activation",
+    "protocol_digest_mismatch"
+  ],
+  "finding_coverage": {
+    "F1": "Role safety and reviewer independence not fail-closed",
+    "F2": "Canonical state and approvals lack authoritative persistence and verification",
+    "F3": "Budget, delegation-depth, retry, and action-chain limits are declarative only",
+    "F4": "No reproducible package validation suite or compatibility evidence",
+    "F5": "Runtime, model, policy, config, and role provenance is underspecified",
+    "F6": "Canonical gate and environment vocabulary drift",
+    "F7": "Primary orchestrator does not automatically receive its full contract",
+    "F8": "Risk and team-efficiency rules are contradictory"
+  }
+}

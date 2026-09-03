@@ -1,0 +1,100 @@
+{
+  "contract_version": "2.0",
+  "schema_uri": "contracts/meva.schema.json",
+  "project": {
+    "id": "replace_me",
+    "goal": "Replace this template goal before starting project work.",
+    "non_goals": [],
+    "risk_tier": "R0",
+    "risk_rationale": "Uninitialized local template; no consequential action is authorized.",
+    "data_classification": "unknown",
+    "physical_safety_tier": "not_applicable",
+    "target_environments": ["local"],
+    "extensions": {}
+  },
+  "state": {
+    "revision": 0,
+    "status": "intake",
+    "current_invalidation_revision": 0,
+    "updated_at": "1970-01-01T00:00:00Z",
+    "history": []
+  },
+  "authority": {
+    "source": "unknown",
+    "source_kind": "unknown",
+    "allowed_actions": [],
+    "scopes": [],
+    "environments": [],
+    "expires_at": "unknown",
+    "extensions": {}
+  },
+  "requirements": [],
+  "interfaces": [],
+  "decisions": [],
+  "tasks": [],
+  "gates": [],
+  "artifacts": [],
+  "evidence": [],
+  "findings": [],
+  "review": {
+    "reviewer": "unknown",
+    "target_artifact_ids": [],
+    "target_evidence_ids": [],
+    "independence_conflicts": [],
+    "recommendation": "fail",
+    "extensions": {}
+  },
+  "approvals": [],
+  "accounting": {
+    "budget": {
+      "max_cost": null,
+      "max_compute_units": null,
+      "max_wall_time_seconds": null,
+      "max_external_calls": 0,
+      "max_worker_fanout": 0,
+      "max_delegation_depth": 0,
+      "max_retries_per_operation": 1,
+      "max_alternative_attempts": 1,
+      "max_action_chain_steps": 0
+    },
+    "usage": {
+      "cost": 0,
+      "compute_units": 0,
+      "wall_time_seconds": 0,
+      "external_calls": 0,
+      "worker_fanout": 0,
+      "delegation_depth": 0,
+      "retries_current_operation": 0,
+      "alternative_attempts": 0,
+      "action_chain_steps": 0
+    },
+    "notified_at_70_percent": false,
+    "reestimated_at_70_percent": false,
+    "updated_at": "1970-01-01T00:00:00Z"
+  },
+  "permission_attestations": [],
+  "invalidations": [],
+  "persistent_resources": [],
+  "action_ledger": {
+    "revision": 0,
+    "reservations": []
+  },
+  "provenance": {
+    "runtime": "unknown",
+    "model": "unknown",
+    "provider": "unknown",
+    "permission_mode": "unknown",
+    "sandbox_mode": "unknown",
+    "policy_digest": "unknown",
+    "config_digest": "unknown",
+    "manual_digest": "unknown",
+    "schema_digest": "unknown",
+    "role_digest": "unknown",
+    "ticket_digest": "unknown",
+    "artifact_digests": {},
+    "attestation_source": "unknown"
+  },
+  "extensions": {
+    "atomic_action_protocol": "reserve-claim-reconcile-v2"
+  }
+}

@@ -1,0 +1,1374 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/meva/contract-2.0/schema",
+  "title": "MEVA Contract 2.0",
+  "description": "Sole machine-readable authority for MEVA state, handoffs, tokens, and records.",
+  "$ref": "#/$defs/projectState",
+  "$defs": {
+    "contractVersion": {
+      "const": "2.0"
+    },
+    "role": {
+      "enum": [
+        "meva_orchestrator",
+        "planner",
+        "implementation_engineer",
+        "platform_engineer",
+        "validation_engineer",
+        "reviewer"
+      ]
+    },
+    "workerRole": {
+      "enum": [
+        "planner",
+        "implementation_engineer",
+        "platform_engineer",
+        "validation_engineer",
+        "reviewer"
+      ]
+    },
+    "lifecycleState": {
+      "enum": [
+        "intake",
+        "design",
+        "ready",
+        "building",
+        "validating",
+        "reviewing",
+        "awaiting_human",
+        "releasing",
+        "complete",
+        "blocked"
+      ]
+    },
+    "riskTier": {
+      "enum": ["R0", "R1", "R2", "R3"]
+    },
+    "physicalSafetyTier": {
+      "enum": ["E0", "E1", "E2", "E3", "not_applicable"]
+    },
+    "dataClassification": {
+      "enum": ["public", "internal", "confidential", "restricted", "unknown"]
+    },
+    "environment": {
+      "enum": [
+        "unit",
+        "local",
+        "ci",
+        "replay",
+        "simulation",
+        "staging",
+        "hardware_in_loop",
+        "controlled_hardware",
+        "edge",
+        "production"
+      ]
+    },
+    "handoffStatus": {
+      "enum": ["complete", "partial", "blocked", "needs_human", "unverified"]
+    },
+    "evidenceResult": {
+      "enum": ["pass", "fail", "not_run", "unverified"]
+    },
+    "gateResult": {
+      "enum": ["pass", "fail", "conditional", "not_applicable", "unverified"]
+    },
+    "staticPackageResult": {
+      "enum": ["pass", "fail"]
+    },
+    "runtimeActivationResult": {
+      "enum": ["pass", "fail", "unverified"]
+    },
+    "gate": {
+      "enum": [
+        "intake",
+        "design",
+        "build_readiness",
+        "implementation",
+        "validation",
+        "independent_review",
+        "release_observation"
+      ]
+    },
+    "severity": {
+      "enum": ["critical", "high", "medium", "low"]
+    },
+    "priority": {
+      "enum": ["P0", "P1", "P2", "P3"]
+    },
+    "findingCategory": {
+      "enum": [
+        "correctness",
+        "security",
+        "privacy",
+        "safety",
+        "data_integrity",
+        "reliability",
+        "performance",
+        "cost",
+        "architecture",
+        "maintainability",
+        "operations",
+        "evaluation_validity",
+        "requirement_traceability",
+        "supply_chain",
+        "compliance",
+        "other"
+      ]
+    },
+    "findingDisposition": {
+      "enum": ["open", "resolved", "risk_accepted", "duplicate", "withdrawn"]
+    },
+    "reviewRecommendation": {
+      "enum": ["pass", "conditional", "fail"]
+    },
+    "permissionMode": {
+      "enum": ["managed", "standard", "elevated", "unknown"]
+    },
+    "sandboxMode": {
+      "enum": ["read_only", "workspace_write", "danger_full_access", "unknown"]
+    },
+    "sourceKind": {
+      "enum": ["runtime_owned", "trusted_external", "self_asserted", "unknown"]
+    },
+    "attestationStatus": {
+      "enum": ["current", "stale", "failed", "unknown"]
+    },
+    "approvalStatus": {
+      "enum": ["active", "revoked"]
+    },
+    "verificationStatus": {
+      "enum": ["verified", "failed", "unknown"]
+    },
+    "recordStatus": {
+      "enum": ["current", "invalidated"]
+    },
+    "invalidationStatus": {
+      "enum": ["open", "acknowledged", "resolved"]
+    },
+    "taskStatus": {
+      "enum": ["pending", "in_progress", "complete", "partial", "blocked", "needs_human", "unverified"]
+    },
+    "actionKind": {
+      "enum": ["ordinary", "essential", "nonessential", "fanout", "cleanup", "emergency_safe_stop"]
+    },
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "handoffTaskId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "handoffText": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240
+    },
+    "handoffItem": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "handoffItems": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/handoffItem"},
+      "maxItems": 8,
+      "uniqueItems": true
+    },
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^(unknown|(?:sha256:)?[a-f0-9]{64})$"
+    },
+    "timestamp": {
+      "type": "string",
+      "pattern": "^(unknown|[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\\.[0-9]+)?Z)$"
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?![A-Za-z]:[\\\\/]).+$"
+    },
+    "stringArray": {
+      "type": "array",
+      "items": {"type": "string"},
+      "uniqueItems": true
+    },
+    "idArray": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/identifier"},
+      "uniqueItems": true
+    },
+    "extensions": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "embodiedSafety": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "operator_id",
+        "physical_envelope",
+        "hardware_emergency_stop_evidence_id",
+        "software_emergency_stop_evidence_id",
+        "watchdog_evidence_id",
+        "heartbeat_timeout_evidence_id",
+        "telemetry_evidence_id",
+        "bounded_command_rate_hz",
+        "hazard_controls",
+        "dry_run_evidence_id",
+        "start_approval_id",
+        "stop_conditions",
+        "incident_recovery",
+        "deterministic_command_validation"
+      ],
+      "properties": {
+        "operator_id": {"$ref": "#/$defs/identifier"},
+        "physical_envelope": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": [
+            "workspace",
+            "max_speed_mps",
+            "max_force_newtons",
+            "max_duration_seconds",
+            "min_proximity_meters"
+          ],
+          "properties": {
+            "workspace": {"type": "object", "minProperties": 1},
+            "max_speed_mps": {"type": "number", "minimum": 0},
+            "max_force_newtons": {"type": "number", "minimum": 0},
+            "max_duration_seconds": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "min_proximity_meters": {"type": "number", "minimum": 0}
+          }
+        },
+        "hardware_emergency_stop_evidence_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "software_emergency_stop_evidence_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "watchdog_evidence_id": {"$ref": "#/$defs/identifier"},
+        "heartbeat_timeout_evidence_id": {"$ref": "#/$defs/identifier"},
+        "telemetry_evidence_id": {"$ref": "#/$defs/identifier"},
+        "bounded_command_rate_hz": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "hazard_controls": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/identifier"},
+          "minItems": 6,
+          "uniqueItems": true
+        },
+        "dry_run_evidence_id": {"$ref": "#/$defs/identifier"},
+        "start_approval_id": {"$ref": "#/$defs/identifier"},
+        "stop_conditions": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/identifier"},
+          "minItems": 5,
+          "uniqueItems": true
+        },
+        "incident_recovery": {"$ref": "#/$defs/nonEmptyString"},
+        "deterministic_command_validation": {"const": true}
+      }
+    },
+    "digestMap": {
+      "type": "object",
+      "additionalProperties": {"$ref": "#/$defs/digest"}
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "runtime",
+        "model",
+        "provider",
+        "permission_mode",
+        "sandbox_mode",
+        "policy_digest",
+        "config_digest",
+        "manual_digest",
+        "schema_digest",
+        "role_digest",
+        "ticket_digest",
+        "artifact_digests",
+        "attestation_source"
+      ],
+      "properties": {
+        "runtime": {"type": "string", "minLength": 1},
+        "model": {"type": "string", "minLength": 1},
+        "provider": {"type": "string", "minLength": 1},
+        "permission_mode": {"$ref": "#/$defs/permissionMode"},
+        "sandbox_mode": {"$ref": "#/$defs/sandboxMode"},
+        "policy_digest": {"$ref": "#/$defs/digest"},
+        "config_digest": {"$ref": "#/$defs/digest"},
+        "manual_digest": {"$ref": "#/$defs/digest"},
+        "schema_digest": {"$ref": "#/$defs/digest"},
+        "role_digest": {"$ref": "#/$defs/digest"},
+        "ticket_digest": {"$ref": "#/$defs/digest"},
+        "artifact_digests": {"$ref": "#/$defs/digestMap"},
+        "attestation_source": {"type": "string", "minLength": 1}
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["inspected", "changed", "excluded"],
+      "properties": {
+        "inspected": {"$ref": "#/$defs/stringArray"},
+        "changed": {"$ref": "#/$defs/stringArray"},
+        "excluded": {"$ref": "#/$defs/stringArray"}
+      }
+    },
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "max_cost",
+        "max_compute_units",
+        "max_wall_time_seconds",
+        "max_external_calls",
+        "max_worker_fanout",
+        "max_delegation_depth",
+        "max_retries_per_operation",
+        "max_alternative_attempts",
+        "max_action_chain_steps"
+      ],
+      "properties": {
+        "max_cost": {"type": ["number", "null"], "minimum": 0},
+        "max_compute_units": {"type": ["number", "null"], "minimum": 0},
+        "max_wall_time_seconds": {"type": ["number", "null"], "minimum": 0},
+        "max_external_calls": {"type": ["integer", "null"], "minimum": 0},
+        "max_worker_fanout": {"type": ["integer", "null"], "minimum": 0},
+        "max_delegation_depth": {"type": ["integer", "null"], "minimum": 0},
+        "max_retries_per_operation": {"type": "integer", "minimum": 0},
+        "max_alternative_attempts": {"type": "integer", "minimum": 0},
+        "max_action_chain_steps": {"type": ["integer", "null"], "minimum": 0}
+      }
+    },
+    "usage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cost",
+        "compute_units",
+        "wall_time_seconds",
+        "external_calls",
+        "worker_fanout",
+        "delegation_depth",
+        "retries_current_operation",
+        "alternative_attempts",
+        "action_chain_steps"
+      ],
+      "properties": {
+        "cost": {"type": "number", "minimum": 0},
+        "compute_units": {"type": "number", "minimum": 0},
+        "wall_time_seconds": {"type": "number", "minimum": 0},
+        "external_calls": {"type": "integer", "minimum": 0},
+        "worker_fanout": {"type": "integer", "minimum": 0},
+        "delegation_depth": {"type": "integer", "minimum": 0},
+        "retries_current_operation": {"type": "integer", "minimum": 0},
+        "alternative_attempts": {"type": "integer", "minimum": 0},
+        "action_chain_steps": {"type": "integer", "minimum": 0}
+      }
+    },
+    "accounting": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["budget", "usage", "notified_at_70_percent", "reestimated_at_70_percent", "updated_at"],
+      "properties": {
+        "budget": {"$ref": "#/$defs/budget"},
+        "usage": {"$ref": "#/$defs/usage"},
+        "notified_at_70_percent": {"type": "boolean"},
+        "reestimated_at_70_percent": {"type": "boolean"},
+        "updated_at": {"$ref": "#/$defs/timestamp"}
+      }
+    },
+    "actionAmounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cost",
+        "compute_units",
+        "wall_time_seconds",
+        "external_calls",
+        "worker_fanout",
+        "action_chain_steps"
+      ],
+      "properties": {
+        "cost": {"type": "number", "minimum": 0},
+        "compute_units": {"type": "number", "minimum": 0},
+        "wall_time_seconds": {"type": "number", "minimum": 0},
+        "external_calls": {"type": "integer", "minimum": 0},
+        "worker_fanout": {"type": "integer", "minimum": 0},
+        "action_chain_steps": {"type": "integer", "minimum": 0}
+      }
+    },
+    "structuredTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "id"],
+      "properties": {
+        "kind": {"$ref": "#/$defs/nonEmptyString"},
+        "id": {"$ref": "#/$defs/nonEmptyString"},
+        "path": {"$ref": "#/$defs/relativePath"},
+        "expected_revision": {"type": "integer", "minimum": 0},
+        "expected_digest": {"$ref": "#/$defs/digest"}
+      }
+    },
+    "actionReservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "task_id",
+        "owner_instance_id",
+        "idempotency_key",
+        "request_digest",
+        "permission_attestation_id",
+        "capability_id",
+        "state_revision",
+        "ledger_revision",
+        "state_digest",
+        "action",
+        "action_kind",
+        "effect",
+        "target",
+        "environment",
+        "reserved",
+        "actual",
+        "status",
+        "created_at",
+        "expires_at",
+        "outcome_digest",
+        "reconciliation_id",
+        "extensions"
+      ],
+      "properties": {
+        "id": {"$ref": "#/$defs/identifier"},
+        "task_id": {"$ref": "#/$defs/identifier"},
+        "owner_instance_id": {"$ref": "#/$defs/identifier"},
+        "idempotency_key": {"$ref": "#/$defs/identifier"},
+        "request_digest": {"$ref": "#/$defs/digest"},
+        "permission_attestation_id": {"$ref": "#/$defs/identifier"},
+        "capability_id": {"$ref": "#/$defs/identifier"},
+        "state_revision": {"type": "integer", "minimum": 0},
+        "ledger_revision": {"type": "integer", "minimum": 0},
+        "state_digest": {"$ref": "#/$defs/digest"},
+        "action": {"$ref": "#/$defs/nonEmptyString"},
+        "action_kind": {"$ref": "#/$defs/actionKind"},
+        "effect": {
+          "enum": ["project_read", "project_write", "external_read", "external_mutation", "physical"]
+        },
+        "target": {"$ref": "#/$defs/structuredTarget"},
+        "environment": {"$ref": "#/$defs/environment"},
+        "reserved": {"$ref": "#/$defs/actionAmounts"},
+        "actual": {"$ref": "#/$defs/actionAmounts"},
+        "status": {
+          "enum": ["reserved", "claimed", "reconciled", "recovery_required"]
+        },
+        "created_at": {"$ref": "#/$defs/timestamp"},
+        "expires_at": {"$ref": "#/$defs/timestamp"},
+        "outcome_digest": {"$ref": "#/$defs/digest"},
+        "reconciliation_id": {
+          "type": "string",
+          "pattern": "^(|[A-Za-z0-9][A-Za-z0-9._:-]*)$"
+        },
+        "extensions": {"$ref": "#/$defs/extensions"}
+      }
+    },
+    "actionLedger": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["revision", "reservations"],
+      "properties": {
+        "revision": {"type": "integer", "minimum": 0},
+        "reservations": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/actionReservation"}
+        }
+      }
+    },
+    "inputArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact", "version"],
+      "properties": {
+        "artifact": {"type": "string", "minLength": 1},
+        "version": {"type": "string", "minLength": 1}
+      }
+    },
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "physical_safety_tier": {"enum": ["E1", "E2"]},
+              "target_environment": {
+                "enum": ["hardware_in_loop", "controlled_hardware"]
+              }
+            },
+            "required": ["physical_safety_tier", "target_environment"]
+          },
+          "then": {
+            "properties": {
+              "extensions": {
+                "type": "object",
+                "required": ["embodied_safety"],
+                "properties": {
+                  "embodied_safety": {"$ref": "#/$defs/embodiedSafety"}
+                }
+              }
+            }
+          }
+        }
+      ],
+      "required": [
+        "id",
+        "objective",
+        "accountable_owner",
+        "risk_tier",
+        "scope",
+        "out_of_scope",
+        "inputs",
+        "dependencies",
+        "writable_scope",
+        "required_outputs",
+        "acceptance_checks",
+        "constraints",
+        "data_classification",
+        "physical_safety_tier",
+        "target_environment",
+        "allowed_actions",
+        "status",
+        "changed_paths",
+        "authored_artifact_ids",
+        "accounting",
+        "rollback_or_recovery",
+        "approvals_required",
+        "extensions"
+      ],
+      "properties": {
+        "id": {"$ref": "#/$defs/identifier"},
+        "objective": {"$ref": "#/$defs/nonEmptyString"},
+        "accountable_owner": {"$ref": "#/$defs/role"},
+        "owner_instance_id": {"$ref": "#/$defs/identifier"},
+        "risk_tier": {"$ref": "#/$defs/riskTier"},
+        "scope": {"$ref": "#/$defs/stringArray"},
+        "out_of_scope": {"$ref": "#/$defs/stringArray"},
+        "inputs": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/inputArtifact"}
+        },
+        "dependencies": {"$ref": "#/$defs/idArray"},
+        "writable_scope": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/relativePath"},
+          "uniqueItems": true
+        },
+        "required_outputs": {"$ref": "#/$defs/stringArray"},
+        "acceptance_checks": {"$ref": "#/$defs/stringArray"},
+        "constraints": {"$ref": "#/$defs/stringArray"},
+        "data_classification": {"$ref": "#/$defs/dataClassification"},
+        "physical_safety_tier": {"$ref": "#/$defs/physicalSafetyTier"},
+        "target_environment": {"$ref": "#/$defs/environment"},
+        "allowed_actions": {"$ref": "#/$defs/stringArray"},
+        "status": {"$ref": "#/$defs/taskStatus"},
+        "changed_paths": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/relativePath"},
+          "uniqueItems": true
+        },
+        "authored_artifact_ids": {"$ref": "#/$defs/idArray"},
+        "accounting": {"$ref": "#/$defs/accounting"},
+        "rollback_or_recovery": {"$ref": "#/$defs/nonEmptyString"},
+        "approvals_required": {"$ref": "#/$defs/stringArray"},
+        "extensions": {"$ref": "#/$defs/extensions"}
+      }
+    },
+    "requirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "statement", "source", "depends_on", "status", "extensions"],
+      "properties": {
+        "id": {"$ref": "#/$defs/identifier"},
+        "statement": {"$ref": "#/$defs/nonEmptyString"},
+        "source": {"$ref": "#/$defs/nonEmptyString"},
+        "depends_on": {"$ref": "#/$defs/idArray"},
+        "status": {"enum": ["active", "superseded"]},
+        "extensions": {"$ref": "#/$defs/extensions"}
+      }
+    },
+    "interface": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "producer", "consumer", "contract", "depends_on", "status", "extensions"],
+      "properties": {
+        "id": {"$ref": "#/$defs/identifier"},
+        "version": {"$ref": "#/$defs/nonEmptyString"},
+        "producer": {"$ref": "#/$defs/nonEmptyString"},
+        "consumer": {"$ref": "#/$defs/nonEmptyString"},
+        "contract": {"$ref": "#/$defs/nonEmptyString"},
+        "depends_on": {"$ref": "#/$defs/idArray"},
+        "status": {"$ref": "#/$defs/recordStatus"},
+        "extensions": {"$ref": "#/$defs/extensions"}
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "decision", "rationale", "alternatives_rejected"],
+      "properties": {
+        "id": {"$ref": "#/$defs/identifier"},
+        "decision": {"$ref": "#/$defs/nonEmptyString"},
+        "rationale": {"$ref": "#/$defs/nonEmptyString"},
+        "alternatives_rejected": {"$ref": "#/$defs/stringArray"}
+      }
+    },
+    "gateRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "gate", "result", "evidence_ids", "depends_on", "invalidation_revision", "extensions"],
+      "properties": {
+        "id": {"$ref": "#/$defs/identifier"},
+        "gate": {"$ref": "#/$defs/gate"},
+        "result": {"$ref": "#/$defs/gateResult"},
+        "evidence_ids": {"$ref": "#/$defs/idArray"},
+        "depends_on": {"$ref": "#/$defs/idArray"},
+        "invalidation_revision": {"type": "integer", "minimum": 0},
+        "extensions": {"$ref": "#/$defs/extensions"}
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "location", "digest", "authors", "owner", "depends_on", "status", "extensions"],
+      "properties": {
+        "id": {"$ref": "#/$defs/identifier"},
+        "location": {"$ref": "#/$defs/relativePath"},
+        "digest": {"$ref": "#/$defs/digest"},
+        "authors": {"$ref": "#/$defs/stringArray"},
+        "owner": {"$ref": "#/$defs/role"},
+        "depends_on": {"$ref": "#/$defs/idArray"},
+        "status": {"$ref": "#/$defs/recordStatus"},
+        "extensions": {"$ref": "#/$defs/extensions"}
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "claim",
+        "source",
+        "environment",
+        "result",
+        "observation",
+        "authors",
+        "depends_on",
+        "status",
+        "invalidation_revision",
+        "extensions"
+      ],
+      "properties": {
+        "id": {"$ref": "#/$defs/identifier"},
+        "claim": {"$ref": "#/$defs/nonEmptyString"},
+        "source": {"$ref": "#/$defs/nonEmptyString"},
+        "environment": {"$ref": "#/$defs/environment"},
+        "result": {"$ref": "#/$defs/evidenceResult"},
+        "observation": {"type": "string"},
+        "authors": {"$ref": "#/$defs/stringArray"},
+        "depends_on": {"$ref": "#/$defs/idArray"},
+        "status": {"$ref": "#/$defs/recordStatus"},
+        "invalidation_revision": {"type": "integer", "minimum": 0},
+        "extensions": {"$ref": "#/$defs/extensions"}
+      }
+    },
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "severity",
+        "priority",
+        "category",
+        "title",
+        "location",
+        "evidence",
+        "impact",
+        "trigger",
+        "required_action",
+        "owner",
+        "disposition",
+        "gate",
+        "approval_id",
+        "duplicate_of",
+        "rationale",
+        "original_evidence",
+        "resolution_evidence_ids",
+        "extensions"
+      ],
+      "properties": {
+        "id": {"$ref": "#/$defs/identifier"},
+        "severity": {"$ref": "#/$defs/severity"},
+        "priority": {"$ref": "#/$defs/priority"},
+        "category": {"$ref": "#/$defs/findingCategory"},
+        "title": {"$ref": "#/$defs/nonEmptyString"},
+        "location": {"$ref": "#/$defs/nonEmptyString"},
+        "evidence": {"$ref": "#/$defs/nonEmptyString"},
+        "impact": {"$ref": "#/$defs/nonEmptyString"},
+        "trigger": {"$ref": "#/$defs/nonEmptyString"},
+        "required_action": {"$ref": "#/$defs/nonEmptyString"},
+        "owner": {"type": "string", "minLength": 1},
+        "disposition": {"$ref": "#/$defs/findingDisposition"},
+        "gate": {"$ref": "#/$defs/gate"},
+        "approval_id": {"type": "string"},
+        "duplicate_of": {"type": "string"},
+        "rationale": {"type": "string"},
+        "original_evidence": {"$ref": "#/$defs/stringArray"},
+        "resolution_evidence_ids": {"$ref": "#/$defs/idArray"},
+        "extensions": {"$ref": "#/$defs/extensions"}
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reviewer",
+        "target_artifact_ids",
+        "target_evidence_ids",
+        "independence_conflicts",
+        "recommendation",
+        "extensions"
+      ],
+      "properties": {
+        "reviewer": {"type": "string", "minLength": 1},
+        "target_artifact_ids": {"$ref": "#/$defs/idArray"},
+        "target_evidence_ids": {"$ref": "#/$defs/idArray"},
+        "independence_conflicts": {"$ref": "#/$defs/stringArray"},
+        "recommendation": {"$ref": "#/$defs/reviewRecommendation"},
+        "extensions": {"$ref": "#/$defs/extensions"}
+      }
+    },
+    "approvalLimits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "max_cost",
+        "max_compute_units",
+        "max_wall_time_seconds",
+        "max_external_calls",
+        "max_action_chain_steps",
+        "physical_envelope",
+        "extensions"
+      ],
+      "properties": {
+        "max_cost": {"type": ["number", "null"], "minimum": 0},
+        "max_compute_units": {"type": ["number", "null"], "minimum": 0},
+        "max_wall_time_seconds": {"type": ["number", "null"], "minimum": 0},
+        "max_external_calls": {"type": ["integer", "null"], "minimum": 0},
+        "max_action_chain_steps": {"type": ["integer", "null"], "minimum": 0},
+        "physical_envelope": {"type": "object", "additionalProperties": true},
+        "extensions": {"$ref": "#/$defs/extensions"}
+      }
+    },
+    "approvalVerification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "source_kind", "status", "verified_at"],
+      "properties": {
+        "source": {"type": "string", "minLength": 1},
+        "source_kind": {"$ref": "#/$defs/sourceKind"},
+        "status": {"$ref": "#/$defs/verificationStatus"},
+        "verified_at": {"$ref": "#/$defs/timestamp"}
+      }
+    },
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "approval_id",
+        "approved_by",
+        "action",
+        "scope",
+        "environment",
+        "limits",
+        "status",
+        "issued_at",
+        "expires_at",
+        "verification",
+        "extensions"
+      ],
+      "properties": {
+        "approval_id": {"$ref": "#/$defs/identifier"},
+        "approved_by": {"$ref": "#/$defs/nonEmptyString"},
+        "action": {"$ref": "#/$defs/nonEmptyString"},
+        "scope": {"$ref": "#/$defs/stringArray"},
+        "environment": {"$ref": "#/$defs/environment"},
+        "limits": {"$ref": "#/$defs/approvalLimits"},
+        "status": {"$ref": "#/$defs/approvalStatus"},
+        "issued_at": {"$ref": "#/$defs/timestamp"},
+        "expires_at": {"$ref": "#/$defs/timestamp"},
+        "verification": {"$ref": "#/$defs/approvalVerification"},
+        "extensions": {"$ref": "#/$defs/extensions"}
+      }
+    },
+    "effectivePermissions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["writable_scopes", "actions", "environments", "external_calls", "max_concurrency"],
+      "properties": {
+        "writable_scopes": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/relativePath"},
+          "uniqueItems": true
+        },
+        "actions": {"$ref": "#/$defs/stringArray"},
+        "environments": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/environment"},
+          "uniqueItems": true
+        },
+        "external_calls": {"type": "boolean"},
+        "max_concurrency": {"type": "integer", "minimum": 1}
+      }
+    },
+    "permissionAttestation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "source",
+        "source_kind",
+        "status",
+        "project_id",
+        "fresh_session",
+        "role",
+        "task_id",
+        "runtime",
+        "model",
+        "provider",
+        "policy_digest",
+        "config_digest",
+        "manual_digest",
+        "schema_digest",
+        "role_digest",
+        "ticket_digest",
+        "effective_permissions",
+        "observed_at",
+        "expires_at",
+        "extensions"
+      ],
+      "properties": {
+        "id": {"$ref": "#/$defs/identifier"},
+        "source": {"type": "string", "minLength": 1},
+        "source_kind": {"$ref": "#/$defs/sourceKind"},
+        "status": {"$ref": "#/$defs/attestationStatus"},
+        "project_id": {"$ref": "#/$defs/identifier"},
+        "fresh_session": {"type": "boolean"},
+        "role": {"$ref": "#/$defs/role"},
+        "task_id": {"$ref": "#/$defs/identifier"},
+        "runtime": {"type": "string", "minLength": 1},
+        "model": {"type": "string", "minLength": 1},
+        "provider": {"type": "string", "minLength": 1},
+        "policy_digest": {"$ref": "#/$defs/digest"},
+        "config_digest": {"$ref": "#/$defs/digest"},
+        "manual_digest": {"$ref": "#/$defs/digest"},
+        "schema_digest": {"$ref": "#/$defs/digest"},
+        "role_digest": {"$ref": "#/$defs/digest"},
+        "ticket_digest": {"$ref": "#/$defs/digest"},
+        "effective_permissions": {"$ref": "#/$defs/effectivePermissions"},
+        "observed_at": {"$ref": "#/$defs/timestamp"},
+        "expires_at": {"$ref": "#/$defs/timestamp"},
+        "extensions": {"$ref": "#/$defs/extensions"}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "source_kind", "allowed_actions", "scopes", "environments", "expires_at", "extensions"],
+      "properties": {
+        "source": {"type": "string", "minLength": 1},
+        "source_kind": {"$ref": "#/$defs/sourceKind"},
+        "allowed_actions": {"$ref": "#/$defs/stringArray"},
+        "scopes": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/relativePath"},
+          "uniqueItems": true
+        },
+        "environments": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/environment"},
+          "uniqueItems": true
+        },
+        "expires_at": {"$ref": "#/$defs/timestamp"},
+        "extensions": {"$ref": "#/$defs/extensions"}
+      }
+    },
+    "acknowledgement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["owner", "revision", "acknowledged_at"],
+      "properties": {
+        "owner": {"type": "string", "minLength": 1},
+        "owner_instance_id": {"$ref": "#/$defs/identifier"},
+        "revision": {"type": "integer", "minimum": 1},
+        "state_revision": {"type": "integer", "minimum": 0},
+        "acknowledged_at": {"$ref": "#/$defs/timestamp"}
+      }
+    },
+    "invalidation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "revision",
+        "changed_ids",
+        "affected_artifact_ids",
+        "affected_evidence_ids",
+        "affected_gate_ids",
+        "required_owners",
+        "acknowledgements",
+        "rerun_evidence_ids",
+        "status",
+        "reason",
+        "extensions"
+      ],
+      "properties": {
+        "id": {"$ref": "#/$defs/identifier"},
+        "revision": {"type": "integer", "minimum": 1},
+        "changed_ids": {"$ref": "#/$defs/idArray"},
+        "affected_artifact_ids": {"$ref": "#/$defs/idArray"},
+        "affected_evidence_ids": {"$ref": "#/$defs/idArray"},
+        "affected_gate_ids": {"$ref": "#/$defs/idArray"},
+        "required_owners": {"$ref": "#/$defs/stringArray"},
+        "acknowledgements": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/acknowledgement"}
+        },
+        "rerun_evidence_ids": {"$ref": "#/$defs/idArray"},
+        "status": {"$ref": "#/$defs/invalidationStatus"},
+        "reason": {"$ref": "#/$defs/nonEmptyString"},
+        "extensions": {"$ref": "#/$defs/extensions"}
+      }
+    },
+    "persistentResource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "owner", "cost_limit", "expires_at", "teardown", "status", "extensions"],
+      "properties": {
+        "id": {"$ref": "#/$defs/identifier"},
+        "owner": {"type": "string", "minLength": 1},
+        "cost_limit": {"type": ["number", "null"], "minimum": 0},
+        "expires_at": {"$ref": "#/$defs/timestamp"},
+        "teardown": {"$ref": "#/$defs/nonEmptyString"},
+        "status": {"enum": ["active", "removed"]},
+        "extensions": {"$ref": "#/$defs/extensions"}
+      }
+    },
+    "stateTransition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["revision", "from", "to", "actor", "at", "reason", "evidence_ids"],
+      "properties": {
+        "revision": {"type": "integer", "minimum": 1},
+        "from": {"$ref": "#/$defs/lifecycleState"},
+        "to": {"$ref": "#/$defs/lifecycleState"},
+        "actor": {"type": "string", "minLength": 1},
+        "at": {"$ref": "#/$defs/timestamp"},
+        "reason": {"type": "string", "minLength": 1},
+        "evidence_ids": {"$ref": "#/$defs/idArray"}
+      }
+    },
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "goal",
+        "non_goals",
+        "risk_tier",
+        "risk_rationale",
+        "data_classification",
+        "physical_safety_tier",
+        "target_environments",
+        "extensions"
+      ],
+      "properties": {
+        "id": {"$ref": "#/$defs/identifier"},
+        "goal": {"$ref": "#/$defs/nonEmptyString"},
+        "non_goals": {"$ref": "#/$defs/stringArray"},
+        "risk_tier": {"$ref": "#/$defs/riskTier"},
+        "risk_rationale": {"$ref": "#/$defs/nonEmptyString"},
+        "data_classification": {"$ref": "#/$defs/dataClassification"},
+        "physical_safety_tier": {"$ref": "#/$defs/physicalSafetyTier"},
+        "target_environments": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/environment"},
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "extensions": {"$ref": "#/$defs/extensions"}
+      }
+    },
+    "stateRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["revision", "status", "current_invalidation_revision", "updated_at", "history"],
+      "properties": {
+        "revision": {"type": "integer", "minimum": 0},
+        "status": {"$ref": "#/$defs/lifecycleState"},
+        "current_invalidation_revision": {"type": "integer", "minimum": 0},
+        "updated_at": {"$ref": "#/$defs/timestamp"},
+        "history": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/stateTransition"}
+        }
+      }
+    },
+    "projectState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_version",
+        "schema_uri",
+        "project",
+        "state",
+        "authority",
+        "requirements",
+        "interfaces",
+        "decisions",
+        "tasks",
+        "gates",
+        "artifacts",
+        "evidence",
+        "findings",
+        "review",
+        "approvals",
+        "accounting",
+        "permission_attestations",
+        "invalidations",
+        "persistent_resources",
+        "provenance",
+        "extensions"
+      ],
+      "properties": {
+        "contract_version": {"$ref": "#/$defs/contractVersion"},
+        "schema_uri": {"const": "contracts/meva.schema.json"},
+        "project": {"$ref": "#/$defs/project"},
+        "state": {"$ref": "#/$defs/stateRecord"},
+        "authority": {"$ref": "#/$defs/authority"},
+        "requirements": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/requirement"}
+        },
+        "interfaces": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/interface"}
+        },
+        "decisions": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/decision"}
+        },
+        "tasks": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/task"}
+        },
+        "gates": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/gateRecord"}
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/artifact"}
+        },
+        "evidence": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/evidence"}
+        },
+        "findings": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/finding"}
+        },
+        "review": {"$ref": "#/$defs/review"},
+        "approvals": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/approval"}
+        },
+        "accounting": {"$ref": "#/$defs/accounting"},
+        "permission_attestations": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/permissionAttestation"}
+        },
+        "invalidations": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/invalidation"}
+        },
+        "persistent_resources": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/persistentResource"}
+        },
+        "action_ledger": {"$ref": "#/$defs/actionLedger"},
+        "provenance": {"$ref": "#/$defs/provenance"},
+        "extensions": {"$ref": "#/$defs/extensions"}
+      }
+    },
+    "risk": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["severity", "issue", "mitigation", "owner"],
+      "properties": {
+        "severity": {"$ref": "#/$defs/severity"},
+        "issue": {"$ref": "#/$defs/nonEmptyString"},
+        "mitigation": {"$ref": "#/$defs/nonEmptyString"},
+        "owner": {"type": "string", "minLength": 1}
+      }
+    },
+    "nextAction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["owner", "action", "acceptance_criteria"],
+      "properties": {
+        "owner": {"type": "string", "minLength": 1},
+        "action": {"$ref": "#/$defs/nonEmptyString"},
+        "acceptance_criteria": {"$ref": "#/$defs/stringArray"}
+      }
+    },
+    "handoffGateResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["gate", "result", "evidence_ids"],
+      "properties": {
+        "gate": {"$ref": "#/$defs/gate"},
+        "result": {"$ref": "#/$defs/gateResult"},
+        "evidence_ids": {"$ref": "#/$defs/idArray"}
+      }
+    },
+    "handoffEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "claim", "source", "environment", "result", "observation"],
+      "properties": {
+        "id": {"$ref": "#/$defs/identifier"},
+        "claim": {"$ref": "#/$defs/nonEmptyString"},
+        "source": {"$ref": "#/$defs/nonEmptyString"},
+        "environment": {"$ref": "#/$defs/environment"},
+        "result": {"$ref": "#/$defs/evidenceResult"},
+        "observation": {"type": "string"}
+      }
+    },
+    "handoffApproval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required",
+        "approval_id",
+        "approved_by",
+        "action",
+        "scope",
+        "environment",
+        "limits",
+        "expires_at",
+        "reason",
+        "verification_source",
+        "verification_status"
+      ],
+      "properties": {
+        "required": {"type": "boolean"},
+        "approval_id": {"type": "string"},
+        "approved_by": {"type": "string"},
+        "action": {"type": "string"},
+        "scope": {"$ref": "#/$defs/stringArray"},
+        "environment": {"type": "string"},
+        "limits": {"type": "object", "additionalProperties": true},
+        "expires_at": {"type": "string"},
+        "reason": {"type": "string"},
+        "verification_source": {"type": "string"},
+        "verification_status": {"type": "string"}
+      }
+    },
+    "legacyHandoff": {
+      "description": "Compatibility-only full handoff record; never accepted by validate-handoff.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_version",
+        "task_id",
+        "role",
+        "status",
+        "summary",
+        "scope",
+        "provenance",
+        "decisions",
+        "evidence",
+        "risks",
+        "open_questions",
+        "next_actions",
+        "human_approval",
+        "extensions"
+      ],
+      "properties": {
+        "contract_version": {"$ref": "#/$defs/contractVersion"},
+        "task_id": {"$ref": "#/$defs/identifier"},
+        "role": {"$ref": "#/$defs/role"},
+        "status": {"$ref": "#/$defs/handoffStatus"},
+        "summary": {"$ref": "#/$defs/nonEmptyString"},
+        "scope": {"$ref": "#/$defs/scope"},
+        "provenance": {"$ref": "#/$defs/provenance"},
+        "project": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["risk_tier", "state", "state_revision", "delivered", "excluded"],
+          "properties": {
+            "risk_tier": {"$ref": "#/$defs/riskTier"},
+            "state": {"$ref": "#/$defs/lifecycleState"},
+            "state_revision": {"type": "string", "minLength": 1},
+            "delivered": {"$ref": "#/$defs/stringArray"},
+            "excluded": {"$ref": "#/$defs/stringArray"}
+          }
+        },
+        "gate_results": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/handoffGateResult"}
+        },
+        "decisions": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/decision"}
+        },
+        "evidence": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/handoffEvidence"}
+        },
+        "risks": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/risk"}
+        },
+        "open_questions": {"$ref": "#/$defs/stringArray"},
+        "next_actions": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/nextAction"}
+        },
+        "human_approval": {"$ref": "#/$defs/handoffApproval"},
+        "extensions": {"$ref": "#/$defs/extensions"}
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "role": {"const": "meva_orchestrator"}
+            },
+            "required": ["role"]
+          },
+          "then": {
+            "required": ["project", "gate_results"]
+          },
+          "else": {
+            "not": {
+              "anyOf": [
+                {"required": ["project"]},
+                {"required": ["gate_results"]}
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "role": {"enum": ["planner", "reviewer"]}
+            },
+            "required": ["role"]
+          },
+          "then": {
+            "properties": {
+              "scope": {
+                "properties": {
+                  "changed": {"maxItems": 0}
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "compactHandoff": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_version",
+        "task_id",
+        "role",
+        "status",
+        "summary",
+        "changed",
+        "refs"
+      ],
+      "properties": {
+        "contract_version": {"$ref": "#/$defs/contractVersion"},
+        "task_id": {"$ref": "#/$defs/handoffTaskId"},
+        "role": {"$ref": "#/$defs/role"},
+        "status": {"$ref": "#/$defs/handoffStatus"},
+        "summary": {"$ref": "#/$defs/handoffText"},
+        "changed": {"$ref": "#/$defs/handoffItems"},
+        "refs": {"$ref": "#/$defs/handoffItems"},
+        "open": {
+          "type": "string",
+          "maxLength": 240
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {"const": "complete"}
+            },
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {
+              "open": {"maxLength": 0}
+            }
+          },
+          "else": {
+            "required": ["open"],
+            "properties": {
+              "open": {"minLength": 1}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "role": {"enum": ["planner", "reviewer"]}
+            },
+            "required": ["role"]
+          },
+          "then": {
+            "properties": {
+              "changed": {"maxItems": 0}
+            }
+          }
+        }
+      ]
+    },
+    "handoff": {
+      "description": "Compact envelope for new cross-phase and crosmeva coordination; legacy records are retained only for migration.",
+      "oneOf": [
+        {"$ref": "#/$defs/compactHandoff"},
+        {"$ref": "#/$defs/legacyHandoff"}
+      ]
+    }
+  }
+}

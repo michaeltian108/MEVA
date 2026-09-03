@@ -1,0 +1,201 @@
+{
+  "report_version": "1.0",
+  "contract_version": "2.0",
+  "task_id": "CLOSURE-VALIDATION",
+  "phase": "final-immutable",
+  "bootstrap_status": "sealed_expectation_before_post_report_execution",
+  "state_binding": {
+    "path": ".meva/state.json",
+    "sha256": "b7a8e0d761db514eb969e24242cd4f1c278095456bb531eb73cd70f57591d600",
+    "state_revision": 19,
+    "invalidation_revision": 0,
+    "validation_result": "pass",
+    "migration_mode": "rv2"
+  },
+  "protocol": {
+    "id": "SAG-CLOSURE-CONFORMANCE-1.0",
+    "path": "tests/conformance/closure_protocol.v1.json",
+    "sha256": "6cd189f3a13edbfe0e5ad9a04dd5f175e541a1202f01dd58ade0163adabebb82",
+    "lock_sha256": "00c2198584d4ce81f36a88a91191683c0b70342089f26d65189258c3359f8d7a",
+    "harness_sha256": "ae53433024b5f2088681e6b88c791d58d5e42d77412da105b58fd25f820c4dd7",
+    "lock_verified": true,
+    "timing_classification": "independently_predeclared_before_patched_outcome_observation",
+    "fixture_correction": {
+      "prior_harness_sha256": "ca979613fb2d15505f4ce87a91f8b1a7e173f9b2a6ecd1a03c240851a198dea5",
+      "final_harness_sha256": "ae53433024b5f2088681e6b88c791d58d5e42d77412da105b58fd25f820c4dd7",
+      "change": "Normalized unittest method-plus-class failure headings to full method IDs.",
+      "criteria_changed": false
+    }
+  },
+  "digests": {
+    "tools/meva_check.py": "56215627ae8e0f8f62564aa63f9769e75cb435e52bc6c8eb95b5b91a9709435f",
+    "contracts/meva.schema.json": "06dec954155ef673cb2ed185badf11a76602d689e2ae5a915b3133d89ba9c228",
+    "tests/conformance/closure_protocol.v1.json": "6cd189f3a13edbfe0e5ad9a04dd5f175e541a1202f01dd58ade0163adabebb82",
+    "tests/conformance/closure_protocol.v1.sha256": "00c2198584d4ce81f36a88a91191683c0b70342089f26d65189258c3359f8d7a",
+    "tests/conformance/test_closure_contracts.py": "ae53433024b5f2088681e6b88c791d58d5e42d77412da105b58fd25f820c4dd7",
+    "tests/conformance/final-review-validation-report.json": "f457ade3d323a25db69f6a5cfb0e004e113ebf488202dbd94d19efb6e49de42f"
+  },
+  "environment": {
+    "kind": "local",
+    "python": "3.9.6",
+    "platform": "Darwin 25.5.0 arm64",
+    "dependencies": "Python standard library only",
+    "runtime_activation": "unverified",
+    "runtime_activation_reason": "Canonical state contains no runtime-owned permission attestation for this Validation session."
+  },
+  "correction_history": [
+    {
+      "sequence": 1,
+      "type": "fixture_parser_correction",
+      "prior_harness_sha256": "ca979613fb2d15505f4ce87a91f8b1a7e173f9b2a6ecd1a03c240851a198dea5",
+      "final_harness_sha256": "ae53433024b5f2088681e6b88c791d58d5e42d77412da105b58fd25f820c4dd7",
+      "criteria_changed": false,
+      "preserved": true
+    },
+    {
+      "sequence": 2,
+      "type": "bootstrap_order_adverse_report",
+      "report_sha256": "826008294365e27093c0ad1459653006a13cfbfd586d04c4fd06cc096ea9f0ee",
+      "stage": "pre_report_new_suite",
+      "command": "python3 -B -m unittest -v tests.conformance.test_closure_contracts",
+      "exit_code": 1,
+      "tests_run": 8,
+      "passed": 6,
+      "failures": 2,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 18.620,
+      "failure_test_ids": [
+        "tests.conformance.test_closure_contracts.ClosureLifecycleLineageTests.test_review_only_monotonic_lineage_passes",
+        "tests.conformance.test_closure_contracts.ClosureReleaseTruthTests.test_exact_counts_and_content_stable_release_pass"
+      ],
+      "observation": "Both release-positive cases failed closed because closure-validation-report.json did not yet exist; check-release evaluated the stale WP6 report and returned four exact stale-lineage errors.",
+      "preserved": true
+    },
+    {
+      "sequence": 3,
+      "type": "bootstrap_order_adverse_report",
+      "report_sha256": "826008294365e27093c0ad1459653006a13cfbfd586d04c4fd06cc096ea9f0ee",
+      "stage": "pre_report_corrected_aggregate",
+      "command": "python3 -B tests/conformance/test_closure_contracts.py --corrected-aggregate",
+      "exit_code": 1,
+      "tests_run": 132,
+      "passed": 130,
+      "failures": 2,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 27.964,
+      "failure_test_ids": [
+        "__main__.ClosureLifecycleLineageTests.test_review_only_monotonic_lineage_passes",
+        "__main__.ClosureReleaseTruthTests.test_exact_counts_and_content_stable_release_pass"
+      ],
+      "observation": "The same two pre-report release-positive cases failed; all other 130 cases passed.",
+      "preserved": true
+    },
+    {
+      "sequence": 4,
+      "type": "bootstrap_order_direct_release_observation",
+      "report_sha256": "826008294365e27093c0ad1459653006a13cfbfd586d04c4fd06cc096ea9f0ee",
+      "stage": "direct_candidate_check_release",
+      "command": "python3 -B tools/meva_check.py check-release --root .",
+      "exit_code": 1,
+      "release_integrity": "fail",
+      "errors": [
+        "tests/conformance/final-review-validation-report.json has stale digest for contracts/meva.schema.json",
+        "tests/conformance/final-review-validation-report.json has stale digest for tools/meva_check.py",
+        "tests/conformance/final-review-validation-report.json integrated validation lineage is absent or inexact",
+        "tests/conformance/final-review-validation-report.json final_release_rerun is stale, partial, or nonpassing"
+      ],
+      "observation": "The direct candidate check was executed inside both release-positive closure cases and failed identically before the closure report existed.",
+      "preserved": true
+    }
+  ],
+  "runs": {
+    "raw_prior": {
+      "command": "python3 -B -m unittest -v tests.conformance.test_contracts tests.conformance.test_review_contracts tests.conformance.test_assurance_contracts",
+      "exit_code": 1,
+      "tests_run": 111,
+      "passed": 108,
+      "failures": 3,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 8.290,
+      "command_output": "Ran 111 tests in 8.290s\n\nFAILED (failures=3)",
+      "failure_test_ids": [
+        "tests.conformance.test_review_contracts.RV2LifecycleTests.test_ac003_positive_r1_current_validation_and_review_gates",
+        "tests.conformance.test_assurance_contracts.SemanticFormalReviewTests.test_exact_formal_review_passes",
+        "tests.conformance.test_assurance_contracts.SemanticLifecycleTests.test_exact_independent_completion_passes"
+      ],
+      "unexpected_failures": [],
+      "conclusion": "pass_with_exact_declared_superseded_failures"
+    },
+    "new": {
+      "command": "python3 -B -m unittest -v tests.conformance.test_closure_contracts",
+      "exit_code": 0,
+      "tests_run": 8,
+      "passed": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "command_output": "Ran 8 tests\n\nOK",
+      "conclusion": "pass"
+    },
+    "corrected_preclosure": {
+      "command": "python3 -B tests/conformance/test_final_review_contracts.py --corrected-aggregate",
+      "exit_code": 0,
+      "tests_run": 124,
+      "passed": 124,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 9.246,
+      "command_output": "Ran 124 tests in 9.246s\n\nOK",
+      "conclusion": "pass"
+    },
+    "corrected_aggregate": {
+      "command": "python3 -B tests/conformance/test_closure_contracts.py --corrected-aggregate",
+      "exit_code": 0,
+      "tests_run": 132,
+      "passed": 132,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "command_output": "Ran 132 tests\n\nOK",
+      "conclusion": "pass"
+    }
+  },
+  "criteria": {
+    "CL-001": "pass",
+    "CL-002": "pass",
+    "CL-003": "pass",
+    "CL-004": "pass"
+  },
+  "final_release_rerun": {
+    "command": "python3 -B tools/meva_check.py check-release --root .",
+    "checker_sha256": "56215627ae8e0f8f62564aa63f9769e75cb435e52bc6c8eb95b5b91a9709435f",
+    "schema_sha256": "06dec954155ef673cb2ed185badf11a76602d689e2ae5a915b3133d89ba9c228",
+    "state_sha256": "b7a8e0d761db514eb969e24242cd4f1c278095456bb531eb73cd70f57591d600",
+    "state_revision": 19,
+    "invalidation_revision": 0,
+    "exit_code": 0,
+    "release_integrity": "pass",
+    "errors": [],
+    "command_output": "{\n  \"contract_version\": \"2.0\",\n  \"details\": {\n    \"agents_digest\": \"116e875d2309cea7684d40071a0a70fc4f45224f253225f1942a67b20c633ce1\",\n    \"assurance_protocol_digest\": \"07baa7f12b50155ba449532ce24bd49a3c009adc4f430425c73c88ca46aa8e15\",\n    \"candidate_state_revision\": 19,\n    \"configured_concurrency\": 4,\n    \"current_candidate_report\": \"tests/conformance/closure-validation-report.json\",\n    \"final_review_protocol_digest\": \"b08e03780d2af87bf2e7f35765e2a941544e502f71f02f9b46545b738f81767a\",\n    \"original_protocol_digest\": \"edc31644ed2aace18b3b0d5f51ede4487206ea7505ed6a685d5b486d934c366c\",\n    \"release_binding_mode\": \"closure_direct\",\n    \"review_protocol_digest\": \"1189746000e9baf26bfab3d19eb4e067e77c01bfd6eb6cd69448bc8cf6b89b57\",\n    \"role_files\": [\n      \".codex/agents/implementation_engineer.toml\",\n      \".codex/agents/planner.toml\",\n      \".codex/agents/platform_engineer.toml\",\n      \".codex/agents/reviewer.toml\",\n      \".codex/agents/validation_engineer.toml\"\n    ]\n  },\n  \"errors\": [],\n  \"release_integrity\": \"pass\"\n}",
+    "report_content_stable": true,
+    "conclusion": "pass"
+  },
+  "conclusion": {
+    "raw_prior": "pass_with_exact_declared_superseded_failures",
+    "new_gate": "pass",
+    "corrected_preclosure_gate": "pass",
+    "corrected_aggregate_gate": "pass",
+    "release_integrity": "pass",
+    "runtime_activation": "unverified",
+    "overall": "pass"
+  },
+  "limitations": [
+    "The initial pre-report bootstrap-order failures remain preserved in correction_history and are not counted as post-envelope passing evidence.",
+    "The final pass envelope was sealed before the post-report suite, aggregate, direct release, and content-stable release executions and was not edited afterward.",
+    "Runtime activation remains unverified; no production, external, or physical readiness is established."
+  ]
+}

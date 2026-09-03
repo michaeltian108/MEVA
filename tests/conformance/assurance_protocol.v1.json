@@ -1,0 +1,250 @@
+{
+  "protocol_id": "SAG-ASSURANCE-CONFORMANCE-1.0",
+  "task_id": "WP5-VALIDATION",
+  "status": "frozen_preimplementation",
+  "contract_target": "2.0",
+  "purpose": "Independent deterministic acceptance addendum for the seven semantic blockers, eight atomic blockers, and single-use claim blocker recorded at the WP5 boundary.",
+  "source_inputs": {
+    "checkpoint": "NEXT_SESSION_HANDOFF.md",
+    "semantic_audit": "SAG-SEMANTIC-ASSURANCE-PRE-WP5",
+    "atomic_audit": "ATOMIC-AUDIT-PRE-WP5",
+    "state_revision": 3,
+    "invalidation_revision": 0
+  },
+  "frozen_upstream": {
+    "tests/conformance/protocol.v1.json": "edc31644ed2aace18b3b0d5f51ede4487206ea7505ed6a685d5b486d934c366c",
+    "tests/conformance/test_contracts.py": "923d402c8fa6d43dd170a945dc1154313710ad8c94c842e8e86df8e19f7633e7",
+    "tests/conformance/review_protocol.v1.json": "1189746000e9baf26bfab3d19eb4e067e77c01bfd6eb6cd69448bc8cf6b89b57",
+    "tests/conformance/test_review_contracts.py": "380ebe80c853b3cc0ab579ead86569e05e2520b1462aa9a29ce3291c33d4f3dc"
+  },
+  "test_design": {
+    "environment": "local",
+    "dependency_set": "Python 3.9 standard library only",
+    "input_format": "strict JSON with duplicate keys and non-finite numbers rejected",
+    "sample_size": 38,
+    "seeds": [],
+    "metric": "Exact agreement with every declared positive and negative decision",
+    "direction": "All positives pass and all negatives fail closed",
+    "threshold": "38 of 38 assurance tests pass with zero failures, errors, or skips; original 43 and RV2 30 also remain exact pass",
+    "uncertainty_method": "Deterministic exact comparison; no statistical uncertainty",
+    "fixture_isolation": "All state mutation, concurrency, symlink, release-report, and lost-response fixtures use temporary directories and never modify product, canonical state, upstream frozen artifacts, or final reports",
+    "evidence_destination": "tests/conformance/assurance-validation-report.json",
+    "freeze_rule": "Criteria, fixtures, inputs, directions, thresholds, commands, and exclusions freeze before implementation outcomes are observed; demonstrated harness defects require an explicit design correction record"
+  },
+  "execution": {
+    "original_command": "python3 -B -m unittest -v tests.conformance.test_contracts",
+    "original_expected": 43,
+    "rv2_command": "python3 -B -m unittest -v tests.conformance.test_review_contracts",
+    "rv2_expected": 30,
+    "assurance_command": "python3 -B -m unittest -v tests.conformance.test_assurance_contracts",
+    "assurance_expected": 38,
+    "combined_command": "python3 -B -m unittest -v tests.conformance.test_contracts tests.conformance.test_review_contracts tests.conformance.test_assurance_contracts",
+    "combined_expected": 111
+  },
+  "public_atomic_contract": {
+    "diagnostic_boundary": "preflight never authorizes consequential action and never emits an executable token",
+    "reservation_boundary": "reserve-action atomically persists bounded capacity and returns a non-executable reservation token with authorizes_consequential_action false",
+    "claim_boundary": "claim-action is the sole first-use authorization transition; one successful atomic claim changes reserved to claimed and returns authorizes_consequential_action true exactly once",
+    "single_use": "Every exact replay, second claim, concurrent loser, expired claim, divergent claim, stale CAS, or claim after narrowed authority returns no new authorization and does not execute",
+    "reconciliation_boundary": "reconcile-action charges actual or conservative use once, is exact-replay idempotent, preserves recovery_required, and never authorizes execution"
+  },
+  "criteria": [
+    {
+      "id": "AS-SEM-001",
+      "claim": "Critical/high risk acceptance is exact, temporally valid, waivable, and never accepts safety controls through legacy, generic, or revoked approval.",
+      "positive_cases": [
+        "A structured waivable high finding with exact current risk_accept_finding approval passes."
+      ],
+      "negative_cases": [
+        "Legacy critical-safety acceptance uses a generic approval.",
+        "Legacy critical-safety acceptance uses a revoked approval.",
+        "Structured high acceptance omits waivability.",
+        "Structured high acceptance omits finding revision."
+      ]
+    },
+    {
+      "id": "AS-SEM-002",
+      "claim": "Critical/high resolution requires existing current independent evidence and exact real-artifact coverage.",
+      "positive_cases": [
+        "Current independent evidence with real artifact coverage resolves."
+      ],
+      "negative_cases": [
+        "Structured resolution evidence is authored by remediation owner.",
+        "Structured coverage names a nonexistent artifact.",
+        "Legacy high resolution cites nonexistent evidence."
+      ]
+    },
+    {
+      "id": "AS-SEM-003",
+      "claim": "R1 completion requires truthful independent Review gate semantics and independently authored gate evidence.",
+      "positive_cases": [
+        "Current Validation and independent Review gates with independent evidence permit completion."
+      ],
+      "negative_cases": [
+        "Review record is advisory or failing while independent_review gate says pass.",
+        "Independent-review gate evidence is authored by implementation."
+      ]
+    },
+    {
+      "id": "AS-SEM-004",
+      "claim": "Review mode and formal attestation enforcement exactly agree with runtime activation and fail closed for unknown, mismatched, or broader capability.",
+      "positive_cases": [
+        "One exact current formal Reviewer attestation with enforced read-only capability passes."
+      ],
+      "negative_cases": [
+        "Review mode is unknown.",
+        "Formal attestation binds a different project.",
+        "Formal attestation binds a different task.",
+        "Formal capability would fail runtime activation."
+      ]
+    },
+    {
+      "id": "AS-SEM-005",
+      "claim": "Generic approval verification rejects future-issued approvals while accepting issuance exactly at use before expiry.",
+      "positive_cases": [
+        "issued_at equals now and now is before expires_at."
+      ],
+      "negative_cases": [
+        "issued_at is later than now."
+      ]
+    },
+    {
+      "id": "AS-SEM-006",
+      "claim": "Release integrity verifies truthful commands, outputs, conclusions, counts, and digests across all three Validation reports.",
+      "positive_cases": [
+        "All report commands, exact counts, outputs, conclusions, and digests describe passing current runs."
+      ],
+      "negative_cases": [
+        "Original report exact counts/digests accompany a failure command, output, or conclusion.",
+        "RV2 or assurance report exact counts/digests accompany a failure command, output, or conclusion."
+      ]
+    },
+    {
+      "id": "AS-SEM-007",
+      "claim": "Invalidation closure includes every behavior-affecting record class and virtual provenance/configuration dependency, not only artifact/evidence/gate records.",
+      "positive_cases": [
+        "Approval-to-finding-to-gate closure and task/provenance closure are complete and acknowledged."
+      ],
+      "negative_cases": [
+        "Changed approval omits affected finding or gate.",
+        "Changed task, authority, permission attestation, action ledger, or provenance dependency is absent from closure."
+      ]
+    },
+    {
+      "id": "AS-ATOMIC-001",
+      "claim": "Reservation replay is non-executable and current claim authorization is revalidated after ticket or authority change.",
+      "positive_cases": [
+        "Exact reserve replay returns the same non-executable token without mutation."
+      ],
+      "negative_cases": [
+        "Reserve or reserve replay returns authorizes_consequential_action true.",
+        "Claim after ticket scope narrows authorizes execution."
+      ]
+    },
+    {
+      "id": "AS-ATOMIC-002",
+      "claim": "Every consequential reservation consumes bounded action-chain capacity even when all numeric requested-use amounts are zero.",
+      "positive_cases": [
+        "One remaining action-chain step permits exactly one reservation."
+      ],
+      "negative_cases": [
+        "Reservation at max_action_chain_steps succeeds."
+      ]
+    },
+    {
+      "id": "AS-ATOMIC-003",
+      "claim": "Threshold accounting includes every outstanding reservation and denies ordinary work at the 100-percent stop.",
+      "positive_cases": [
+        "Ordinary pending capacity below 100 percent remains reservable."
+      ],
+      "negative_cases": [
+        "Multiple pending ordinary reservations reach 100 percent."
+      ]
+    },
+    {
+      "id": "AS-ATOMIC-004",
+      "claim": "Structured target revision/digest preconditions are compared and resolved paths cannot escape authority through symlinks.",
+      "positive_cases": [
+        "Current target revision and digest inside exact scope reserve."
+      ],
+      "negative_cases": [
+        "Stale target revision reserves.",
+        "Symlink resolves outside distribution or writable authority."
+      ]
+    },
+    {
+      "id": "AS-ATOMIC-005",
+      "claim": "Outstanding claimed reservations remain reconcilable across other reconciliation updates and fresh equivalent permission attestations.",
+      "positive_cases": [
+        "Two outstanding claims reconcile independently after one changes accounting.",
+        "Equivalent fresh attestation rotation does not strand a claim."
+      ],
+      "negative_cases": [
+        "Reconciliation accepts a different task, owner, capability, or outcome binding."
+      ]
+    },
+    {
+      "id": "AS-ATOMIC-006",
+      "claim": "Overrun, unknown execution, and reconciliation replay produce immediately valid durable state and charge once.",
+      "positive_cases": [
+        "Overrun is charged and recovery_required state validates.",
+        "Unknown execution charges full reservation and recovery_required state validates.",
+        "Exact reconciliation replay is mutation-free and idempotent."
+      ],
+      "negative_cases": [
+        "Divergent reconciliation replay mutates or charges again."
+      ]
+    },
+    {
+      "id": "AS-ATOMIC-007",
+      "claim": "Reservation expiry is bounded by authority and attestation validity and caller-controlled replay time cannot restore authorization.",
+      "positive_cases": [
+        "First claim strictly before bounded expiry can authorize once."
+      ],
+      "negative_cases": [
+        "Reservation expiry exceeds authority or attestation expiry.",
+        "Claim at or after expiry authorizes.",
+        "Replay with an earlier caller time reauthorizes."
+      ]
+    },
+    {
+      "id": "AS-ATOMIC-008",
+      "claim": "Planner/Reviewer exact external read can reserve and claim without conflicting with read-only role semantics, while mutation remains forbidden.",
+      "positive_cases": [
+        "Budgeted exact Reviewer external_read reserves and claims with empty project write scope."
+      ],
+      "negative_cases": [
+        "External mutation relabeled inspect reserves or claims."
+      ]
+    },
+    {
+      "id": "AS-ATOMIC-009",
+      "claim": "The execution token is single-use: exactly one first claim authorizes and every later or concurrent claim is non-authorizing.",
+      "positive_cases": [
+        "First valid atomic claim changes reserved to claimed and returns authorization once."
+      ],
+      "negative_cases": [
+        "Sequential second claim authorizes.",
+        "Exact claim replay authorizes.",
+        "Two concurrent claims both authorize.",
+        "Lost claim response causes a retry to reauthorize."
+      ]
+    }
+  ],
+  "robustness_cases": [
+    "Identical concurrent CAS requests",
+    "Lost reservation and claim responses followed by exact replay",
+    "Stale digest, state revision, ledger revision, target revision, and target digest",
+    "Symlink path escape",
+    "Fresh equivalent attestation rotation",
+    "Zero-cost action-chain exhaustion",
+    "Pending capacity at 70/90/100-percent boundaries",
+    "Unknown execution, overrun, exact replay, and divergent replay"
+  ],
+  "safety_cases": [
+    "Critical safety findings and required deterministic/live controls remain non-waivable",
+    "No external mutation or physical effect is executed; all fixtures are local synthetic state",
+    "Missing runtime-owned activation remains unverified and cannot support a production or formal independence claim"
+  ],
+  "overall_gate": "All 43 original, 30 RV2, and 38 assurance tests pass; strict package/template/JSON checks pass; release reports are truthful and current; runtime-dependent claims remain unverified without runtime-owned telemetry."
+}

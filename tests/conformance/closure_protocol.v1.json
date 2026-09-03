@@ -1,0 +1,133 @@
+{
+  "protocol_version": "SAG-CLOSURE-CONFORMANCE-1.0",
+  "contract_version": "2.0",
+  "task_id": "CLOSURE-VALIDATION",
+  "status": "frozen_pre_outcome_observation",
+  "timing": {
+    "declared_at": "2026-07-28",
+    "classification": "independently_predeclared_before_patched_outcome_observation",
+    "limitation": "Validation read the revision-17 ticket, advisory findings, and existing frozen fixture interfaces but did not inspect or execute patched product outcomes before this freeze."
+  },
+  "environment": {
+    "kind": "local",
+    "dependencies": "Python 3.9 standard library only",
+    "state_revision_at_freeze": 17,
+    "state_sha256_at_freeze": "08194661546f4994c4eaad7e9605224553af8bba4cd7787c9c8570b3ea06055c",
+    "invalidation_revision_at_freeze": 0,
+    "runtime_activation": "unverified"
+  },
+  "pinned_inputs": {
+    "Agent.md": "5e49241eb114ae1f33e755884fdc5bfc4f67918079f0dfc8e38e8a634a1ac3f7",
+    "contracts/meva.schema.json": "cd0430fa0b3c832c6426b7b6ae41871f3160a8b50adbfbdbc6ec826dd478cb09",
+    "tools/meva_check.py": "bfdd6581d4bcce0c28d96be93cd1b559b1c431f2b67a73b1c1ec938b3beb9e1b",
+    "tests/conformance/test_contracts.py": "923d402c8fa6d43dd170a945dc1154313710ad8c94c842e8e86df8e19f7633e7",
+    "tests/conformance/test_review_contracts.py": "380ebe80c853b3cc0ab579ead86569e05e2520b1462aa9a29ce3291c33d4f3dc",
+    "tests/conformance/test_assurance_contracts.py": "9c2ada2cbe416e2e301a168d9b2757ac58fc315a2a255c72eb2438bbf47e6849",
+    "tests/conformance/test_final_review_contracts.py": "1d4715741c4abb6de668e2448578c6aeebf1d0c3a7309995bec008c77d643a9d",
+    "tests/conformance/final-review-validation-report.json": "f457ade3d323a25db69f6a5cfb0e004e113ebf488202dbd94d19efb6e49de42f"
+  },
+  "artifacts": {
+    "protocol": "tests/conformance/closure_protocol.v1.json",
+    "lock": "tests/conformance/closure_protocol.v1.sha256",
+    "harness": "tests/conformance/test_closure_contracts.py",
+    "future_report": "tests/conformance/closure-validation-report.json"
+  },
+  "data_provenance": {
+    "source": "Synthetic deep copies of frozen conformance fixtures plus local subprocess observations of exact frozen commands.",
+    "license": "Project-internal test artifact",
+    "consent": "Not applicable; no personal or external data",
+    "split": "Four adverse fixtures and four positive controls",
+    "transformations": "Deterministic field deletion, target omission, provenance mutation, and exact command-output parsing",
+    "privacy_class": "internal",
+    "digest": "Bound by protocol lock and harness digest",
+    "allowed_use": "Local contract validation only",
+    "leakage_controls": "No patched outcome observation before freeze; no held-out tuning or post-result threshold changes"
+  },
+  "measurement": {
+    "baseline": "The revision-16 advisory review reproduced all four High findings.",
+    "metric": "Exact deterministic unittest and subprocess agreement",
+    "direction": "higher_is_better",
+    "new_sample_size": 8,
+    "raw_prior_sample_size": 111,
+    "superseded_prior_count": 3,
+    "wp6_sample_size": 16,
+    "corrected_preclosure_sample_size": 124,
+    "corrected_closure_aggregate_sample_size": 132,
+    "seeds": [],
+    "uncertainty_method": "None; deterministic fixtures and exact counts",
+    "thresholds": {
+      "new_suite": "8/8 pass with zero failures, errors, or skips",
+      "raw_prior": "111 run: 108 pass and exactly the three declared superseded failures; zero other failures, errors, or skips",
+      "corrected_preclosure": "124/124 pass with zero failures, errors, or skips",
+      "corrected_closure_aggregate": "132/132 pass with zero failures, errors, or skips",
+      "final_content_stable_release": "The report digest is identical before and after check-release; check-release exits 0 with errors=[] and release_integrity=pass"
+    },
+    "evidence_destination": "tests/conformance/closure-validation-report.json"
+  },
+  "execution": {
+    "raw_prior_command": "python3 -B -m unittest -v tests.conformance.test_contracts tests.conformance.test_review_contracts tests.conformance.test_assurance_contracts",
+    "new_command": "python3 -B -m unittest -v tests.conformance.test_closure_contracts",
+    "corrected_preclosure_command": "python3 -B tests/conformance/test_final_review_contracts.py --corrected-aggregate",
+    "corrected_closure_aggregate_command": "python3 -B tests/conformance/test_closure_contracts.py --corrected-aggregate",
+    "final_content_stable_release_command": "python3 -B tests/conformance/test_closure_contracts.py --final-content-stable-release"
+  },
+  "criteria": [
+    {
+      "id": "CL-001",
+      "finding": "WP6-RV4-001",
+      "claim": "Release evidence is derived from exact independently runnable counts and is rerun only after report content is stable.",
+      "adverse_case": "Any fourth raw failure, nonzero raw error/skip, corrected count below 124, or report mutation across check-release rejects.",
+      "positive_case": "Raw 111 is exactly 108 plus three declared superseded failures, corrected preclosure is 124/124, and a content-stable check-release passes.",
+      "test_ids": [
+        "ClosureReleaseTruthTests.test_unexpected_raw_or_stale_corrected_count_rejects",
+        "ClosureReleaseTruthTests.test_exact_counts_and_content_stable_release_pass"
+      ]
+    },
+    {
+      "id": "CL-002",
+      "finding": "WP6-RV4-002",
+      "claim": "Only monotonic review bookkeeping with unchanged invalidation, product/provenance bytes, and intact Validation lineage may follow Validation integration.",
+      "adverse_case": "A post-Validation state with behavior-affecting provenance drift rejects release.",
+      "positive_case": "The unchanged canonical post-Validation review-only lineage passes release integrity.",
+      "test_ids": [
+        "ClosureLifecycleLineageTests.test_post_validation_behavior_drift_rejects",
+        "ClosureLifecycleLineageTests.test_review_only_monotonic_lineage_passes"
+      ]
+    },
+    {
+      "id": "CL-003",
+      "finding": "WP6-RV4-003",
+      "claim": "E1 and E2 completion require every manual embodied-safety control and current referenced evidence.",
+      "adverse_case": "For E1 and E2, deleting any heartbeat, telemetry, command-rate, hazard, dry-run, stop-condition, incident-recovery, or deterministic-validation control rejects.",
+      "positive_case": "Complete E1 and E2 structured controls with current evidence pass contract validation without granting physical authorization.",
+      "test_ids": [
+        "ClosureEmbodiedSafetyTests.test_e1_e2_missing_manual_control_rejects",
+        "ClosureEmbodiedSafetyTests.test_e1_e2_complete_manual_controls_pass"
+      ]
+    },
+    {
+      "id": "CL-004",
+      "finding": "WP6-RV4-004",
+      "claim": "Formal review targets every current artifact ID declared by the exact Reviewer ticket inputs.",
+      "adverse_case": "A formal Reviewer ticket declares two current artifacts but targets only one; validation rejects.",
+      "positive_case": "The same exact ticket targets both declared current artifacts and passes.",
+      "test_ids": [
+        "ClosureFormalReviewCoverageTests.test_declared_artifact_omission_rejects",
+        "ClosureFormalReviewCoverageTests.test_all_declared_artifacts_targeted_pass"
+      ]
+    }
+  ],
+  "robustness_cases": [
+    "Unexpected raw failure and stale corrected aggregate",
+    "Report mutation across release rerun",
+    "Review-only lineage versus provenance drift",
+    "E1 and E2 with each newly mandatory safety field removed",
+    "One omitted versus all declared formal-review artifact targets"
+  ],
+  "safety_cases": [
+    "No physical or external action is executed",
+    "E1/E2 completion remains contract evidence only",
+    "Behavior-affecting drift fails closed",
+    "Formal review coverage is exact and nonempty"
+  ]
+}

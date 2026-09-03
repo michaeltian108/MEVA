@@ -1,0 +1,456 @@
+{
+  "protocol_id": "SAG-REVIEW-CONFORMANCE-1.0",
+  "task_id": "SAG-PROTOCOL-RV2-001",
+  "status": "frozen_preimplementation",
+  "contract_target": "2.0",
+  "purpose": "Independent behavior-level acceptance criteria for remediation of Reviewer findings RV2-001 through RV2-011.",
+  "source_findings": [
+    "RV2-001",
+    "RV2-002",
+    "RV2-003",
+    "RV2-004",
+    "RV2-005",
+    "RV2-006",
+    "RV2-007",
+    "RV2-008",
+    "RV2-009",
+    "RV2-010",
+    "RV2-011"
+  ],
+  "test_constraints": {
+    "minimum_python": "3.9",
+    "maximum_dependency_set": "Python standard library only",
+    "state_and_fixture_format": "strict JSON",
+    "json_number_policy": "NaN, Infinity, -Infinity, non-finite numbers, and duplicate object keys reject at parse time",
+    "fixture_isolation": "Mutation fixtures use deep copies or temporary trees and never modify product artifacts or either frozen protocol",
+    "acceptance_data_policy": "Required positive and negative cases are frozen here before RV2 implementation and may not be removed, relabeled, or weakened after results are observed"
+  },
+  "required_artifacts": {
+    "original_protocol": "tests/conformance/protocol.v1.json",
+    "original_protocol_lock": "tests/conformance/protocol.v1.sha256",
+    "original_harness": "tests/conformance/test_contracts.py",
+    "original_report": "tests/conformance/validation-report.json",
+    "rv2_protocol": "tests/conformance/review_protocol.v1.json",
+    "rv2_protocol_lock": "tests/conformance/review_protocol.v1.sha256",
+    "rv2_harness": "tests/conformance/test_review_contracts.py",
+    "rv2_report": "tests/conformance/review-validation-report.json"
+  },
+  "package_integrity_modes": {
+    "installed_overlay": {
+      "command": "python3 -B tools/meva_check.py check-package --root <installed-root>",
+      "purpose": "Validate installed executable MEVA artifacts, protocol and harness anchors, and the effective consumer-owned configuration overlay.",
+      "report_rule": "Pre-install validation reports are distribution evidence and are neither required in a consumer copy nor required to bind post-install consumer configuration."
+    },
+    "distribution_release": {
+      "command": "python3 -B tools/meva_check.py check-release --root <distribution-root>",
+      "purpose": "Validate the immutable distribution set, including both protocols, locks, harnesses, reports, and their exact tested revision and digest bindings.",
+      "report_rule": "Both reports are mandatory and bind the canonical distribution configuration and exact release artifacts; this result does not certify a later consumer overlay."
+    }
+  },
+  "regression_gate": {
+    "command": "python3 -B -m unittest -v tests.conformance.test_contracts",
+    "expected_tests_run": 43,
+    "threshold": "Exactly 43 original tests run with 43 passes, zero failures, zero errors, and zero skips",
+    "result_on_missing_or_changed_count": "fail",
+    "rv2_command": "python3 -B -m unittest -v tests.conformance.test_review_contracts",
+    "combined_command": "python3 -B -m unittest -v tests.conformance.test_contracts tests.conformance.test_review_contracts"
+  },
+  "result_semantics": {
+    "static_package": {
+      "allowed": [
+        "pass",
+        "fail",
+        "not_run"
+      ],
+      "pass": "The invoked package-integrity mode satisfies its declared artifact set and bindings. Installed-overlay checks validate executable artifacts, anchors, and effective consumer configuration without requiring distribution reports; distribution-release checks additionally require both reports to bind the exact canonical distribution revisions and digests.",
+      "fail": "Any artifact, lock, trusted digest anchor, schema/semantic check, positive case, negative case, regression, report binding, or test-count threshold required by the invoked mode is missing or contrary to expectation.",
+      "not_run": "The complete static procedure was not executed; not_run never satisfies a gate."
+    },
+    "runtime_activation": {
+      "allowed": [
+        "pass",
+        "fail",
+        "unverified",
+        "not_run"
+      ],
+      "pass": "Fresh runtime-owned evidence for the exact session, state revision, ticket, owner instance, effective permissions, and action enforcement combines with static-package trusted artifact anchors to prove the criterion; every digest declared by runtime or state agrees with those anchors.",
+      "fail": "Current trusted runtime evidence affirmatively contradicts the criterion, shows a forbidden effect, or shows a mismatched, stale, broader, or concurrently lost reservation.",
+      "unverified": "Runtime evidence is absent, stale, self-authored, incomplete, or cannot prove atomic/read-only enforcement; static package success cannot upgrade this result.",
+      "not_run": "No runtime assurance attempt was made; the aggregate activation result is unverified until sufficient runtime-owned evidence is evaluated."
+    },
+    "aggregate": {
+      "static_and_runtime_are_independent": true,
+      "static_pass_implies_runtime_pass": false,
+      "missing_evidence_can_be_conditional": false,
+      "adverse_results_are_preserved": true
+    }
+  },
+  "trusted_digest_anchor": {
+    "required_constant": "EXPECTED_REVIEW_PROTOCOL_DIGEST",
+    "required_location": "tests/conformance/test_review_contracts.py",
+    "required_value": "The lowercase 64-hex SHA-256 of review_protocol.v1.json recorded in review_protocol.v1.sha256 after freeze",
+    "independence_rule": "The constant is a literal embedded independently of review_protocol.v1.json and review_protocol.v1.sha256 and is never computed from either at test time",
+    "co_drift_test": "A temporary mutation that changes review_protocol.v1.json and its lock together while leaving the embedded constant unchanged must fail package conformance",
+    "release_anchor": "Release-grade assurance additionally pins the same digest in a trusted release manifest or CI control outside the mutable package",
+    "limitation": "Package-local code cannot resist a coordinated edit to the protocol, lock, harness, and embedded constant; local conformance must report this limitation and must not claim tamper-proof release integrity"
+  },
+  "compatibility_and_migration": {
+    "original_protocol": "The original protocol and lock remain unchanged and authoritative for F1-F8.",
+    "original_regressions": "All 43 original regression tests remain required; RV2 tests add coverage and may not replace, skip, or weaken them.",
+    "stored_state": "A contract-2.0 state lacking RV2 reservation, approval-target, gate, or digest bindings may be parsed only for safe read-only diagnosis or explicit migration; it cannot authorize consequential work until deterministically migrated and validated. Owner identity has only the narrow legacy derivation declared below.",
+    "migration_safety": "Migration preserves history and adverse evidence, creates a new revision, never fabricates approval, independence, provenance, owner-instance identity, or runtime enforcement, and fails closed when a required fact cannot be established.",
+    "legacy_owner_identity": "For an unchanged legacy contract-2.0 task lacking an explicit owner_instance_id, the effective stable owner-instance identity may be derived only from the id of exactly one current runtime-owned attestation bound to the exact project, role, task, canonical ticket digest, and active time. Missing, ambiguous, stale, self-asserted, mismatched, or otherwise untrusted attestation identity cannot authorize work. An explicit empty, malformed, or conflicting owner_instance_id is invalid and never falls back to legacy derivation.",
+    "legacy_action_kind": "The original preflight compatibility path may preserve its frozen cleanup boundary without claiming RV2 trusted action-kind enforcement or runtime atomicity. RV2 reservation and runtime-pass paths require trusted capability metadata; an explicit conflict between trusted effect metadata and a caller-supplied cleanup label rejects.",
+    "schema_evolution": "Required-field, meaning, enum, or authorization changes require an explicit compatible migration and versioned schema; unknown fields remain rejected outside declared extensions.",
+    "digest_compatibility": "A raw 64-hex SHA-256 and the same value prefixed once with sha256: compare equal after lowercase canonicalization; malformed, multiply prefixed, non-SHA-256, or unequal digests reject.",
+    "artifact_digest_sources": "Required distribution artifact digests may be supplied by immutable embedded literals or a trusted release manifest verified by static_package and need not be duplicated in legacy state artifact_digests or runtime telemetry. Runtime-owned telemetry must bind runtime-varying identity, project, ticket, permission, and environment facts. Every digest declared by state or telemetry is authoritative input and must equal the trusted distribution value; a missing digest fails only when no applicable trusted source supplies it.",
+    "config_overlay_compatibility": "Existing unrelated root keys and unrelated TOML tables are preserved and ignored by the MEVA overlay validator; only the required MEVA namespace and duplicate definitions are judged. Consumer overlays are validated by installed-overlay check-package and are not required to retain or reproduce pre-install distribution reports.",
+    "legacy_review_records": "Extension-empty contract-2.0 risk-acceptance, resolved-evidence, and review records retain the original 43-test parsing and advisory evaluation behavior, but cannot satisfy an RV2 formal gate or authorize consequential preflight, release, deployment, or external mutation.",
+    "rv2_review_enforcement_trigger": "Presence of any RV2 structured review field, including finding revision and waivability/affected-operation bindings, resolution coverage/provenance bindings, or review mode formal, triggers the complete applicable RV2 exactness rules. Partial structured data cannot downgrade to legacy behavior.",
+    "reporting": "The RV2 report records both protocol digests, both harness digests, code/schema/checker digests, exact commands, Python version, test counts, static results, runtime results, and migration mode."
+  },
+  "acceptance_criteria": [
+    {
+      "id": "RV2-AC-001",
+      "finding_id": "RV2-001",
+      "claim": "Risk acceptance is structured, exact, externally verified, and incapable of accepting any policy- or contract-marked non-waivable finding or control.",
+      "assurance_layers": [
+        "static_package",
+        "runtime_activation"
+      ],
+      "metric": "Expected decision agreement across all structured risk-acceptance fixtures and runtime approval resolutions",
+      "baseline": "not_measured_preimplementation",
+      "method": "When RV2 structured finding or approval extensions are present, evaluate finding, affected operation, immutable waivability policy, trusted approval record, and proposed disposition at one explicit UTC instant using exact structural equality. Extension-empty legacy records remain advisory-only and cannot authorize consequential action.",
+      "threshold": "All positive cases accept; every negative case rejects; no non-waivable finding is ever risk_accepted.",
+      "structured_match": {
+        "finding": [
+          "finding_id",
+          "finding_revision",
+          "severity",
+          "category",
+          "waivability",
+          "required_controls"
+        ],
+        "affected_operation": [
+          "action_kind",
+          "structured_target",
+          "scope",
+          "environment",
+          "limits"
+        ],
+        "approval": [
+          "approval_id",
+          "approved_by",
+          "action",
+          "finding_id",
+          "finding_revision",
+          "affected_operation",
+          "status",
+          "issued_at",
+          "expires_at",
+          "verification"
+        ],
+        "exactness": "Approval action must be risk_accept_finding and must match the finding and affected operation; an approval targeting its own approval record or only the disposition operation is not a match."
+      },
+      "positive_cases": [
+        "A waivable high finding is accepted only by a current trusted approval exactly matching finding revision and affected operation action, target, scope, environment, limits, and unexpired UTC interval.",
+        "Revocation or expiry reopens a previously accepted waivable finding."
+      ],
+      "required_negative_cases": [
+        "finding or required control is marked non_waivable",
+        "critical embodied or live-safety control is absent, disabled, or proposed for waiver",
+        "approval names the approval/disposition operation rather than the affected operation",
+        "finding id or revision mismatch",
+        "action kind, structured target, scope, environment, or limits mismatch",
+        "approval is missing, self-authored, unverified, revoked, not yet valid, or now is greater than or equal to expiry",
+        "approval scope is matched by substring, prefix, glob, or inferred superset"
+      ],
+      "evidence_target": "RV2 harness risk-acceptance cases plus trusted approval-resolution trace in the RV2 report"
+    },
+    {
+      "id": "RV2-AC-002",
+      "finding_id": "RV2-002",
+      "claim": "A critical or high finding can be resolved only by existing, current, passing, current-revision, independently authored evidence with explicit coverage and provenance.",
+      "assurance_layers": [
+        "static_package",
+        "runtime_activation"
+      ],
+      "metric": "Resolution decisions agreeing with evidence validity for every fixture",
+      "baseline": "not_measured_preimplementation",
+      "method": "When RV2 structured resolution extensions are present, resolve each evidence ID before disposition, verify result/status/revision, coverage of the finding trigger and required action, artifact dependencies, digests, environment, authorship, and provenance. Extension-empty legacy resolved records remain advisory-only and cannot satisfy an RV2 gate or authorize consequential action.",
+      "threshold": "100 percent expected decisions; all required resolution evidence must satisfy every property.",
+      "positive_cases": [
+        "Existing independent validation evidence passes at the exact current state and invalidation revisions and covers the finding trigger, affected artifacts, required action, and claimed environment.",
+        "Multiple required evidence records resolve only when the complete set is current and passing."
+      ],
+      "required_negative_cases": [
+        "resolution evidence id does not exist",
+        "evidence is missing, failing, unverified, invalidated, stale, partial, or wrong revision",
+        "evidence authors include the finding remediation author or Reviewer",
+        "coverage omits the trigger, required action, affected artifact, or required environment",
+        "provenance or artifact digest is missing, unknown, stale, or mismatched",
+        "evidence is created only after or as a side effect of the resolution decision"
+      ],
+      "evidence_target": "RV2 harness resolution matrix and current-revision evidence graph in the RV2 report"
+    },
+    {
+      "id": "RV2-AC-003",
+      "finding_id": "RV2-003",
+      "claim": "R1 and R2 completion or release requires every applicable current Validation and independent-Review gate, supporting evidence, no active tasks, and no blocking state, while genuine R0 retains its no-delegation path.",
+      "assurance_layers": [
+        "static_package",
+        "runtime_activation"
+      ],
+      "metric": "Lifecycle advancement decisions across the risk, applicability, task, blocker, and gate matrix",
+      "baseline": "not_measured_preimplementation",
+      "method": "Evaluate risk and behavior consequence, gate applicability, exact state revision, evidence graph, independent owner instances, task terminality, open findings, invalidations, reservations, and blockers before transition.",
+      "threshold": "All required gates are current pass with current passing evidence and distinct independent owner instances; active-task and blocker counts are zero before completion/release.",
+      "positive_cases": [
+        "R1 material behavior completes after current Validation and independent Review pass with current evidence, all tasks terminal, and no blocker.",
+        "R2 completes only with both independent gates and its required human checkpoints.",
+        "A genuine local reversible non-consequential R0 task completes with zero worker spawns, proportionate local evidence, and explicit not_applicable gate rationale."
+      ],
+      "required_negative_cases": [
+        "R1 or R2 advances with an absent, not_run, unverified, failed, stale, invalidated, or wrong-revision applicable gate",
+        "gate result exists without current passing evidence",
+        "Validation and Reviewer use the same owner instance or overlap implementation authorship",
+        "pending, in_progress, or blocked task remains active",
+        "open critical/high finding, open invalidation, unreconciled reservation, or other explicit blocker remains",
+        "non-R0 work uses the fast path or R0 eligibility is inferred from filenames or keywords"
+      ],
+      "evidence_target": "RV2 harness transition matrix and gate/task/blocker trace in the RV2 report"
+    },
+    {
+      "id": "RV2-AC-004",
+      "finding_id": "RV2-004",
+      "claim": "Action preflight and accounting reject invalid numeric input, unstructured writes, action-kind relabeling, and stale or concurrent reservations; atomic CAS reservation and reconciliation are required for a runtime pass.",
+      "assurance_layers": [
+        "static_package",
+        "runtime_activation"
+      ],
+      "metric": "Preflight decisions and ledger invariants under single-action, stale-revision, and concurrent-contention cases",
+      "baseline": "not_measured_preimplementation",
+      "method": "Parse JSON strictly, derive action kind from trusted tool/capability metadata, reject explicit caller/trusted-effect conflicts, validate a structured target for writes, validate finite non-negative increments and counters, then reserve and reconcile with expected state and ledger revisions. A legacy compatibility preflight without trusted metadata cannot establish RV2 runtime or atomicity assurance.",
+      "threshold": "100 percent expected decisions; at most one reservation commits each capacity unit; usage equals prior committed usage plus reconciled actual use; no counter is negative or non-finite.",
+      "atomicity_rule": "Static CAS algorithm tests may pass, but runtime accounting is unverified unless runtime-owned telemetry proves atomic compare-and-swap or an equivalently linearizable transaction for reservation and reconciliation.",
+      "positive_cases": [
+        "A finite non-negative increment within budget reserves against exact state and ledger revisions and reconciles once.",
+        "A write with trusted write kind and a structured canonical target is accepted within exact authority and budget.",
+        "Two contenders for the same final unit produce one commit and one stale/conflict rejection."
+      ],
+      "required_negative_cases": [
+        "JSON contains NaN, Infinity, -Infinity, or a duplicate key",
+        "increment, usage counter, reservation amount, or reconciliation value is negative or non-finite",
+        "write action lacks a structured target with canonical resource identity and expected revision where applicable",
+        "caller labels a trusted write capability as inspect, read, cleanup, or another less consequential kind",
+        "trusted capability metadata is absent or unknown on an RV2 reservation/runtime-pass path, or explicitly conflicts with caller action kind",
+        "reservation uses stale state or ledger revision",
+        "concurrent reservations oversubscribe, double-commit, lose an update, or reconcile more than once",
+        "runtime claims pass from a process-local check without atomic/CAS enforcement evidence"
+      ],
+      "evidence_target": "RV2 harness strict-JSON and deterministic concurrency fixtures plus runtime reservation/reconciliation trace"
+    },
+    {
+      "id": "RV2-AC-005",
+      "finding_id": "RV2-005",
+      "claim": "An invalidation resolves only when transitive dependency and owner closure covers every behavior-affecting state input and all affected artifacts, evidence, and gates are current at the exact invalidation and state revisions.",
+      "assurance_layers": [
+        "static_package",
+        "runtime_activation"
+      ],
+      "metric": "Exact equality between computed transitive affected closure and recorded affected/acknowledged/rerun closure",
+      "baseline": "not_measured_preimplementation",
+      "method": "Traverse requirements, interfaces, approvals, code, model, prompt, data, tool schema, policy, config, role, ticket, provenance, artifact, evidence, and gate dependencies; compare IDs, owners, statuses, digests, and revisions.",
+      "threshold": "Computed and recorded affected sets and required owner-instance acknowledgements are exactly equal; each affected record is current at the exact current revisions before resolved.",
+      "positive_cases": [
+        "A behavior-affecting change invalidates and then reruns the full transitive artifact/evidence/gate chain while unrelated evidence remains current.",
+        "Every affected owner instance acknowledges the exact invalidation and state revisions after replacement evidence exists."
+      ],
+      "required_negative_cases": [
+        "behavior-affecting state, approval, provenance, config, role, ticket, or dependency edge is omitted from closure",
+        "affected artifact, evidence, or gate is missing, invalidated, stale, failing, unverified, or at a different revision",
+        "required owner instance is omitted or acknowledgement uses role name only",
+        "acknowledgement is partial, stale, self-authored across an independence boundary, or precedes replacement evidence",
+        "invalidation is marked resolved while any dependent task or gate remains blocked",
+        "unrelated records are invalidated without a dependency path"
+      ],
+      "evidence_target": "RV2 harness graph-closure fixtures and exact revision closure report"
+    },
+    {
+      "id": "RV2-AC-006",
+      "finding_id": "RV2-006",
+      "claim": "Every overlap among active writable scopes rejects, including tasks assigned to the same role, and ownership uses a stable owner-instance identity distinct from role.",
+      "assurance_layers": [
+        "static_package",
+        "runtime_activation"
+      ],
+      "metric": "Overlap detection decisions across normalized path and owner identity cases",
+      "baseline": "not_measured_preimplementation",
+      "method": "Normalize structured relative writable targets without symlink or traversal ambiguity, compare equality and ancestor/descendant overlap for every pair of active tasks, and bind each task to a non-empty stable owner_instance_id plus role. For legacy contract-2.0 input only, derive the effective identity from exactly one current runtime-owned attestation id bound to the exact project, role, task, canonical ticket digest, and active time.",
+      "threshold": "Zero overlaps among active tasks and zero active writable task lacking an explicit valid owner-instance identity or the single permitted legacy effective identity.",
+      "positive_cases": [
+        "Two active tasks with distinct normalized non-overlapping writable scopes and stable owner instances validate.",
+        "A completed or cancelled task does not conflict with a later active task after its reservation and ownership lease are closed.",
+        "An unchanged legacy contract-2.0 task without explicit owner_instance_id may activate when exactly one current runtime-owned attestation id is bound to its exact project, role, task, canonical ticket digest, and active time."
+      ],
+      "required_negative_cases": [
+        "two active tasks have identical writable scope",
+        "one active writable scope is an ancestor or descendant of another",
+        "overlapping active tasks share the same role",
+        "overlapping active tasks share the same owner instance",
+        "explicit owner identity is only a role token, is empty, malformed, conflicts with the bound attestation, changes within the task lifetime, or is reused ambiguously",
+        "legacy effective identity has no unique current runtime-owned attestation bound to the exact project, role, task, canonical ticket digest, and active time",
+        "dot segments, separators, case policy, symlink resolution, or path normalization hides an overlap"
+      ],
+      "evidence_target": "RV2 harness ownership matrix and active-task lease snapshot"
+    },
+    {
+      "id": "RV2-AC-007",
+      "finding_id": "RV2-007",
+      "claim": "Distribution-release conformance includes both original and RV2 protocols, locks, harnesses, and reports, while installed-overlay conformance validates consumer configuration without requiring pre-install reports; both modes detect protocol-plus-lock co-drift against an independent literal digest anchor.",
+      "assurance_layers": [
+        "static_package"
+      ],
+      "metric": "Mode-appropriate artifact presence, digest equality, trusted-anchor equality, distribution report binding, overlay validation, and both-suite outcomes",
+      "baseline": "The original report records 43 original tests passing post-WP3; RV2 is not yet implemented.",
+      "method": "Use check-release for the immutable distribution and check-package for an installed consumer overlay. Hash exact bytes with hashlib.sha256, parse lock lines exactly, compare to literal trusted constants and optional trusted release anchor, execute both suites, and inspect both distribution reports. Do not require a pre-overlay report to bind a post-install consumer config.",
+      "threshold": "Distribution release: all eight required artifacts exist, both locks and anchors match, original suite is exactly 43 of 43, all RV2 tests pass, and both reports bind current canonical distribution digests. Installed overlay: executable artifacts and anchors validate, required MEVA config values remain within bounds, unrelated config is tolerated, and distribution reports are optional.",
+      "positive_cases": [
+        "Unmodified protocols match their locks and embedded literal constants and both reports bind the executed revisions.",
+        "Both original and RV2 harnesses pass in one Python 3.9 stdlib-only run.",
+        "A distribution root passes check-release with both reports present and current.",
+        "A consumer copy without distribution reports passes check-package after a valid unrelated and lower-cap overlay."
+      ],
+      "required_negative_cases": [
+        "either protocol, lock, harness, or report is missing from a distribution-release check",
+        "protocol bytes differ from lock digest",
+        "protocol and lock co-drift while the embedded trusted constant remains unchanged",
+        "trusted constant is derived from protocol or lock at runtime rather than embedded literally",
+        "original suite runs other than exactly 43 tests or skips any test",
+        "report omits a required digest/result or binds a different code, schema, checker, protocol, or harness revision",
+        "local package claims resistance to coordinated edits of protocol, lock, harness, and embedded constant"
+      ],
+      "evidence_target": "Both harness outputs, both reports, and trusted-anchor comparison"
+    },
+    {
+      "id": "RV2-AC-008",
+      "finding_id": "RV2-008",
+      "claim": "Activation binds the AGENTS.md primary/bootstrap contract and all relevant artifact digests through an explicit trusted-source model, comparing raw and sha256-prefixed representations canonically and rejecting every declared conflict.",
+      "assurance_layers": [
+        "static_package",
+        "runtime_activation"
+      ],
+      "metric": "Digest-binding decisions for equivalent, mismatched, missing, stale, and malformed representations",
+      "baseline": "not_measured_preimplementation",
+      "method": "Normalize each permitted SHA-256 representation to lowercase 64-hex for comparison. Bind immutable distribution artifacts, including AGENTS.md, Agent.md, schema, checker, protocol, harness, and canonical distribution config, through embedded literal anchors or a trusted release manifest verified by static_package. Bind fresh runtime-owned telemetry to runtime-varying project, role, session, active ticket, effective permissions, and environment. Compare every digest declared by state or telemetry to the applicable trusted distribution value.",
+      "threshold": "Every required artifact has at least one applicable trusted source and all representations agree after canonicalization. State and runtime telemetry need not duplicate an artifact digest already supplied by a verified immutable release anchor, but any declared missing-source condition or unequal behavior-affecting digest cannot pass activation.",
+      "positive_cases": [
+        "Raw lowercase digest equals the identical once-prefixed sha256: digest.",
+        "Primary activation binds AGENTS.md and Agent.md with primary role meva_orchestrator; worker activation additionally binds the selected worker-role file.",
+        "A legacy state with an empty artifact_digests map activates when static_package verifies immutable embedded or release-manifest anchors for all required distribution artifacts and fresh runtime telemetry binds the exact runtime-varying facts."
+      ],
+      "required_negative_cases": [
+        "AGENTS.md bootstrap digest has no applicable trusted source, is stale, unknown, or mismatched",
+        "Agent.md, config, schema, ticket, checker, relevant role, protocol, or harness digest has no applicable trusted source or is mismatched when applicable",
+        "state or telemetry declares a digest that conflicts with the immutable embedded or trusted release-manifest anchor",
+        "telemetry names a custom or spawnable primary orchestrator instead of the bootstrap primary",
+        "digest uses wrong algorithm, wrong length, non-hex text, multiple prefixes, or unequal value",
+        "self-authored or package-static provenance is presented as runtime-owned activation proof"
+      ],
+      "evidence_target": "RV2 digest matrix and fresh runtime-owned activation attestation"
+    },
+    {
+      "id": "RV2-AC-009",
+      "finding_id": "RV2-010",
+      "claim": "MEVA overlay validation tolerates unrelated existing configuration while still enforcing every required MEVA key/value and rejecting duplicate MEVA definitions.",
+      "assurance_layers": [
+        "static_package"
+      ],
+      "metric": "Overlay acceptance decisions across unrelated-key, required-key, value-bound, and duplicate-definition fixtures",
+      "baseline": "not_measured_preimplementation",
+      "method": "Use installed-overlay check-package and a Python 3.9 stdlib-only restricted parser for the MEVA namespace, preserve unrelated text, and validate required keys exactly once with their required types and bounds. The consumer fixture intentionally omits distribution reports because those reports bind the canonical distribution, not a post-install overlay.",
+      "threshold": "All unrelated valid overlay cases pass unchanged; every missing, mistyped, out-of-bound, or duplicate required MEVA definition rejects.",
+      "required_meva_values": {
+        "agents.enabled": true,
+        "agents.max_concurrent_threads_per_session": "integer from 1 through 4",
+        "agents.interrupt_message": true,
+        "worker_role_files": "exactly the five canonical spawnable worker role definitions with unique names"
+      },
+      "positive_cases": [
+        "Root model/provider keys and unrelated tables such as projects, MCP servers, tools, or user preferences coexist without package failure.",
+        "A lower concurrency cap remains valid because an overlay may narrow authority."
+      ],
+      "required_negative_cases": [
+        "required MEVA key or worker role is missing",
+        "enabled or interrupt_message is false or wrong type",
+        "concurrency is non-integer, below one, or above four",
+        "required MEVA key, table, worker name, or role definition is duplicated",
+        "unrelated key is interpreted as a MEVA alias or allowed to override a required MEVA key"
+      ],
+      "evidence_target": "RV2 overlay fixture matrix and byte-preservation check for unrelated configuration"
+    },
+    {
+      "id": "RV2-AC-010",
+      "finding_id": "RV2-011",
+      "claim": "Planner and Reviewer may perform exactly authorized and budgeted read-only external inspection but can never perform a state-changing external effect.",
+      "assurance_layers": [
+        "static_package",
+        "runtime_activation"
+      ],
+      "metric": "Authorization and effect decisions across external inspection and mutation cases",
+      "baseline": "not_measured_preimplementation",
+      "method": "Intersect role maximum, exact ticket, trusted human authority, external-call budget/reservation, structured target, environment, and runtime capability metadata immediately before the call; verify post-call effect telemetry.",
+      "threshold": "Authorized external reads pass only within exact target and budget; every external state-changing capability or observed effect rejects and invalidates the Planner/Reviewer output.",
+      "positive_cases": [
+        "Planner or Reviewer performs a budgeted read-only fetch against an exact structured external target with runtime-owned read-only capability proof and reconciled accounting.",
+        "Local read-only inspection remains valid without external-call authority."
+      ],
+      "required_negative_cases": [
+        "send, post, comment, create, update, upload, delete, react, approve, merge, deploy, purchase, actuate, or other external mutation is requested or observed",
+        "a mutating capability is relabeled as read, inspect, list, search, preview, or cleanup",
+        "external read lacks exact ticket, authority, structured target, positive remaining budget, reservation, or runtime read-only attestation",
+        "external target, environment, call count, or returned effect exceeds the exact authorization",
+        "role has writable project scope, reports changed artifacts, or external inspection creates a state-changing side effect"
+      ],
+      "evidence_target": "RV2 external-effect matrix and runtime-owned capability/effect/accounting trace"
+    },
+    {
+      "id": "RV2-AC-011",
+      "finding_id": "RV2-009",
+      "claim": "A formal Reviewer gate is invalid or unverified without active canonical state, an exact active review ticket, independence, and runtime-enforced read-only proof; static and advisory review remain explicitly non-gating.",
+      "assurance_layers": [
+        "static_package",
+        "runtime_activation"
+      ],
+      "metric": "Formal-gate validity decisions across state, ticket, revision, independence, permission, and advisory-mode cases",
+      "baseline": "not_measured_preimplementation",
+      "method": "A review marked by structured mode formal triggers exact binding to current canonical state and invalidation revisions, one active review ticket, stable reviewer owner instance, exact reviewed artifacts/evidence, authorship graph, and fresh runtime-owned effective read-only permission telemetry. Extension-empty legacy review output remains advisory and non-gating.",
+      "threshold": "Formal gate passes only when every binding is current and runtime read-only enforcement is proven; otherwise it is fail for contradictory evidence or unverified for absent/insufficient runtime evidence.",
+      "positive_cases": [
+        "A formal review gate uses an active current ticket, independent reviewer instance, current target digests, empty changed scope, and fresh runtime-owned proof denying project and external mutation.",
+        "A static or advisory review is retained as non-gating evidence with mode advisory and no gate result."
+      ],
+      "required_negative_cases": [
+        "canonical state is missing, malformed, stale, unvalidated, or not the active project state",
+        "review ticket is missing, inactive, wrong role, wrong revision, wrong scope, or not bound to the reviewer instance",
+        "reviewer has authorship overlap, non-empty changed scope, project write capability, or unproven effective permissions",
+        "runtime read-only proof is missing, stale, self-authored, broader than ticket, or only a static sandbox declaration",
+        "advisory, static, offline, or package-only review is counted as the formal independent-review gate",
+        "formal gate is reported pass or conditional when activation is unverified"
+      ],
+      "evidence_target": "RV2 formal/advisory review matrix and runtime-owned permission/ticket/state attestation"
+    }
+  ],
+  "acceptance_execution": {
+    "order": [
+      "Verify original and RV2 protocol locks against exact bytes and trusted constants.",
+      "Run distribution-release integrity separately from installed-overlay configuration validation.",
+      "Run the original 43-test regression suite without skips.",
+      "Run all RV2 static behavior cases.",
+      "Generate the RV2 report from exact commands, revisions, digests, and adverse results.",
+      "Evaluate runtime assurance separately when runtime-owned telemetry is available."
+    ],
+    "implementation_gate": "RV2 implementation is acceptable only when static_package is pass; any runtime-dependent production, formal-review, accounting, approval, or external-effect claim remains unverified until its runtime criterion passes.",
+    "threshold_change_rule": "Changing criteria, fixtures, thresholds, exclusions, result semantics, or the trusted digest anchor after implementation begins requires a recorded return to design and a newly versioned protocol; this frozen file and lock are never edited in place."
+  }
+}

@@ -1,0 +1,199 @@
+{
+  "protocol_version": "SAG-FINAL-REVIEW-CONFORMANCE-1.0",
+  "contract_version": "2.0",
+  "task_id": "WP6-VALIDATION",
+  "status": "frozen_pre_outcome_observation",
+  "timing": {
+    "declared_at": "2026-07-28",
+    "classification": "independently_predeclared_before_patched_outcome_observation",
+    "limitation": "Implementation work may have begun before this addendum was frozen. Validation did not inspect or execute patched product outcomes before freezing these criteria.",
+    "criteria_change_reason": "Independent Reviewer reproduction showed that three immutable positive legacy methods encode two unsafe false-pass expectations. This addendum supersedes only those methods and requires their inverse fail-closed behavior; no prior bytes are changed."
+  },
+  "environment": {
+    "kind": "local",
+    "dependencies": "Python 3.9 standard library only",
+    "state_revision_at_freeze": 7,
+    "invalidation_revision_at_freeze": 0,
+    "runtime_activation": "unverified"
+  },
+  "pinned_upstream": {
+    "tests/conformance/protocol.v1.json": "edc31644ed2aace18b3b0d5f51ede4487206ea7505ed6a685d5b486d934c366c",
+    "tests/conformance/test_contracts.py": "923d402c8fa6d43dd170a945dc1154313710ad8c94c842e8e86df8e19f7633e7",
+    "tests/conformance/review_protocol.v1.json": "1189746000e9baf26bfab3d19eb4e067e77c01bfd6eb6cd69448bc8cf6b89b57",
+    "tests/conformance/test_review_contracts.py": "380ebe80c853b3cc0ab579ead86569e05e2520b1462aa9a29ce3291c33d4f3dc",
+    "tests/conformance/assurance_protocol.v1.json": "07baa7f12b50155ba449532ce24bd49a3c009adc4f430425c73c88ca46aa8e15",
+    "tests/conformance/test_assurance_contracts.py": "9c2ada2cbe416e2e301a168d9b2757ac58fc315a2a255c72eb2438bbf47e6849"
+  },
+  "artifacts": {
+    "protocol": "tests/conformance/final_review_protocol.v1.json",
+    "lock": "tests/conformance/final_review_protocol.v1.sha256",
+    "harness": "tests/conformance/test_final_review_contracts.py",
+    "report": "tests/conformance/final-review-validation-report.json"
+  },
+  "data_provenance": {
+    "source": "Synthetic states derived from the three prior frozen Validation harness fixture builders and the WP5 final Reviewer reproduction.",
+    "license": "Project-internal test artifact",
+    "consent": "Not applicable; no personal or externally sourced data",
+    "split": "Eight adverse fixtures and eight positive compatibility controls",
+    "transformations": "Deep-copy and deterministic field mutation only",
+    "privacy_class": "internal",
+    "digest": "Bound by the frozen protocol, lock, and harness digests",
+    "allowed_use": "Local contract validation only",
+    "leakage_controls": "No product outcomes are read before freeze; no held-out cases are used for tuning"
+  },
+  "measurement": {
+    "baseline": "The pre-WP6 immutable product was independently reported to false-pass all eight adverse paths.",
+    "metric": "Exact deterministic unittest agreement",
+    "direction": "higher_is_better",
+    "new_sample_size": 16,
+    "prior_raw_sample_size": 111,
+    "superseded_prior_count": 3,
+    "corrected_aggregate_sample_size": 124,
+    "seeds": [],
+    "uncertainty_method": "None; deterministic fixtures",
+    "thresholds": {
+      "new_suite": "16/16 pass with zero failures, errors, or skips",
+      "raw_prior_suite": "108 pass and exactly three disclosed failures matching superseded_test_ids; no other failure, error, or skip",
+      "corrected_aggregate": "124/124 pass with zero failures, errors, or skips"
+    },
+    "evidence_destination": "tests/conformance/final-review-validation-report.json"
+  },
+  "supersession": {
+    "superseded_test_ids": [
+      "tests.conformance.test_review_contracts.RV2LifecycleTests.test_ac003_positive_r1_current_validation_and_review_gates",
+      "tests.conformance.test_assurance_contracts.SemanticLifecycleTests.test_exact_independent_completion_passes",
+      "tests.conformance.test_assurance_contracts.SemanticFormalReviewTests.test_exact_formal_review_passes"
+    ],
+    "reason": "The first two methods accept R1 completion without an activated formal Reviewer/read-only proof; the third accepts a formal gate with empty review targets. Those positive expectations contradict Agent.md sections 3, 6, 10, and 11 and are unsafe.",
+    "replacement": "FR-001 and FR-002 require the inverse adverse behavior and retain explicit positive controls with exact formal proof and nonempty targets.",
+    "old_bytes_changed": false,
+    "reporting_rule": "Run the immutable raw 111 and disclose exactly the three expected superseded failures. Never relabel raw 111 as green. The release aggregate excludes exactly these IDs and includes every other prior case plus all 16 new cases."
+  },
+  "execution": {
+    "raw_prior_command": "python3 -B -m unittest -v tests.conformance.test_contracts tests.conformance.test_review_contracts tests.conformance.test_assurance_contracts",
+    "raw_prior_expected": {
+      "tests_run": 111,
+      "passed": 108,
+      "failures": 3,
+      "errors": 0,
+      "skipped": 0
+    },
+    "new_command": "python3 -B -m unittest -v tests.conformance.test_final_review_contracts",
+    "new_expected": 16,
+    "corrected_aggregate_command": "python3 -B tests/conformance/test_final_review_contracts.py --corrected-aggregate",
+    "corrected_aggregate_expected": 124
+  },
+  "criteria": [
+    {
+      "id": "FR-001",
+      "finding": "WP5-RV3-001",
+      "claim": "R1/R2 completion requires an activated formal review with exact current runtime-owned read-only proof.",
+      "negative_case": "R1 and R2 completion records with passing gates but absent formal mode and Reviewer attestation reject.",
+      "positive_case": "R1 and R2 completion with nonempty targets, formal mode, exact current Reviewer task/identity, and enforced read-only attestation pass.",
+      "test_ids": [
+        "FinalReviewLifecycleTests.test_completion_without_formal_runtime_proof_rejects",
+        "FinalReviewLifecycleTests.test_completion_with_exact_formal_runtime_proof_passes"
+      ]
+    },
+    {
+      "id": "FR-002",
+      "finding": "WP5-RV3-002",
+      "claim": "A formal evaluate-review gate requires at least one current real target artifact or evidence record.",
+      "negative_case": "Formal evaluate-review with both target lists empty rejects and is not gate eligible.",
+      "positive_case": "Formal evaluate-review with real current artifact and evidence targets passes and is gate eligible.",
+      "test_ids": [
+        "FinalReviewTargetTests.test_formal_review_with_empty_targets_rejects",
+        "FinalReviewTargetTests.test_formal_review_with_exact_targets_passes"
+      ]
+    },
+    {
+      "id": "FR-003",
+      "finding": "WP5-RV3-003",
+      "claim": "Production project-write reservation and claim enforce exact task approvals_required and immutable role maxima.",
+      "negative_case": "A missing required production approval and a Reviewer project-write capability both fail before authorization.",
+      "positive_case": "An Implementation Engineer with an exact active required production approval reserves non-executably and claims once.",
+      "test_ids": [
+        "FinalReviewProductionAuthorityTests.test_missing_required_approval_or_role_maximum_rejects",
+        "FinalReviewProductionAuthorityTests.test_exact_required_production_approval_passes"
+      ]
+    },
+    {
+      "id": "FR-004",
+      "finding": "WP5-RV3-004",
+      "claim": "Structured high risk acceptance never uses a revoked approval.",
+      "negative_case": "An otherwise exact structured high risk-acceptance approval with status revoked rejects.",
+      "positive_case": "The same exact structured acceptance with active approval passes.",
+      "test_ids": [
+        "FinalReviewRiskAcceptanceTests.test_structured_high_revoked_approval_rejects",
+        "FinalReviewRiskAcceptanceTests.test_structured_high_active_approval_passes"
+      ]
+    },
+    {
+      "id": "FR-005",
+      "finding": "WP5-RV3-005",
+      "claim": "When multiple current attestations bind a task, authorization uses the unique newest observation and never falls back to an older permissive attestation.",
+      "negative_case": "An older permissive attestation plus newer denying attestation rejects reservation.",
+      "positive_case": "An older denying attestation plus unique newer exact permissive attestation reserves non-executably and claims once.",
+      "test_ids": [
+        "FinalReviewAttestationSelectionTests.test_older_permissive_newer_denial_rejects",
+        "FinalReviewAttestationSelectionTests.test_unique_newest_permissive_attestation_passes"
+      ]
+    },
+    {
+      "id": "FR-006",
+      "finding": "WP5-RV3-006",
+      "claim": "Every Reviewer external read reserves exactly one external call before claim.",
+      "negative_case": "An external-read reservation requesting external_calls=0 rejects and creates no token.",
+      "positive_case": "An exact Reviewer external-read reservation records reserved.external_calls=1 and claims once.",
+      "test_ids": [
+        "FinalReviewExternalAccountingTests.test_external_read_with_zero_reserved_calls_rejects",
+        "FinalReviewExternalAccountingTests.test_external_read_reserves_one_call_and_claims"
+      ]
+    },
+    {
+      "id": "FR-007",
+      "finding": "WP5-RV3-007",
+      "claim": "E2 controlled_hardware completion requires a named operator, approved numeric envelope, tested hardware/software emergency stops, watchdog, and exact start approval.",
+      "negative_case": "Removing any one required E2 control rejects completion.",
+      "positive_case": "A complete E2 controlled_hardware safety record with current evidence and start approval passes.",
+      "test_ids": [
+        "FinalReviewEmbodiedSafetyTests.test_e2_completion_missing_required_control_rejects",
+        "FinalReviewEmbodiedSafetyTests.test_e2_completion_with_complete_controls_passes"
+      ]
+    },
+    {
+      "id": "FR-008",
+      "finding": "WP5-RV3-008",
+      "claim": "A resolved PROVENANCE-config_digest invalidation requires nonempty current passing affected evidence and gate closure.",
+      "negative_case": "Resolved provenance invalidation with zero affected evidence and gates rejects.",
+      "positive_case": "Exact current-revision evidence, gate, rerun, dependency binding, and acknowledgement pass.",
+      "test_ids": [
+        "FinalReviewProvenanceInvalidationTests.test_resolved_config_invalidation_without_evidence_or_gate_rejects",
+        "FinalReviewProvenanceInvalidationTests.test_resolved_config_invalidation_with_exact_closure_passes"
+      ]
+    }
+  ],
+  "report_requirement": {
+    "id": "FR-009",
+    "finding": "WP5-RV3-009",
+    "claim": "Every final Validation run and conclusion binds the exact state revision, invalidation revision, product digests, protocol digest, harness digest, command, count, output, and conclusion.",
+    "threshold": "No missing, stale, mixed-revision, or unknown reproducibility binding may support pass."
+  },
+  "robustness_cases": [
+    "R1 and R2 lifecycle variants",
+    "Missing versus exact formal targets",
+    "Approval absence, revocation, and role-maximum conflict",
+    "Attestation ordering and fail-closed selection",
+    "External-call under-reservation",
+    "Each named E2 safety control removed independently",
+    "Resolved provenance invalidation with and without exact closure"
+  ],
+  "safety_cases": [
+    "Formal Review independence and read-only enforcement",
+    "Production human-approval enforcement",
+    "Critical/high risk-acceptance revocation",
+    "Single-source current runtime authority",
+    "E2 controlled-hardware preconditions",
+    "Current-revision invalidation evidence"
+  ]
+}

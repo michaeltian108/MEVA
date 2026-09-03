@@ -1,0 +1,240 @@
+{
+  "report_version": "1.0",
+  "task_id": "WP5-VALIDATION",
+  "phase": "final-WP5",
+  "protocol": {
+    "id": "SAG-ASSURANCE-CONFORMANCE-1.0",
+    "path": "tests/conformance/assurance_protocol.v1.json",
+    "sha256": "07baa7f12b50155ba449532ce24bd49a3c009adc4f430425c73c88ca46aa8e15",
+    "lock_sha256": "9b7512329516e159c0f7c25f92842c6023ed0a70135ef5c6914199514044d567",
+    "lock_verified": true,
+    "literal_status": "frozen_preimplementation",
+    "timing_classification": "independently_predeclared_before_outcome_observation",
+    "timing_limitation": "Implementation work had already begun before the assurance addendum was frozen, although Validation had not inspected or executed against implementation outcomes. The literal frozen_preimplementation label is therefore too strong and is not relied upon."
+  },
+  "environment": {
+    "kind": "local",
+    "python": "3.9.6",
+    "platform": "Darwin 25.5.0 arm64",
+    "dependencies": "Python standard library only",
+    "state_revision": 3,
+    "invalidation_revision": 0,
+    "runtime_owned_activation_telemetry": "absent; live activation unverified"
+  },
+  "digests": {
+    "AGENTS.md": "3b64a9ff4d3ed6be4dddb4724ee9f0b76a084214ca2a7e69505b12169fb5c176",
+    "Agent.md": "d3b5ec062c9914c19601af06e309e10b722935d11fd815a573115beb37a9776d",
+    "README.md": "bc3364ec1e07037ae8f944362dcf764b4772cb30c79b1bd5e297fcdd558ef0b5",
+    ".codex/config.toml": "5fac0fa18357ec99d9039f9274dea88010102a54a3158c60050ab3b77fdb3a86",
+    ".codex/agents/implementation_engineer.toml": "f1b2d0b728d2bc510002d68c65707aee8956c9f76ac7f5efa134a97f57b30fa2",
+    ".codex/agents/planner.toml": "17c4f537c1de81a807a6e0c27efdc7b939cc05745f5c053e7312e18b908bc764",
+    ".codex/agents/platform_engineer.toml": "f40c412bdd623aa52877e93b283380867f278e799ddce35c5c6e042e159b1276",
+    ".codex/agents/reviewer.toml": "b67e480300c3bb564f7fd1ab6890d81651f4326136c5dac9a760a6ac55f113ce",
+    ".codex/agents/validation_engineer.toml": "9fe95ee0324535379f8772baf5e2d3ef2528e276884811ebc8930a941ac6c859",
+    "contracts/meva.schema.json": "98b8aec10b754f7bb2f27faf51eb959f0cb74da0871657c5c907840263185445",
+    "templates/project-state.json": "ac7992916c2d942e5c0597f323f12640db9106acecaf5d9ab289637dccea3589",
+    "tools/meva_check.py": "f09652b21a15385b78f6c37f2d422c6faa611f39eb265aa82b0ba836b61e0e49",
+    "docs/reviewer-handbook.md": "9f9bbe0231c5464de9cf0fec396e98613edb000fef0a0b39266b06f1f4d85db3",
+    "tests/conformance/protocol.v1.json": "edc31644ed2aace18b3b0d5f51ede4487206ea7505ed6a685d5b486d934c366c",
+    "tests/conformance/protocol.v1.sha256": "bee8b50c6d56d884e997c79ccea19e9a5bb5444ddda4c35406644f9a9457a334",
+    "tests/conformance/test_contracts.py": "923d402c8fa6d43dd170a945dc1154313710ad8c94c842e8e86df8e19f7633e7",
+    "tests/conformance/review_protocol.v1.json": "1189746000e9baf26bfab3d19eb4e067e77c01bfd6eb6cd69448bc8cf6b89b57",
+    "tests/conformance/review_protocol.v1.sha256": "6efc5ad7b607e0801b23df539da857cc235849cf4118593ad5c41980d698aed0",
+    "tests/conformance/test_review_contracts.py": "380ebe80c853b3cc0ab579ead86569e05e2520b1462aa9a29ce3291c33d4f3dc",
+    "tests/conformance/assurance_protocol.v1.json": "07baa7f12b50155ba449532ce24bd49a3c009adc4f430425c73c88ca46aa8e15",
+    "tests/conformance/assurance_protocol.v1.sha256": "9b7512329516e159c0f7c25f92842c6023ed0a70135ef5c6914199514044d567",
+    "tests/conformance/test_assurance_contracts.py": "9c2ada2cbe416e2e301a168d9b2757ac58fc315a2a255c72eb2438bbf47e6849",
+    "tests/conformance/validation-report.json": "e82766bf6fb2aa3ea0e07a4e9652bd065c038a406cf8d591689960203b85be76",
+    "tests/conformance/review-validation-report.json": "89dbb4372985d8e03c987247b23b5d916d1506dc556ef8ec9e528edb02b164a2"
+  },
+  "historical_adverse_evidence": {
+    "initial_baseline_limitation": "The initial assurance execution overlapped active checker mutation and therefore did not bind one product revision.",
+    "observations": [
+      {
+        "phase": "earlier assurance observation",
+        "tests_run": 38,
+        "passed": 24,
+        "failures": 14,
+        "errors": 0,
+        "conclusion": "fail"
+      },
+      {
+        "phase": "later mixed-revision combined observation",
+        "original": "43/43 pass",
+        "rv2": "30/30 pass",
+        "assurance": "33/38 pass",
+        "combined": "106/111 pass",
+        "conclusion": "fail"
+      }
+    ],
+    "use": "Preserved as adverse development evidence only; neither observation supports final acceptance because product bytes changed during execution."
+  },
+  "harness_correction_record": {
+    "classification": "demonstrated_fixture_defect",
+    "criterion": "AS-ATOMIC-002: one remaining action-chain step permits exactly one reservation and reserves one action-chain step.",
+    "criterion_changed": false,
+    "protocol_changed": false,
+    "lock_changed": false,
+    "old_harness_sha256": "13e22a6ab52b3e16deab8009bcdb2748a1800e3d61b26ce9d5c0433808b0d83b",
+    "corrected_harness_sha256": "9c2ada2cbe416e2e301a168d9b2757ac58fc315a2a255c72eb2438bbf47e6849",
+    "reason": "The positive fixture set project and task action_chain_steps to 9/10 but left the pre-existing >=70% notification and re-estimation controls false, so valid normative state validation rejected before the reservation criterion was exercised.",
+    "minimal_correction": "Set notified_at_70_percent and reestimated_at_70_percent true for project and task accounting in only the one-remaining-step fixture.",
+    "pre_correction_reproduction": "One isolated failure containing only the six expected project/task >=70% notification, re-estimation, and pending-capacity control errors.",
+    "intermediate_anchor_observation": "After correction but before the product anchor update, 22/38 passed and all 16 failures reported only the stale embedded assurance-harness anchor.",
+    "final_result": "The corrected case and all 38 assurance cases passed after the immutable checker embedded the corrected harness digest."
+  },
+  "runs": {
+    "assurance": {
+      "command": "python3 -B -m unittest -v tests.conformance.test_assurance_contracts",
+      "exit_code": 0,
+      "tests_run": 38,
+      "passed": 38,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 3.351,
+      "command_output": "Ran 38 tests in 3.351s\n\nOK",
+      "conclusion": "pass"
+    },
+    "combined": {
+      "command": "python3 -B -m unittest -v tests.conformance.test_contracts tests.conformance.test_review_contracts tests.conformance.test_assurance_contracts",
+      "exit_code": 0,
+      "tests_run": 111,
+      "passed": 111,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 7.565,
+      "command_output": "Ran 111 tests in 7.565s\n\nOK",
+      "conclusion": "pass"
+    }
+  },
+  "supporting_runs": {
+    "original": {
+      "command": "python3 -B -m unittest -v tests.conformance.test_contracts",
+      "tests_run": 43,
+      "passed": 43,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 3.184,
+      "conclusion": "pass"
+    },
+    "rv2": {
+      "command": "python3 -B -m unittest -v tests.conformance.test_review_contracts",
+      "tests_run": 30,
+      "passed": 30,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 1.167,
+      "conclusion": "pass"
+    },
+    "original_plus_rv2": {
+      "command": "python3 -B -m unittest -v tests.conformance.test_contracts tests.conformance.test_review_contracts",
+      "tests_run": 73,
+      "passed": 73,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 4.374,
+      "conclusion": "pass"
+    }
+  },
+  "targeted_probes": {
+    "command": "python3 -B -m unittest -v tests.conformance.test_assurance_contracts.AtomicAuthorizationTests.test_concurrent_claim_has_exactly_one_authorizing_winner tests.conformance.test_assurance_contracts.AtomicAuthorizationTests.test_reserve_and_exact_replay_are_nonauthorizing tests.conformance.test_assurance_contracts.AtomicAuthorizationTests.test_second_or_lost_response_claim_never_reauthorizes tests.conformance.test_assurance_contracts.AtomicReconciliationTests.test_reconciliation_exact_replay_and_divergence tests.conformance.test_assurance_contracts.AtomicReconciliationTests.test_two_outstanding_claims_reconcile_without_lost_update tests.conformance.test_assurance_contracts.AtomicReconciliationTests.test_overrun_is_valid_durable_recovery_state tests.conformance.test_assurance_contracts.AtomicRecoveryTests.test_unknown_execution_is_charged_valid_recovery_and_blocks_completion",
+    "coverage": [
+      "concurrent single-use claim authorization",
+      "non-authorizing reservation replay",
+      "lost-response and second-claim replay",
+      "reconciliation exact replay and divergence",
+      "two outstanding claims without lost update",
+      "durable overrun recovery state",
+      "unknown-execution charging and completion blocking"
+    ],
+    "tests_run": 7,
+    "passed": 7,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "duration_seconds": 1.160,
+    "command_output": "Ran 7 tests in 1.160s\n\nOK",
+    "conclusion": "pass"
+  },
+  "additional_checks": {
+    "strict_json": {
+      "command": "python3 -B -m unittest -v tests.conformance.test_review_contracts.RV2AtomicAccountingTests.test_ac004_negative_nan_json_rejects_at_parse tests.conformance.test_contracts.SchemaAndVocabularyTests.test_duplicate_and_unknown_json_fields_reject_extensions_allow",
+      "tests_run": 2,
+      "passed": 2,
+      "duration_seconds": 0.167,
+      "conclusion": "pass"
+    },
+    "python_compile": {
+      "command": "PYTHONPYCACHEPREFIX=/private/tmp/meva-final-pycache python3 -B -m py_compile tools/meva_check.py tests/conformance/test_contracts.py tests/conformance/test_review_contracts.py tests/conformance/test_assurance_contracts.py",
+      "exit_code": 0,
+      "conclusion": "pass"
+    },
+    "template_validation": {
+      "command": "python3 -B tools/meva_check.py validate-state templates/project-state.json",
+      "result": "pass",
+      "errors": [],
+      "migration_mode": "rv2"
+    },
+    "check_package": {
+      "command": "python3 -B tools/meva_check.py check-package --root .",
+      "exit_code": 0,
+      "static_package": "pass",
+      "runtime_activation": "unverified",
+      "static_errors": [],
+      "activation_observations": [
+        "runtime activation was not evaluated"
+      ]
+    }
+  },
+  "criteria": {
+    "AS-SEM-001": "pass",
+    "AS-SEM-002": "pass",
+    "AS-SEM-003": "pass",
+    "AS-SEM-004": "pass",
+    "AS-SEM-005": "pass",
+    "AS-SEM-006": "pass",
+    "AS-SEM-007": "pass",
+    "AS-ATOMIC-001": "pass",
+    "AS-ATOMIC-002": "pass",
+    "AS-ATOMIC-003": "pass",
+    "AS-ATOMIC-004": "pass",
+    "AS-ATOMIC-005": "pass",
+    "AS-ATOMIC-006": "pass",
+    "AS-ATOMIC-007": "pass",
+    "AS-ATOMIC-008": "pass",
+    "AS-ATOMIC-009": "pass"
+  },
+  "limitations": [
+    "Live runtime activation and effective permissions remain unverified because no runtime-owned activation telemetry or permission attestation was supplied.",
+    "The evidence is local and synthetic; it does not support production, physical, or external-effect readiness.",
+    "Package-local anchors are release-integrity controls, not proof against a coordinated edit of every local anchor and artifact."
+  ],
+  "release_check": {
+    "command": "python3 -B tools/meva_check.py check-release --root .",
+    "exit_code": 0,
+    "release_integrity": "pass",
+    "errors": [],
+    "details": {
+      "agents_digest": "3b64a9ff4d3ed6be4dddb4724ee9f0b76a084214ca2a7e69505b12169fb5c176",
+      "original_protocol_digest": "edc31644ed2aace18b3b0d5f51ede4487206ea7505ed6a685d5b486d934c366c",
+      "review_protocol_digest": "1189746000e9baf26bfab3d19eb4e067e77c01bfd6eb6cd69448bc8cf6b89b57",
+      "assurance_protocol_digest": "07baa7f12b50155ba449532ce24bd49a3c009adc4f430425c73c88ca46aa8e15",
+      "configured_concurrency": 4
+    }
+  },
+  "conclusion": {
+    "original_gate": "pass",
+    "rv2_gate": "pass",
+    "assurance_gate": "pass",
+    "combined_gate": "pass",
+    "static_package": "pass",
+    "runtime_activation": "unverified",
+    "overall": "pass",
+    "statement": "The immutable final product passes all 38 assurance cases and the complete 111-case local static and synthetic suite without failures or skips. Live runtime activation remains separately unverified."
+  }
+}

@@ -1,0 +1,236 @@
+{
+  "report_version": "1.0",
+  "contract_version": "2.0",
+  "task_id": "WP6-VALIDATION",
+  "phase": "final-immutable",
+  "state_binding": {
+    "path": ".meva/state.json",
+    "sha256": "f70b9ea6235dc6a5f014d431d3b574f56055a5299d194e95dca1667667d99f0c",
+    "state_revision": 15,
+    "invalidation_revision": 0,
+    "validation_result": "pass",
+    "migration_mode": "rv2"
+  },
+  "protocol": {
+    "id": "SAG-FINAL-REVIEW-CONFORMANCE-1.0",
+    "path": "tests/conformance/final_review_protocol.v1.json",
+    "sha256": "b08e03780d2af87bf2e7f35765e2a941544e502f71f02f9b46545b738f81767a",
+    "lock_sha256": "318df1d27627ca9176b763e9c21976b2be1cc0f66e06042652f7b7709c932afc",
+    "lock_verified": true,
+    "timing_classification": "independently_predeclared_before_patched_outcome_observation",
+    "timing_limitation": "Implementation work may have begun before freeze, but Validation did not inspect or execute patched outcomes before the protocol, criteria, supersession inventory, and 16-case design were frozen."
+  },
+  "environment": {
+    "kind": "local",
+    "python": "3.9.6",
+    "platform": "Darwin 25.5.0 arm64",
+    "dependencies": "Python standard library only",
+    "runtime_activation": "unverified",
+    "runtime_activation_reason": "Canonical state contains no runtime-owned permission attestation for this Validation session."
+  },
+  "digests": {
+    "AGENTS.md": "116e875d2309cea7684d40071a0a70fc4f45224f253225f1942a67b20c633ce1",
+    "Agent.md": "5e49241eb114ae1f33e755884fdc5bfc4f67918079f0dfc8e38e8a634a1ac3f7",
+    "README.md": "dbe08847ecb272b5ca9f2de9c7ba67aa81db5a49a2492e988f02cf2531589623",
+    "docs/reviewer-handbook.md": "fcbe89b011fafbc4d5d1b94524a2496b1642112a71c82497cdf6c21295b1fccf",
+    "contracts/meva.schema.json": "cd0430fa0b3c832c6426b7b6ae41871f3160a8b50adbfbdbc6ec826dd478cb09",
+    "templates/project-state.json": "ac7992916c2d942e5c0597f323f12640db9106acecaf5d9ab289637dccea3589",
+    "tools/meva_check.py": "bfdd6581d4bcce0c28d96be93cd1b559b1c431f2b67a73b1c1ec938b3beb9e1b",
+    ".codex/config.toml": "5fac0fa18357ec99d9039f9274dea88010102a54a3158c60050ab3b77fdb3a86",
+    ".codex/agents/implementation_engineer.toml": "f1b2d0b728d2bc510002d68c65707aee8956c9f76ac7f5efa134a97f57b30fa2",
+    ".codex/agents/planner.toml": "17c4f537c1de81a807a6e0c27efdc7b939cc05745f5c053e7312e18b908bc764",
+    ".codex/agents/platform_engineer.toml": "f40c412bdd623aa52877e93b283380867f278e799ddce35c5c6e042e159b1276",
+    ".codex/agents/reviewer.toml": "b67e480300c3bb564f7fd1ab6890d81651f4326136c5dac9a760a6ac55f113ce",
+    ".codex/agents/validation_engineer.toml": "9fe95ee0324535379f8772baf5e2d3ef2528e276884811ebc8930a941ac6c859",
+    "tests/conformance/protocol.v1.json": "edc31644ed2aace18b3b0d5f51ede4487206ea7505ed6a685d5b486d934c366c",
+    "tests/conformance/protocol.v1.sha256": "bee8b50c6d56d884e997c79ccea19e9a5bb5444ddda4c35406644f9a9457a334",
+    "tests/conformance/test_contracts.py": "923d402c8fa6d43dd170a945dc1154313710ad8c94c842e8e86df8e19f7633e7",
+    "tests/conformance/review_protocol.v1.json": "1189746000e9baf26bfab3d19eb4e067e77c01bfd6eb6cd69448bc8cf6b89b57",
+    "tests/conformance/review_protocol.v1.sha256": "6efc5ad7b607e0801b23df539da857cc235849cf4118593ad5c41980d698aed0",
+    "tests/conformance/test_review_contracts.py": "380ebe80c853b3cc0ab579ead86569e05e2520b1462aa9a29ce3291c33d4f3dc",
+    "tests/conformance/assurance_protocol.v1.json": "07baa7f12b50155ba449532ce24bd49a3c009adc4f430425c73c88ca46aa8e15",
+    "tests/conformance/assurance_protocol.v1.sha256": "9b7512329516e159c0f7c25f92842c6023ed0a70135ef5c6914199514044d567",
+    "tests/conformance/test_assurance_contracts.py": "9c2ada2cbe416e2e301a168d9b2757ac58fc315a2a255c72eb2438bbf47e6849",
+    "tests/conformance/final_review_protocol.v1.json": "b08e03780d2af87bf2e7f35765e2a941544e502f71f02f9b46545b738f81767a",
+    "tests/conformance/final_review_protocol.v1.sha256": "318df1d27627ca9176b763e9c21976b2be1cc0f66e06042652f7b7709c932afc",
+    "tests/conformance/test_final_review_contracts.py": "1d4715741c4abb6de668e2448578c6aeebf1d0c3a7309995bec008c77d643a9d",
+    "tests/conformance/validation-report.json": "e82766bf6fb2aa3ea0e07a4e9652bd065c038a406cf8d591689960203b85be76",
+    "tests/conformance/review-validation-report.json": "89dbb4372985d8e03c987247b23b5d916d1506dc556ef8ec9e528edb02b164a2",
+    "tests/conformance/assurance-validation-report.json": "3501530fedea4106fe98cb57ba3da97c4e6ceca867565d4ff02734004c4f57f2"
+  },
+  "supersession": {
+    "count": 3,
+    "test_ids": [
+      "tests.conformance.test_review_contracts.RV2LifecycleTests.test_ac003_positive_r1_current_validation_and_review_gates",
+      "tests.conformance.test_assurance_contracts.SemanticLifecycleTests.test_exact_independent_completion_passes",
+      "tests.conformance.test_assurance_contracts.SemanticFormalReviewTests.test_exact_formal_review_passes"
+    ],
+    "reason": "The first two immutable methods expect R1 completion without activated formal Reviewer proof to pass; the third expects an empty-target formal review to be gate eligible. The final manual requires the inverse safe behavior.",
+    "old_bytes_changed": false,
+    "replacement_criteria": [
+      "FR-001",
+      "FR-002"
+    ]
+  },
+  "harness_correction_history": [
+    {
+      "sequence": 1,
+      "sha256": "1d38736cc11b5f03b7aa9438b929af2b836824bbab13c07e6bef1fb4e5df547d",
+      "status": "superseded_before_final_execution",
+      "reason": "Initial frozen 16-case harness."
+    },
+    {
+      "sequence": 2,
+      "sha256": "70662cc001c4b16af324a54da7762c7ecaf45c7760546bd7ea47e2e21551ec6b",
+      "status": "superseded_before_final_execution",
+      "reason": "Fixture-only correction recomputed ATT-FORMAL-REVIEW.ticket_digest from the fully mutated TASK-REVIEW bytes for R1, R2, and E2; criteria and protocol were unchanged.",
+      "construction_evidence": "Before correction expected e34c710c...e701 versus actual 11bf93dc...ee0; after correction R1, R2, and E2 comparisons were all true."
+    },
+    {
+      "sequence": 3,
+      "sha256": "1d4715741c4abb6de668e2448578c6aeebf1d0c3a7309995bec008c77d643a9d",
+      "status": "final_executed",
+      "reason": "Runner-only correction prepended repository ROOT to sys.path before tests.conformance imports so the frozen direct corrected-aggregate command could execute; criteria, protocol, and counts were unchanged.",
+      "dispatch_evidence": "Direct --help exited 0 without acceptance collection or execution."
+    }
+  ],
+  "runs": {
+    "raw_prior": {
+      "command": "python3 -B -m unittest -v tests.conformance.test_contracts tests.conformance.test_review_contracts tests.conformance.test_assurance_contracts",
+      "exit_code": 1,
+      "tests_run": 111,
+      "passed": 108,
+      "failures": 3,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 8.065,
+      "command_output": "Ran 111 tests in 8.065s\n\nFAILED (failures=3)",
+      "failure_test_ids": [
+        "tests.conformance.test_review_contracts.RV2LifecycleTests.test_ac003_positive_r1_current_validation_and_review_gates",
+        "tests.conformance.test_assurance_contracts.SemanticFormalReviewTests.test_exact_formal_review_passes",
+        "tests.conformance.test_assurance_contracts.SemanticLifecycleTests.test_exact_independent_completion_passes"
+      ],
+      "unexpected_failures": [],
+      "conclusion": "pass_with_exact_declared_superseded_failures"
+    },
+    "new": {
+      "command": "python3 -B -m unittest -v tests.conformance.test_final_review_contracts",
+      "exit_code": 0,
+      "tests_run": 16,
+      "passed": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 1.166,
+      "command_output": "Ran 16 tests in 1.166s\n\nOK",
+      "conclusion": "pass"
+    },
+    "corrected_aggregate": {
+      "command": "python3 -B tests/conformance/test_final_review_contracts.py --corrected-aggregate",
+      "exit_code": 0,
+      "tests_run": 124,
+      "passed": 124,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 8.875,
+      "command_output": "Ran 124 tests in 8.875s\n\nOK",
+      "conclusion": "pass"
+    }
+  },
+  "supplemental_checks": {
+    "strict_json": {
+      "command": "python3 -B strict json.loads parse over schema, template, four protocols, three prior reports, and the final report",
+      "files": 10,
+      "result": "pass"
+    },
+    "python_compile": {
+      "command": "PYTHONPYCACHEPREFIX=/private/tmp/meva-wp6-final-pycache python3 -B -m py_compile tools/meva_check.py tests/conformance/test_contracts.py tests/conformance/test_review_contracts.py tests/conformance/test_assurance_contracts.py tests/conformance/test_final_review_contracts.py",
+      "exit_code": 0,
+      "result": "pass"
+    },
+    "template_validation": {
+      "command": "python3 -B tools/meva_check.py validate-state templates/project-state.json",
+      "result": "pass",
+      "errors": [],
+      "migration_mode": "rv2"
+    },
+    "check_package": {
+      "command": "python3 -B tools/meva_check.py check-package --root .",
+      "exit_code": 0,
+      "static_package": "pass",
+      "runtime_activation": "unverified",
+      "static_errors": [],
+      "activation_observations": [
+        "runtime activation was not evaluated"
+      ]
+    }
+  },
+  "criteria": {
+    "FR-001": "pass",
+    "FR-002": "pass",
+    "FR-003": "pass",
+    "FR-004": "pass",
+    "FR-005": "pass",
+    "FR-006": "pass",
+    "FR-007": "pass",
+    "FR-008": "pass",
+    "FR-009": "pass"
+  },
+  "limitations": [
+    "Live runtime activation and effective permissions remain unverified because no runtime-owned activation telemetry or permission attestation was supplied.",
+    "Evidence is local and synthetic and does not support production, physical, deployment, or external-effect readiness.",
+    "The raw immutable 111 is intentionally not green; its three exact obsolete positive expectations are preserved and disclosed.",
+    "The preserved release_check failure was observed against the earlier checker; the final checker consumes this explicitly superseding report and the final_release_rerun proves the candidate passes directly."
+  ],
+  "release_check": {
+    "historical": true,
+    "checker_sha256": "672f714edcfe69a6f64bf7f2129a3c26daffdcc663e0c33ec0d850191487cc20",
+    "command": "python3 -B tools/meva_check.py check-release --root .",
+    "exit_code": 1,
+    "release_integrity": "fail",
+    "errors": [
+      "tests/conformance/validation-report.json has stale digest for AGENTS.md",
+      "tests/conformance/validation-report.json has stale digest for Agent.md",
+      "tests/conformance/validation-report.json has stale digest for README.md",
+      "tests/conformance/validation-report.json has stale digest for contracts/meva.schema.json",
+      "tests/conformance/validation-report.json has stale digest for tools/meva_check.py",
+      "tests/conformance/validation-report.json has stale digest for docs/reviewer-handbook.md",
+      "tests/conformance/review-validation-report.json has stale digest for AGENTS.md",
+      "tests/conformance/review-validation-report.json has stale digest for Agent.md",
+      "tests/conformance/review-validation-report.json has stale digest for README.md",
+      "tests/conformance/review-validation-report.json has stale digest for contracts/meva.schema.json",
+      "tests/conformance/review-validation-report.json has stale digest for tools/meva_check.py",
+      "tests/conformance/review-validation-report.json has stale digest for docs/reviewer-handbook.md",
+      "tests/conformance/assurance-validation-report.json has stale digest for AGENTS.md",
+      "tests/conformance/assurance-validation-report.json has stale digest for Agent.md",
+      "tests/conformance/assurance-validation-report.json has stale digest for README.md",
+      "tests/conformance/assurance-validation-report.json has stale digest for contracts/meva.schema.json",
+      "tests/conformance/assurance-validation-report.json has stale digest for tools/meva_check.py",
+      "tests/conformance/assurance-validation-report.json has stale digest for docs/reviewer-handbook.md"
+    ],
+    "conclusion": "fail"
+  },
+  "final_release_rerun": {
+    "command": "python3 -B tools/meva_check.py check-release --root .",
+    "checker_sha256": "bfdd6581d4bcce0c28d96be93cd1b559b1c431f2b67a73b1c1ec938b3beb9e1b",
+    "state_sha256": "f70b9ea6235dc6a5f014d431d3b574f56055a5299d194e95dca1667667d99f0c",
+    "state_revision": 15,
+    "invalidation_revision": 0,
+    "exit_code": 0,
+    "release_integrity": "pass",
+    "errors": [],
+    "command_output": "{\n  \"contract_version\": \"2.0\",\n  \"details\": {\n    \"agents_digest\": \"116e875d2309cea7684d40071a0a70fc4f45224f253225f1942a67b20c633ce1\",\n    \"assurance_protocol_digest\": \"07baa7f12b50155ba449532ce24bd49a3c009adc4f430425c73c88ca46aa8e15\",\n    \"candidate_state_revision\": 15,\n    \"configured_concurrency\": 4,\n    \"current_candidate_report\": \"tests/conformance/final-review-validation-report.json\",\n    \"final_review_protocol_digest\": \"b08e03780d2af87bf2e7f35765e2a941544e502f71f02f9b46545b738f81767a\",\n    \"original_protocol_digest\": \"edc31644ed2aace18b3b0d5f51ede4487206ea7505ed6a685d5b486d934c366c\",\n    \"release_binding_mode\": \"direct\",\n    \"review_protocol_digest\": \"1189746000e9baf26bfab3d19eb4e067e77c01bfd6eb6cd69448bc8cf6b89b57\",\n    \"role_files\": [\n      \".codex/agents/implementation_engineer.toml\",\n      \".codex/agents/planner.toml\",\n      \".codex/agents/platform_engineer.toml\",\n      \".codex/agents/reviewer.toml\",\n      \".codex/agents/validation_engineer.toml\"\n    ]\n  },\n  \"errors\": [],\n  \"release_integrity\": \"pass\"\n}",
+    "conclusion": "pass"
+  },
+  "conclusion": {
+    "raw_prior": "pass_with_exact_declared_superseded_failures",
+    "new_gate": "pass",
+    "corrected_aggregate_gate": "pass",
+    "static_package": "pass",
+    "release_integrity": "pass",
+    "runtime_activation": "unverified",
+    "overall": "pass",
+    "statement": "Against candidate state revision 15 and one immutable product digest set, behavioral acceptance met every WP6 threshold and the final checker directly validated this explicitly superseding report with release integrity pass."
+  }
+}

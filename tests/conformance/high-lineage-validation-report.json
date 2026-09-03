@@ -1,0 +1,202 @@
+{
+  "report_version": "1.0",
+  "contract_version": "2.0",
+  "task_id": "FINAL-HIGH-VALIDATION",
+  "phase": "targeted-final",
+  "finding": {
+    "id": "WP6-RV4-002",
+    "severity": "high",
+    "claim": "An exact candidate-to-Validation integration remains valid through a later Reviewer-only revision only while invalidation, behavior provenance, report/checker/artifact bindings, and Validation evidence/gate lineage remain exact."
+  },
+  "state_binding": {
+    "path": ".meva/state.json",
+    "sha256": "06654bfae45463fe13b1c2a2c70590b0bd7feba044e6efd508e434cbd59fe83f",
+    "state_revision": 24,
+    "invalidation_revision": 0,
+    "validation_result": "pass",
+    "migration_mode": "rv2",
+    "immutable_before_and_after": true
+  },
+  "digests": {
+    "Agent.md": "5e49241eb114ae1f33e755884fdc5bfc4f67918079f0dfc8e38e8a634a1ac3f7",
+    "contracts/meva.schema.json": "06dec954155ef673cb2ed185badf11a76602d689e2ae5a915b3133d89ba9c228",
+    "tools/meva_check.py": "b8c1be3608347a643b75d4d36e511ef7622fbebf62ce96c5f17e017e3edfa27b",
+    "tests/conformance/closure-validation-report.json": "cf7b422f2d9ee7af707fb51373dae7aaec503bcab451e620c0a23a8f2c35c4ea"
+  },
+  "environment": {
+    "kind": "local",
+    "python": "3.9.6",
+    "platform": "Darwin 25.5.0 arm64",
+    "dependencies": "Python standard library only",
+    "runtime_activation": "unverified",
+    "external_calls": 0,
+    "physical_execution": false
+  },
+  "data_provenance": {
+    "source": "Temporary deep copy of the exact revision-24 repository candidate.",
+    "license": "Project-internal validation fixture",
+    "consent": "Not applicable; no personal or external data",
+    "privacy_class": "internal",
+    "transformations": "Deterministic temporary state/report construction and one-field adverse mutations only",
+    "allowed_use": "Local targeted WP6-RV4-002 validation",
+    "leakage_controls": "Canonical state and product remained read-only; temporary directories were destroyed after execution"
+  },
+  "fixture": {
+    "candidate_state_revision": 24,
+    "candidate_state_sha256": "06654bfae45463fe13b1c2a2c70590b0bd7feba044e6efd508e434cbd59fe83f",
+    "validation_integration_revision": 25,
+    "reviewer_only_revision": 26,
+    "current_status": "validating",
+    "candidate_invalidation_revision": 0,
+    "report_path": "tests/conformance/closure-validation-report.json",
+    "fixture_report_sha256": "fed6d24fa960e1400014d103aecc5128472dd0884557489428090bcc04f8f15a",
+    "checker_sha256": "b8c1be3608347a643b75d4d36e511ef7622fbebf62ce96c5f17e017e3edfa27b",
+    "integration_contract": {
+      "candidate_state_sha256": "06654bfae45463fe13b1c2a2c70590b0bd7feba044e6efd508e434cbd59fe83f",
+      "candidate_state_revision": 24,
+      "candidate_invalidation_revision": 0,
+      "report_path": "tests/conformance/closure-validation-report.json",
+      "report_sha256": "fed6d24fa960e1400014d103aecc5128472dd0884557489428090bcc04f8f15a",
+      "current_checker_sha256": "b8c1be3608347a643b75d4d36e511ef7622fbebf62ce96c5f17e017e3edfa27b",
+      "integrated_state_revision": 25
+    },
+    "validation_evidence_revision": 25,
+    "validation_gate_revision": 25
+  },
+  "execution": {
+    "command": "python3 -B -c '<embedded temporary exact closure fixture and sequential eight-case lineage matrix>'",
+    "procedure": [
+      "Copy the exact repository to a temporary directory, excluding caches and this report.",
+      "Bind a temporary exact passing closure report to candidate revision 24 and current checker/schema digests.",
+      "Create exact Validation integration at revision 25 with matching report artifact, passing Validation evidence, and passing Validation gate.",
+      "Advance only lifecycle bookkeeping to Reviewer-only/current revision 26 without changing invalidation or behavior provenance.",
+      "Run python3 -B tools/meva_check.py check-release --root <temporary-case-root> for the positive fixture and each one-field adverse mutation.",
+      "Stop immediately if the positive fails or any adverse passes."
+    ],
+    "metric": "Exact exit code, release_integrity token, nonempty/empty errors, binding mode, and candidate revision",
+    "direction": "positive must pass; every adverse must reject",
+    "sample_size": 8,
+    "seeds": [],
+    "uncertainty_method": "None; deterministic exact fixtures",
+    "threshold": "1/1 positive pass with errors=[] and 7/7 adverse cases fail with nonempty errors"
+  },
+  "cases": [
+    {
+      "id": "positive_reviewer_only_revision",
+      "mutation": "none",
+      "expected": "pass",
+      "exit_code": 0,
+      "release_integrity": "pass",
+      "errors": [],
+      "release_binding_mode": "closure_integrated",
+      "candidate_state_revision": 24,
+      "result": "pass"
+    },
+    {
+      "id": "adverse_config_provenance_drift",
+      "mutation": "state.provenance.config_digest differs from the current configuration digest",
+      "expected": "reject",
+      "exit_code": 1,
+      "release_integrity": "fail",
+      "errors": [
+        "tests/conformance/closure-validation-report.json closure behavior-affecting config_digest drifted after Validation"
+      ],
+      "release_binding_mode": "closure_integrated",
+      "candidate_state_revision": 24,
+      "result": "pass"
+    },
+    {
+      "id": "adverse_invalidation_mismatch",
+      "mutation": "validation_integration.candidate_invalidation_revision changes from 0 to 1",
+      "expected": "reject",
+      "exit_code": 1,
+      "release_integrity": "fail",
+      "errors": [
+        "tests/conformance/closure-validation-report.json closure integrated validation lineage is absent or inexact"
+      ],
+      "release_binding_mode": "closure_integrated",
+      "candidate_state_revision": 24,
+      "result": "pass"
+    },
+    {
+      "id": "adverse_report_binding_mismatch",
+      "mutation": "validation_integration.report_sha256 changes to an unrelated digest",
+      "expected": "reject",
+      "exit_code": 1,
+      "release_integrity": "fail",
+      "errors": [
+        "tests/conformance/closure-validation-report.json closure integrated validation lineage is absent or inexact"
+      ],
+      "release_binding_mode": "closure_integrated",
+      "candidate_state_revision": 24,
+      "result": "pass"
+    },
+    {
+      "id": "adverse_checker_binding_mismatch",
+      "mutation": "validation_integration.current_checker_sha256 changes to an unrelated digest",
+      "expected": "reject",
+      "exit_code": 1,
+      "release_integrity": "fail",
+      "errors": [
+        "tests/conformance/closure-validation-report.json closure integrated validation lineage is absent or inexact"
+      ],
+      "release_binding_mode": "closure_integrated",
+      "candidate_state_revision": 24,
+      "result": "pass"
+    },
+    {
+      "id": "adverse_artifact_mismatch",
+      "mutation": "ART-CLOSURE-VALIDATION-REPORT.digest changes to an unrelated digest",
+      "expected": "reject",
+      "exit_code": 1,
+      "release_integrity": "fail",
+      "errors": [
+        "tests/conformance/closure-validation-report.json closure integrated report artifact is absent or stale"
+      ],
+      "release_binding_mode": "closure_integrated",
+      "candidate_state_revision": 24,
+      "result": "pass"
+    },
+    {
+      "id": "adverse_validation_evidence_mismatch",
+      "mutation": "Validation evidence state_revision changes from candidate+1 revision 25 to 26",
+      "expected": "reject",
+      "exit_code": 1,
+      "release_integrity": "fail",
+      "errors": [
+        "tests/conformance/closure-validation-report.json closure integrated Validation gate/evidence lineage is absent"
+      ],
+      "release_binding_mode": "closure_integrated",
+      "candidate_state_revision": 24,
+      "result": "pass"
+    },
+    {
+      "id": "adverse_validation_gate_mismatch",
+      "mutation": "Validation gate state_revision changes from candidate+1 revision 25 to 26",
+      "expected": "reject",
+      "exit_code": 1,
+      "release_integrity": "fail",
+      "errors": [
+        "tests/conformance/closure-validation-report.json closure integrated Validation gate/evidence lineage is absent"
+      ],
+      "release_binding_mode": "closure_integrated",
+      "candidate_state_revision": 24,
+      "result": "pass"
+    }
+  ],
+  "excluded_issues": [
+    "CLOSURE-RV5-002",
+    "CLOSURE-RV5-003",
+    "All Medium and Low findings",
+    "Full closure aggregate and release-readiness evaluation"
+  ],
+  "conclusion": {
+    "WP6-RV4-002": "pass",
+    "positive": "1_of_1_pass",
+    "adverse": "7_of_7_reject",
+    "canonical_state_immutable": true,
+    "runtime_activation": "unverified",
+    "overall": "pass",
+    "release_approval": "not_performed"
+  }
+}

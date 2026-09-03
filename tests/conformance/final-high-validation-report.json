@@ -1,0 +1,38 @@
+{
+  "report_version": "1.0",
+  "contract_version": "2.0",
+  "task_id": "FINAL2-HIGH-VALIDATION",
+  "finding": "WP6-RV4-002",
+  "scope": "Targeted final High/P1 lineage validation only; Medium/Low findings, aggregate suites, product, canonical state, and existing artifacts were untouched.",
+  "candidate": {
+    "state_revision": 28,
+    "state_sha256": "b0a1a8e7db9862b762e92fe035ba32b0b8a780d13db314fff3a7352e2758f5fc",
+    "checker_sha256": "03fa7ef52d91cd0ad5aacd730d93ee663bd2ab3c2347700961eb26382cbd841d"
+  },
+  "fixture": {
+    "source": "Disconnected temporary copy of the exact candidate package",
+    "integration_revision": 29,
+    "reviewer_only_revision": 30,
+    "report_sha256": "25ffdf596bad7362963594d81d88c7f7ba9cadf99a3be518146e16ca8c8e7180",
+    "validated_behavior_sha256": "4e4602277d7d2412822f4b50ed6f1f647037f739ba88fbeffa50783a291b46d1",
+    "command": "python3 -B tools/meva_check.py check-release --root .",
+    "environment": "local",
+    "external_calls": 0,
+    "runtime_activation": "unverified"
+  },
+  "cases": [
+    {"id": "positive_reviewer_only", "expected": "pass", "exit_code": 0, "release_integrity": "pass", "errors": [], "result": "pass"},
+    {"id": "adverse_project_goal_drift", "expected": "reject", "exit_code": 1, "release_integrity": "fail", "result": "pass"},
+    {"id": "adverse_authority_drift", "expected": "reject", "exit_code": 1, "release_integrity": "fail", "result": "pass"},
+    {"id": "adverse_task_acceptance_drift", "expected": "reject", "exit_code": 1, "release_integrity": "fail", "result": "pass"},
+    {"id": "adverse_report_binding_drift", "expected": "reject", "exit_code": 1, "release_integrity": "fail", "result": "pass"},
+    {"id": "adverse_invalidation_drift", "expected": "reject", "exit_code": 1, "release_integrity": "fail", "result": "pass"},
+    {"id": "adverse_decision_drift", "expected": "reject", "exit_code": 1, "release_integrity": "fail", "result": "pass"}
+  ],
+  "result": {
+    "positive": "1/1 pass",
+    "adverse": "6/6 reject",
+    "overall": "pass",
+    "release_approval": "not_performed"
+  }
+}

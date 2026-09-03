@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MEVA system schematic</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #18243d;
+      --muted: #66738c;
+      --line: #d9e1ee;
+      --blue: #3f70e8;
+      --blue-soft: #edf3ff;
+      --teal: #2c9b8c;
+      --teal-soft: #eaf8f5;
+      --violet: #7666d9;
+      --violet-soft: #f1efff;
+      --amber: #c8862b;
+      --amber-soft: #fff6e7;
+      --surface: #ffffff;
+      --canvas: #f6f8fc;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      min-width: 320px;
+      min-height: 100%;
+      margin: 0;
+      background: var(--canvas);
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+    }
+
+    body {
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .frame {
+      width: min(1600px, 100%);
+      aspect-ratio: 8 / 5;
+      overflow: hidden;
+      border: 1px solid #e2e8f2;
+      border-radius: 28px;
+      background: #fbfcff;
+      box-shadow: 0 24px 70px rgba(28, 43, 76, 0.10);
+    }
+
+    svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    text { fill: var(--ink); }
+    .title { font-size: 36px; font-weight: 760; letter-spacing: -1.2px; }
+    .subtitle { font-size: 16px; fill: var(--muted); }
+    .eyebrow {
+      font-size: 12px;
+      font-weight: 760;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+    .card-title { font-size: 18px; font-weight: 740; }
+    .card-copy { font-size: 13px; fill: var(--muted); }
+    .small { font-size: 12px; fill: var(--muted); }
+    .mini-title { font-size: 13px; font-weight: 720; }
+    .pill-text { font-size: 11px; font-weight: 720; }
+  </style>
+</head>
+<body>
+  <main class="frame" aria-label="MEVA structural multi-agent system schematic">
+    <svg viewBox="0 0 1600 1000" role="img" aria-labelledby="diagram-title diagram-desc">
+      <title id="diagram-title">MEVA system schematic</title>
+      <desc id="diagram-desc">
+        Human intent enters a primary MEVA Orchestrator, which maintains durable
+        project state, delegates bounded tickets only to needed specialist roles,
+        applies independent validation and review, and returns a verified outcome.
+      </desc>
+
+      <defs>
+        <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+          <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#20345f" flood-opacity=".08"/>
+        </filter>
+        <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+          <path d="M0,0 L10,5 L0,10 Z" fill="#7f9ce6"/>
+        </marker>
+        <marker id="arrow-teal" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+          <path d="M0,0 L10,5 L0,10 Z" fill="#67b5a9"/>
+        </marker>
+        <marker id="arrow-gray" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+          <path d="M0,0 L10,5 L0,10 Z" fill="#a9b6ca"/>
+        </marker>
+        <linearGradient id="orchestrator-fill" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#f4f7ff"/>
+          <stop offset="1" stop-color="#eef4ff"/>
+        </linearGradient>
+        <pattern id="dot-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+          <circle cx="2" cy="2" r="1.2" fill="#dfe6f1"/>
+        </pattern>
+      </defs>
+
+      <rect width="1600" height="1000" fill="#fbfcff"/>
+      <rect width="1600" height="1000" fill="url(#dot-grid)" opacity=".55"/>
+
+      <!-- Header -->
+      <g transform="translate(72 62)">
+        <rect width="46" height="46" rx="14" fill="#3f70e8"/>
+        <path d="M14 25h7l4-11 6 22 4-11h5" fill="none" stroke="#fff" stroke-width="3"
+          stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="62" y="28" class="title">MEVA</text>
+        <text x="62" y="53" class="subtitle">Minimal, bounded orchestration for dependable multi-agent work</text>
+      </g>
+      <g transform="translate(1287 68)">
+        <rect width="241" height="40" rx="20" fill="#edf3ff"/>
+        <circle cx="23" cy="20" r="6" fill="#3f70e8"/>
+        <text x="40" y="25" class="pill-text" fill="#315dbb">CONTRACT VERSION 2.0</text>
+      </g>
+
+      <!-- Human intent -->
+      <g transform="translate(72 176)" filter="url(#shadow)">
+        <rect width="258" height="190" rx="22" fill="#fff" stroke="#dfe6f1"/>
+        <circle cx="42" cy="42" r="22" fill="#edf3ff"/>
+        <circle cx="42" cy="35" r="7" fill="none" stroke="#3f70e8" stroke-width="2.5"/>
+        <path d="M29 53c3-9 23-9 26 0" fill="none" stroke="#3f70e8" stroke-width="2.5" stroke-linecap="round"/>
+        <text x="76" y="37" class="eyebrow" fill="#3f70e8">INPUT</text>
+        <text x="76" y="58" class="card-title">Human intent</text>
+        <text x="24" y="92" class="card-copy">
+          <tspan x="24" dy="0">Goal, constraints and explicit</tspan>
+          <tspan x="24" dy="19">authority define the boundary.</tspan>
+        </text>
+        <rect x="24" y="142" width="93" height="28" rx="14" fill="#f4f6fa"/>
+        <text x="41" y="160" class="pill-text" fill="#5d6a82">GOAL</text>
+        <rect x="125" y="142" width="109" height="28" rx="14" fill="#f4f6fa"/>
+        <text x="142" y="160" class="pill-text" fill="#5d6a82">AUTHORITY</text>
+      </g>
+
+      <!-- Orchestrator -->
+      <g transform="translate(410 145)" filter="url(#shadow)">
+        <rect width="780" height="252" rx="26" fill="url(#orchestrator-fill)" stroke="#bcd0fa" stroke-width="1.5"/>
+        <rect x="0" y="0" width="780" height="74" rx="26" fill="#3f70e8"/>
+        <path d="M0 48h780v26H0z" fill="#3f70e8"/>
+        <circle cx="42" cy="37" r="18" fill="#fff" opacity=".16"/>
+        <path d="M32 37h20M42 27v20" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+        <text x="72" y="32" class="eyebrow" fill="#dce7ff">PRIMARY AGENT</text>
+        <text x="72" y="56" class="card-title" fill="#fff">MEVA Orchestrator</text>
+        <text x="550" y="44" font-size="13" font-weight="650" fill="#e5edff">One accountable control plane</text>
+
+        <g transform="translate(24 100)">
+          <rect width="168" height="120" rx="18" fill="#fff" stroke="#d8e2f7"/>
+          <circle cx="28" cy="28" r="13" fill="#edf3ff"/>
+          <path d="M22 28h12M28 22v12" stroke="#3f70e8" stroke-width="2" stroke-linecap="round"/>
+          <text x="50" y="32" class="mini-title">Intake &amp; risk</text>
+          <text x="18" y="66" class="small"><tspan x="18">Classify consequence</tspan><tspan x="18" dy="18">before team size.</tspan></text>
+        </g>
+        <g transform="translate(212 100)">
+          <rect width="168" height="120" rx="18" fill="#fff" stroke="#d8e2f7"/>
+          <circle cx="28" cy="28" r="13" fill="#edf3ff"/>
+          <path d="M21 24h14M21 29h14M21 34h9" stroke="#3f70e8" stroke-width="2" stroke-linecap="round"/>
+          <text x="50" y="32" class="mini-title">Task graph</text>
+          <text x="18" y="66" class="small"><tspan x="18">Bounded tickets, one</tspan><tspan x="18" dy="18">owner and writer.</tspan></text>
+        </g>
+        <g transform="translate(400 100)">
+          <rect width="168" height="120" rx="18" fill="#fff" stroke="#d8e2f7"/>
+          <circle cx="28" cy="28" r="13" fill="#edf3ff"/>
+          <path d="M22 29l4 4 8-10" fill="none" stroke="#3f70e8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="50" y="32" class="mini-title">Gates</text>
+          <text x="18" y="66" class="small"><tspan x="18">Validation and review</tspan><tspan x="18" dy="18">stay independent.</tspan></text>
+        </g>
+        <g transform="translate(588 100)">
+          <rect width="168" height="120" rx="18" fill="#fff" stroke="#d8e2f7"/>
+          <circle cx="28" cy="28" r="13" fill="#edf3ff"/>
+          <path d="M22 24h12v12H22zM25 21h12v12" fill="none" stroke="#3f70e8" stroke-width="2"/>
+          <text x="50" y="32" class="mini-title">Integration</text>
+          <text x="18" y="66" class="small"><tspan x="18">Resolve conflicts and</tspan><tspan x="18" dy="18">deliver one handoff.</tspan></text>
+        </g>
+      </g>
+
+      <!-- Durable state -->
+      <g transform="translate(1270 176)" filter="url(#shadow)">
+        <rect width="258" height="190" rx="22" fill="#fff" stroke="#dfe6f1"/>
+        <circle cx="42" cy="42" r="22" fill="#eaf8f5"/>
+        <ellipse cx="42" cy="32" rx="10" ry="4" fill="none" stroke="#2c9b8c" stroke-width="2.3"/>
+        <path d="M32 32v17c0 6 20 6 20 0V32M32 40c0 6 20 6 20 0" fill="none" stroke="#2c9b8c" stroke-width="2.3"/>
+        <text x="76" y="37" class="eyebrow" fill="#2c9b8c">CONTROL PLANE</text>
+        <text x="76" y="58" class="card-title">Durable state</text>
+        <text x="24" y="92" class="card-copy">
+          <tspan x="24">Tasks, evidence, gates, risk</tspan>
+          <tspan x="24" dy="19">and provenance stay traceable.</tspan>
+        </text>
+        <rect x="24" y="142" width="210" height="28" rx="14" fill="#eaf8f5"/>
+        <text x="46" y="160" class="pill-text" fill="#237c70">.MEVA / STATE.JSON</text>
+      </g>
+
+      <!-- Top arrows -->
+      <path d="M330 271H392" fill="none" stroke="#7f9ce6" stroke-width="3" marker-end="url(#arrow-blue)"/>
+      <text x="345" y="254" class="small">bounded request</text>
+      <path d="M1190 257H1252" fill="none" stroke="#67b5a9" stroke-width="3" marker-end="url(#arrow-teal)"/>
+      <path d="M1252 286H1190" fill="none" stroke="#67b5a9" stroke-width="3" marker-end="url(#arrow-teal)"/>
+
+      <!-- Delegation bus -->
+      <path d="M800 397V458" fill="none" stroke="#91a7d7" stroke-width="3"/>
+      <path d="M194 458H1406" fill="none" stroke="#c5d1e5" stroke-width="2.5"/>
+      <rect x="630" y="429" width="340" height="40" rx="20" fill="#fff" stroke="#d7e0ef"/>
+      <text x="800" y="454" text-anchor="middle" font-size="13" font-weight="680" fill="#52627d">
+        Bounded tickets • select only the roles needed
+      </text>
+
+      <!-- Worker cards -->
+      <g transform="translate(72 506)">
+        <path d="M122 0V-48" stroke="#c5d1e5" stroke-width="2"/>
+        <rect width="244" height="196" rx="22" fill="#fff" stroke="#dfe6f1"/>
+        <rect x="18" y="18" width="76" height="25" rx="12.5" fill="#f1efff"/>
+        <text x="31" y="35" class="pill-text" fill="#6656c1">READ-ONLY</text>
+        <circle cx="204" cy="31" r="14" fill="#f1efff"/>
+        <path d="M198 31h12M204 25v12" stroke="#7666d9" stroke-width="2"/>
+        <text x="20" y="79" class="card-title">Planner</text>
+        <text x="20" y="105" class="card-copy"><tspan x="20">Requirements, architecture,</tspan><tspan x="20" dy="19">interfaces and recovery.</tspan></text>
+        <path d="M20 162h204" stroke="#edf0f5"/>
+        <text x="20" y="182" class="small">Used when design risk warrants it</text>
+      </g>
+
+      <g transform="translate(380 506)">
+        <path d="M122 0V-48" stroke="#c5d1e5" stroke-width="2"/>
+        <rect width="244" height="196" rx="22" fill="#fff" stroke="#dfe6f1"/>
+        <rect x="18" y="18" width="62" height="25" rx="12.5" fill="#edf3ff"/>
+        <text x="31" y="35" class="pill-text" fill="#315dbb">BUILD</text>
+        <circle cx="204" cy="31" r="14" fill="#edf3ff"/>
+        <path d="M198 35l12-12M201 23h9v9" fill="none" stroke="#3f70e8" stroke-width="2"/>
+        <text x="20" y="79" class="card-title">Implementation</text>
+        <text x="20" y="105" class="card-copy"><tspan x="20">Agent behavior, tools, schemas</tspan><tspan x="20" dy="19">and code-level checks.</tspan></text>
+        <path d="M20 162h204" stroke="#edf0f5"/>
+        <text x="20" y="182" class="small">Owns product behavior</text>
+      </g>
+
+      <g transform="translate(688 506)">
+        <path d="M122 0V-48" stroke="#c5d1e5" stroke-width="2"/>
+        <rect width="244" height="196" rx="22" fill="#fff" stroke="#dfe6f1"/>
+        <rect x="18" y="18" width="80" height="25" rx="12.5" fill="#fff6e7"/>
+        <text x="31" y="35" class="pill-text" fill="#a86817">RUNTIME</text>
+        <circle cx="204" cy="31" r="14" fill="#fff6e7"/>
+        <path d="M197 26h14v10h-14zM201 23v3M207 23v3" fill="none" stroke="#c8862b" stroke-width="2"/>
+        <text x="20" y="79" class="card-title">Platform</text>
+        <text x="20" y="105" class="card-copy"><tspan x="20">Environments, deployment,</tspan><tspan x="20" dy="19">observability and safety layers.</tspan></text>
+        <path d="M20 162h204" stroke="#edf0f5"/>
+        <text x="20" y="182" class="small">Joins only for runtime ownership</text>
+      </g>
+
+      <g transform="translate(996 506)">
+        <path d="M122 0V-48" stroke="#c5d1e5" stroke-width="2"/>
+        <rect width="244" height="196" rx="22" fill="#fff" stroke="#bfe4dd" stroke-width="1.5"/>
+        <rect x="18" y="18" width="84" height="25" rx="12.5" fill="#eaf8f5"/>
+        <text x="31" y="35" class="pill-text" fill="#237c70">EVIDENCE</text>
+        <circle cx="204" cy="31" r="14" fill="#eaf8f5"/>
+        <path d="M197 31l5 5 9-11" fill="none" stroke="#2c9b8c" stroke-width="2.2" stroke-linecap="round"/>
+        <text x="20" y="79" class="card-title">Validation</text>
+        <text x="20" y="105" class="card-copy"><tspan x="20">Independent criteria, tests,</tspan><tspan x="20" dy="19">robustness and reproducibility.</tspan></text>
+        <path d="M20 162h204" stroke="#edf0f5"/>
+        <text x="20" y="182" class="small">Cannot change product to pass</text>
+      </g>
+
+      <g transform="translate(1304 506)">
+        <path d="M122 0V-48" stroke="#c5d1e5" stroke-width="2"/>
+        <rect width="224" height="196" rx="22" fill="#fff" stroke="#cfc8fa" stroke-width="1.5"/>
+        <rect x="18" y="18" width="76" height="25" rx="12.5" fill="#f1efff"/>
+        <text x="31" y="35" class="pill-text" fill="#6656c1">READ-ONLY</text>
+        <circle cx="184" cy="31" r="14" fill="#f1efff"/>
+        <circle cx="182" cy="29" r="6" fill="none" stroke="#7666d9" stroke-width="2"/>
+        <path d="M187 34l6 6" stroke="#7666d9" stroke-width="2" stroke-linecap="round"/>
+        <text x="20" y="79" class="card-title">Reviewer</text>
+        <text x="20" y="105" class="card-copy"><tspan x="20">Independent audit of design,</tspan><tspan x="20" dy="19">evidence, safety and readiness.</tspan></text>
+        <path d="M20 162h184" stroke="#edf0f5"/>
+        <text x="20" y="182" class="small">Cannot review its own work</text>
+      </g>
+
+      <!-- Assurance flow -->
+      <path d="M1240 604H1287" fill="none" stroke="#67b5a9" stroke-width="3" marker-end="url(#arrow-teal)"/>
+      <text x="1263" y="587" text-anchor="middle" class="small">then audit</text>
+
+      <!-- Outcome lane -->
+      <g transform="translate(72 760)" filter="url(#shadow)">
+        <rect width="1456" height="170" rx="26" fill="#fff" stroke="#dfe6f1"/>
+        <text x="28" y="36" class="eyebrow" fill="#66738c">ASSURANCE &amp; DELIVERY</text>
+
+        <g transform="translate(28 58)">
+          <rect width="250" height="82" rx="18" fill="#f6f8fc" stroke="#e2e7f0"/>
+          <rect x="16" y="15" width="46" height="24" rx="12" fill="#edf3ff"/>
+          <text x="28" y="32" class="pill-text" fill="#315dbb">R0</text>
+          <text x="75" y="32" class="mini-title">Fast path</text>
+          <text x="16" y="61" class="small">Primary handles low-risk local work.</text>
+        </g>
+
+        <path d="M300 99H340" stroke="#a9b6ca" stroke-width="2.5" marker-end="url(#arrow-gray)"/>
+
+        <g transform="translate(360 58)">
+          <rect width="576" height="82" rx="18" fill="#f6f8fc" stroke="#e2e7f0"/>
+          <rect x="16" y="15" width="62" height="24" rx="12" fill="#eaf8f5"/>
+          <text x="28" y="32" class="pill-text" fill="#237c70">R1 / R2</text>
+          <text x="92" y="32" class="mini-title">Independent assurance path</text>
+          <text x="16" y="61" class="small">Build</text>
+          <path d="M58 57h55" stroke="#a9b6ca" stroke-width="2" marker-end="url(#arrow-gray)"/>
+          <text x="128" y="61" class="small">Validate</text>
+          <path d="M182 57h55" stroke="#67b5a9" stroke-width="2" marker-end="url(#arrow-teal)"/>
+          <text x="252" y="61" class="small">Review</text>
+          <path d="M304 57h55" stroke="#7f9ce6" stroke-width="2" marker-end="url(#arrow-blue)"/>
+          <text x="374" y="61" class="small">Integrate</text>
+          <rect x="456" y="45" width="102" height="24" rx="12" fill="#fff"/>
+          <text x="470" y="61" class="pill-text" fill="#66738c">FAIL CLOSED</text>
+        </g>
+
+        <path d="M960 99H1000" stroke="#67b5a9" stroke-width="2.5" marker-end="url(#arrow-teal)"/>
+
+        <g transform="translate(1020 46)">
+          <rect width="408" height="106" rx="20" fill="#eaf8f5" stroke="#bfe4dd"/>
+          <circle cx="44" cy="53" r="24" fill="#2c9b8c"/>
+          <path d="M32 53l8 8 16-19" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="82" y="40" class="eyebrow" fill="#237c70">OUTPUT</text>
+          <text x="82" y="64" class="card-title">Verified outcome</text>
+          <text x="82" y="86" class="small">Evidence-backed contract-v2 handoff</text>
+        </g>
+      </g>
+
+      <!-- Guardrail footer -->
+      <g transform="translate(72 956)">
+        <text x="0" y="0" class="small">Exact authority intersection</text>
+        <circle cx="190" cy="-4" r="3" fill="#b7c2d2"/>
+        <text x="210" y="0" class="small">One writer per artifact</text>
+        <circle cx="382" cy="-4" r="3" fill="#b7c2d2"/>
+        <text x="402" y="0" class="small">Evidence over claims</text>
+        <circle cx="552" cy="-4" r="3" fill="#b7c2d2"/>
+        <text x="572" y="0" class="small">Unknown never becomes authority</text>
+        <text x="1456" y="0" text-anchor="end" class="small">Minimal by consequence • General by contract</text>
+      </g>
+    </svg>
+  </main>
+</body>
+</html>
