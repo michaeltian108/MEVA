@@ -233,30 +233,34 @@ hidden in a long manual.
 
 ## 5. Installation and first use
 
-One merge-safe entry point owns installation and initialization:
+The source checkout provides merge-safe shell entry points for installation and
+initialization:
 
 ```text
-meva init
+./install.sh --preview TARGET_PROJECT
+./install.sh TARGET_PROJECT
 ```
 
 It:
 
-1. detects the project root and installed runtime capabilities;
+1. validates the source package and target project;
 2. previews every file and configuration change;
 3. preserves unrelated user files and configuration;
-4. installs or upgrades through a staging directory and atomic rename;
-5. verifies the trusted release manifest;
-6. derives a provisional Core intake from the current request;
-7. creates the event journal, first checkpoint, and compact active view; and
-8. reports elevated features as `enforced`, `advisory`, or `unavailable`.
+4. installs through a staging directory and atomic renames;
+5. records ownership and digests in `.meva/install-manifest.json`;
+6. creates or validates `.meva/state.json`; and
+7. excludes archives, caches, and generated files from the target.
 
-No user edits JSON to begin a local R0/R1 task. Missing telemetry produces a
-short capability report and permits Core advisory/local work; it does not create
-a half-authorized Elevated state.
+The template state intentionally authorizes nothing. Replace its project
+identity, goal, authority, budgets, tickets, and provenance before work. Missing
+telemetry produces a short capability report and permits Core advisory/local
+work; it does not create a half-authorized Elevated state.
 
-`meva doctor`, `meva upgrade`, and `meva remove --preview` provide
-preflight, migration, and recoverable removal. Removal never deletes project
-artifacts or archives without a separate exact confirmation.
+`./uninstall.sh --preview TARGET_PROJECT` and
+`./uninstall.sh TARGET_PROJECT` provide recoverable removal. Add
+`--purge-state` to remove MEVA-created state when it is unchanged;
+pre-existing/adopted state is preserved. Removal never deletes unrelated
+project artifacts or archives.
 
 ## 6. Context and performance budgets
 
@@ -347,7 +351,7 @@ fix it.
 | Reviewer finding | vNext answer |
 |---|---|
 | ZEN-001 | Core/Elevated profiles and 12-rule Core contract |
-| ZEN-002 | `meva init`, doctor, upgrade, and recoverable removal |
+| ZEN-002 | `install.sh`, validation, and recoverable `uninstall.sh` removal |
 | ZEN-003 | explicit token, handoff, and active-state budgets |
 | ZEN-004 | three-field intake sufficiency and role matrix |
 | ZEN-005 | truthful base scope and optional domain packs |
