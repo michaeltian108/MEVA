@@ -169,8 +169,8 @@ at backend, AI, data, platform, and embodied-AI work.
 
 ## Learn more
 
-- [`AGENTS.md`](AGENTS.md) — the project bootstrap and operating contract
-- [`Agent.md`](Agent.md) — the complete behavior and role manual
+- [`AGENTS.md`](AGENTS.md) — the complete project bootstrap and operating
+  contract; it is the sole active instruction source
 - [`docs/meva-architecture.md`](docs/meva-architecture.md) — the design and
   rationale
 - [`docs/reviewer-handbook.md`](docs/reviewer-handbook.md) — independent review

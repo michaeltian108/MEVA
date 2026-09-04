@@ -25,7 +25,7 @@ TEMPLATE_PATH = ROOT / "templates" / "project-state.json"
 PROTOCOL_PATH = ROOT / "tests" / "conformance" / "protocol.v1.json"
 PROTOCOL_LOCK_PATH = ROOT / "tests" / "conformance" / "protocol.v1.sha256"
 EXPECTED_PROTOCOL_DIGEST = (
-    "c529f598c93217d262b5de29b8af29044213ef065b438905532452eb42d97c4d"
+    "444bf9b0db6cea89afda56781de2f8279250dc4024a9db982ab6cee7ac38472b"
 )
 ZERO_DIGEST = "0" * 64
 POLICY_DIGEST = "2" * 64
@@ -124,7 +124,7 @@ def valid_attestation(role="implementation_engineer", task_id="TASK-001"):
         "provider": "test-provider",
         "policy_digest": POLICY_DIGEST,
         "config_digest": file_digest(ROOT / ".codex/config.toml"),
-        "manual_digest": file_digest(ROOT / "Agent.md"),
+        "manual_digest": file_digest(ROOT / "AGENTS.md"),
         "schema_digest": file_digest(SCHEMA_PATH),
         "role_digest": file_digest(ROOT / ".codex/agents" / (role + ".toml")),
         "ticket_digest": hashlib.sha256(
@@ -214,7 +214,7 @@ def valid_state(role="implementation_engineer"):
         else "workspace_write",
         "policy_digest": POLICY_DIGEST,
         "config_digest": file_digest(ROOT / ".codex/config.toml"),
-        "manual_digest": file_digest(ROOT / "Agent.md"),
+        "manual_digest": file_digest(ROOT / "AGENTS.md"),
         "schema_digest": file_digest(SCHEMA_PATH),
         "role_digest": file_digest(ROOT / ".codex/agents" / (role + ".toml")),
         "ticket_digest": hashlib.sha256(
@@ -388,7 +388,7 @@ class PackageConformanceTests(unittest.TestCase):
         self.assertEqual(5, len(role_files))
         self.assertFalse((ROOT / ".codex/agents/meva_orchestrator.toml").exists())
         bootstrap = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
-        manual = (ROOT / "Agent.md").read_text(encoding="utf-8")
+        manual = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
         self.assertIn("primary MEVA Orchestrator", bootstrap)
         self.assertIn("not a spawnable custom role", bootstrap)
         self.assertIn("automatically activated primary agent", manual)
@@ -1245,7 +1245,7 @@ class RuntimeActivationTests(unittest.TestCase):
 
 class RiskAndTeamCompositionTests(unittest.TestCase):
     def test_consequence_rules_and_no_fold_are_normative(self):
-        manual = (ROOT / "Agent.md").read_text(encoding="utf-8")
+        manual = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
         self.assertIn("Keyword-only escalation", manual)
         self.assertIn("R0 no-delegation fast path", manual)
         self.assertIn("They are never folded into one another", manual)

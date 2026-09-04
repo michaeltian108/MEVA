@@ -342,16 +342,16 @@
       ],
       "metric": "Digest-binding decisions for equivalent, mismatched, missing, stale, and malformed representations",
       "baseline": "not_measured_preimplementation",
-      "method": "Normalize each permitted SHA-256 representation to lowercase 64-hex for comparison. Bind immutable distribution artifacts, including AGENTS.md, Agent.md, schema, checker, protocol, harness, and canonical distribution config, through embedded literal anchors or a trusted release manifest verified by static_package. Bind fresh runtime-owned telemetry to runtime-varying project, role, session, active ticket, effective permissions, and environment. Compare every digest declared by state or telemetry to the applicable trusted distribution value.",
+      "method": "Normalize each permitted SHA-256 representation to lowercase 64-hex for comparison. Bind immutable distribution artifacts, including AGENTS.md, schema, checker, protocol, harness, and canonical distribution config, through embedded literal anchors or a trusted release manifest verified by static_package. Bind fresh runtime-owned telemetry to runtime-varying project, role, session, active ticket, effective permissions, and environment. Compare every digest declared by state or telemetry to the applicable trusted distribution value.",
       "threshold": "Every required artifact has at least one applicable trusted source and all representations agree after canonicalization. State and runtime telemetry need not duplicate an artifact digest already supplied by a verified immutable release anchor, but any declared missing-source condition or unequal behavior-affecting digest cannot pass activation.",
       "positive_cases": [
         "Raw lowercase digest equals the identical once-prefixed sha256: digest.",
-        "Primary activation binds AGENTS.md and Agent.md with primary role meva_orchestrator; worker activation additionally binds the selected worker-role file.",
+        "Primary activation binds AGENTS.md with primary role meva_orchestrator; worker activation additionally binds the selected worker-role file.",
         "A legacy state with an empty artifact_digests map activates when static_package verifies immutable embedded or release-manifest anchors for all required distribution artifacts and fresh runtime telemetry binds the exact runtime-varying facts."
       ],
       "required_negative_cases": [
         "AGENTS.md bootstrap digest has no applicable trusted source, is stale, unknown, or mismatched",
-        "Agent.md, config, schema, ticket, checker, relevant role, protocol, or harness digest has no applicable trusted source or is mismatched when applicable",
+        "AGENTS.md, config, schema, ticket, checker, relevant role, protocol, or harness digest has no applicable trusted source or is mismatched when applicable",
         "state or telemetry declares a digest that conflicts with the immutable embedded or trusted release-manifest anchor",
         "telemetry names a custom or spawnable primary orchestrator instead of the bootstrap primary",
         "digest uses wrong algorithm, wrong length, non-hex text, multiple prefixes, or unequal value",

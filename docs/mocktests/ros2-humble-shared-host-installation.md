@@ -62,7 +62,7 @@ The mock did not authorize:
 
 ### 1. Primary activation and manual binding
 
-Before incident work, the primary read `Agent.md` completely and treated it as
+Before incident work, the primary read `AGENTS.md` completely and treated it as
 the canonical contract. The primary then validated the existing
 `.meva/state.json` with `tools/meva_check.py`.
 

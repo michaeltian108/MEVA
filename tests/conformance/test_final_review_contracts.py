@@ -22,17 +22,17 @@ EXPECTED_PROTOCOL_DIGEST = (
 )
 EXPECTED_UPSTREAM = {
     "tests/conformance/protocol.v1.json":
-        "c529f598c93217d262b5de29b8af29044213ef065b438905532452eb42d97c4d",
+        "444bf9b0db6cea89afda56781de2f8279250dc4024a9db982ab6cee7ac38472b",
     "tests/conformance/test_contracts.py":
-        "95190be27f34dd6f0731ce0c30a6ff7b5a95f1a176b94b2f1069c5d92a14d8fb",
+        "95fba374856aa37e02e907d5c141d70c3b643cc1a4789808fc67d2e72631292b",
     "tests/conformance/review_protocol.v1.json":
-        "32e5a7a9eb1695aacd0c3f1ed6a807f14aac35528a10c3435e897120aa9aed6d",
+        "bf9fbb45811e6edb7f1e796d53df564c1e57ae4330da659c6991e060510f02e1",
     "tests/conformance/test_review_contracts.py":
-        "83e034831410bc910c28e4badce1aba802df84ad7e440fef36c9b4d00ea41726",
+        "808112129f90f39a33e057d8f8f8ab144a15302f21a80d2d5f19db5ea07e4aab",
     "tests/conformance/assurance_protocol.v1.json":
         "07baa7f12b50155ba449532ce24bd49a3c009adc4f430425c73c88ca46aa8e15",
     "tests/conformance/test_assurance_contracts.py":
-        "ee2544f8b6f4915e76cfc38bd749ba6cd6538dd4e419596c5d8e9d05eda7cf70",
+        "b8c75adc1b35c416a87c5248dce448d5ce5c666c75b921f773e91db14ab04378",
 }
 SUPERSEDED_TEST_IDS = frozenset(
     {
@@ -91,8 +91,8 @@ def _bind_task_attestation_digest(state, task_id):
 def _review_targets(state):
     artifact = {
         "id": "FR-ART-TARGET",
-        "location": "Agent.md",
-        "digest": _digest(ROOT / "Agent.md"),
+        "location": "AGENTS.md",
+        "digest": _digest(ROOT / "AGENTS.md"),
         "authors": ["implementation-owner"],
         "owner": "implementation_engineer",
         "depends_on": [],
@@ -186,7 +186,7 @@ def _production_action_state(role="implementation_engineer"):
             "risk_tier": "R2",
             "target_environment": "production",
             "allowed_actions": ["edit_assigned_files"],
-            "writable_scope": ["Agent.md"],
+            "writable_scope": ["AGENTS.md"],
             "approvals_required": ["APP-PRODUCTION-WRITE"],
         }
     )
@@ -202,14 +202,14 @@ def _production_action_state(role="implementation_engineer"):
     state["authority"].update(
         {
             "allowed_actions": ["edit_assigned_files"],
-            "scopes": ["Agent.md"],
+            "scopes": ["AGENTS.md"],
             "environments": ["production"],
         }
     )
     attestation = state["permission_attestations"][0]
     attestation["effective_permissions"].update(
         {
-            "writable_scopes": ["Agent.md"],
+            "writable_scopes": ["AGENTS.md"],
             "actions": ["edit_assigned_files"],
             "environments": ["production"],
         }
@@ -218,7 +218,7 @@ def _production_action_state(role="implementation_engineer"):
     approval.update(
         {
             "action": "edit_assigned_files",
-            "scope": ["Agent.md"],
+            "scope": ["AGENTS.md"],
             "environment": "production",
         }
     )
@@ -237,7 +237,7 @@ def _production_reserve_args(path, trusted_root, key, expected, role):
         role=role,
         action="edit_assigned_files",
         effect="project_write",
-        target_path="Agent.md",
+        target_path="AGENTS.md",
     )
     environment_index = arguments.index("--environment") + 1
     arguments[environment_index] = "production"

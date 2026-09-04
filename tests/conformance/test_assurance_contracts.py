@@ -31,13 +31,13 @@ EXPECTED_ASSURANCE_PROTOCOL_DIGEST = (
 )
 EXPECTED_UPSTREAM = {
     "tests/conformance/protocol.v1.json":
-        "c529f598c93217d262b5de29b8af29044213ef065b438905532452eb42d97c4d",
+        "444bf9b0db6cea89afda56781de2f8279250dc4024a9db982ab6cee7ac38472b",
     "tests/conformance/test_contracts.py":
-        "95190be27f34dd6f0731ce0c30a6ff7b5a95f1a176b94b2f1069c5d92a14d8fb",
+        "95fba374856aa37e02e907d5c141d70c3b643cc1a4789808fc67d2e72631292b",
     "tests/conformance/review_protocol.v1.json":
-        "32e5a7a9eb1695aacd0c3f1ed6a807f14aac35528a10c3435e897120aa9aed6d",
+        "bf9fbb45811e6edb7f1e796d53df564c1e57ae4330da659c6991e060510f02e1",
     "tests/conformance/test_review_contracts.py":
-        "83e034831410bc910c28e4badce1aba802df84ad7e440fef36c9b4d00ea41726",
+        "808112129f90f39a33e057d8f8f8ab144a15302f21a80d2d5f19db5ea07e4aab",
 }
 ORIGINAL_COMMAND = "python3 -B -m unittest -v tests.conformance.test_contracts"
 RV2_COMMAND = (
@@ -182,7 +182,7 @@ def action_state(
     task["accounting"] = base.accounting(100, used_cost)
     state["accounting"] = base.accounting(100, used_cost)
     action = "inspect" if role in {"planner", "reviewer"} else "edit_assigned_files"
-    target_path = None if effect == "external_read" else "Agent.md"
+    target_path = None if effect == "external_read" else "AGENTS.md"
     task["extensions"]["trusted_capability_metadata"] = {
         "action": action,
         "trusted_action_kind": action_kind,
@@ -237,7 +237,7 @@ def reserve_args(
     effect="project_write",
     target_kind="task",
     target_id="TASK-001",
-    target_path="Agent.md",
+    target_path="AGENTS.md",
     target_revision=None,
     target_digest=None,
     external_calls=0,
@@ -400,7 +400,6 @@ def claim_once(testcase, path, directory, token, role="implementation_engineer",
 def package_digest_map(root):
     candidates = [
         "AGENTS.md",
-        "Agent.md",
         "README.md",
         ".codex/config.toml",
         ".codex/agents/implementation_engineer.toml",
@@ -895,7 +894,7 @@ class AtomicAuthorizationTests(unittest.TestCase):
                     "--action-kind",
                     "ordinary",
                     "--path",
-                    "Agent.md",
+                    "AGENTS.md",
                     "--environment",
                     "local",
                 ]
@@ -1063,7 +1062,7 @@ class AtomicTargetTests(unittest.TestCase):
                 "IDEM-TARGET-CURRENT",
                 cost=1,
                 target_revision=3,
-                target_digest=digest(ROOT / "Agent.md"),
+                target_digest=digest(ROOT / "AGENTS.md"),
             )
 
     def test_stale_target_revision_rejects_without_mutation(self):

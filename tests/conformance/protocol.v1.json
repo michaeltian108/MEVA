@@ -32,7 +32,7 @@
       "id": "AC-01",
       "kind": "static",
       "covers": ["F4", "F7"],
-      "claim": "The package contains the required bootstrap, manual, config, schema, state example, validator, reviewer handbook, tests, and exactly five unique spawnable worker roles; the primary orchestrator contract is in AGENTS.md and Agent.md.",
+      "claim": "The package contains the required bootstrap and complete operating manual in AGENTS.md, config, schema, state example, validator, reviewer handbook, tests, and exactly five unique spawnable worker roles.",
       "threshold": "All required artifacts exist, no meva_orchestrator custom-agent file exists, and the restricted role/config loader reports no duplicate or unsupported definition."
     },
     {
